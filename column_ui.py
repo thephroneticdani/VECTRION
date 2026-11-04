@@ -6,6 +6,7 @@ from column import (
     recommend_square_column,
     validate_column_code,
 )
+from engineering_disclaimer import render_engineering_disclaimer
 
 
 def render_column_module(st):
@@ -62,6 +63,7 @@ def render_column_module(st):
     draft = st.session_state.get("draft_kolom")
     if draft:
         st.markdown("#### Informasi kolom")
+        render_engineering_disclaimer(st)
         st.write(f"**{draft['Kode kolom']}** · lu {draft['lu (mm)']:,.0f} mm · lebar balok terbesar {draft['Lebar balok terbesar (mm)']:,.0f} mm")
         a, b = st.columns(2)
         a.metric("Rekomendasi otomatis", draft["Rekomendasi VECTRION"])

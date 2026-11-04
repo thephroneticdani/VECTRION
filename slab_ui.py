@@ -5,6 +5,7 @@ from slab import (
     hitung_tebal_minimum_tabel,
     periksa_ketebalan_pilihan,
 )
+from engineering_disclaimer import render_engineering_disclaimer
 
 
 def render_modul_pelat(st):
@@ -82,6 +83,7 @@ def render_modul_pelat(st):
     draft = st.session_state.get("draft_pelat")
     if draft:
         st.markdown("#### Hasil pemeriksaan awal")
+        render_engineering_disclaimer(st)
         st.write(f"**Metode:** {draft['Jenis pelat']} · {draft['metode']}")
         st.write(f"**Rasio bentang:** L/h = {draft['Rasio L/h']:g} · **Bentang acuan:** {draft['Bentang acuan (mm)']:,} mm · **Tumpuan:** {draft['Kondisi tumpuan']}")
         x, y, z = st.columns(3)

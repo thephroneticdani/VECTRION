@@ -17,6 +17,7 @@ from styling import inject_global_styles
 from styling import COLORS
 from column_ui import render_column_module
 from recap import beam_recap_warnings, slab_recap_summary, column_recap_summary
+from engineering_disclaimer import render_engineering_disclaimer
 
 inject_global_styles(st)
 
@@ -64,6 +65,7 @@ def pindah(halaman):
 if st.session_state["halaman"] == "Beranda":
     st.markdown("## Rekayasa struktur, dimulai dari pradesain")
     st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
+    render_engineering_disclaimer(st)
     logo_path = Path(__file__).parent / "assets" / "vectrion_logo.png"
     if logo_path.exists():
         st.image(str(logo_path), width=440)
@@ -83,6 +85,7 @@ if st.session_state["halaman"] == "Beranda":
 
 elif st.session_state["halaman"] == "Pra-Desain":
     st.markdown("## Analisis Pra-Desain")
+    render_engineering_disclaimer(st)
     modul = st.session_state["modul_pra"]
     if modul == "Kolom":
         render_column_module(st)
@@ -104,6 +107,7 @@ elif st.session_state["halaman"] == "Pra-Desain":
         draft = st.session_state["draft_balok"]
         if draft:
             st.write(f"**{draft['kode']}** · Bentang {draft['bentang']} mm · {draft['kondisi']}")
+            render_engineering_disclaimer(st)
             c1, c2 = st.columns(2)
             c1.metric("Tinggi minimum awal", f"{draft['h_min']:.2f} mm")
             c2.metric("Rekomendasi praktis", f"{draft['h_rekom']} mm")
@@ -135,10 +139,12 @@ elif st.session_state["halaman"] == "Pra-Desain":
         render_modul_pelat(st)
 elif st.session_state["halaman"] == "Pasca-ETABS":
     st.markdown("## Analisis Pasca-ETABS")
+    render_engineering_disclaimer(st)
     st.info("Belum tersedia")
 
 # Rekap lintas halaman: tetap berada di session_state saat navigasi.
 st.divider()
+render_engineering_disclaimer(st)
 st.markdown("### Rekap analisis")
 if st.session_state["rekap_balok"]:
     st.markdown("**Balok**")
