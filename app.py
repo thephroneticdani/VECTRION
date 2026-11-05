@@ -1,5 +1,6 @@
 import streamlit as st
 from pathlib import Path
+import base64
 from beam import (
     hitung_tinggi_minimum,
     bulatkan_ke_atas_50_mm,
@@ -19,8 +20,6 @@ from column_ui import render_column_module
 from recap import beam_recap_warnings, slab_recap_summary, column_recap_summary
 from engineering_disclaimer import render_engineering_disclaimer
 
-inject_global_styles(st)
-
 # ==================================================
 # NAVIGASI DAN SESSION STATE
 # ==================================================
@@ -35,40 +34,63 @@ from slab_ui import render_modul_pelat
 
 initialize_state(st.session_state)
 st.session_state.setdefault("rekap_kolom", {})
+st.session_state.setdefault("navigation_hidden", False)
+inject_global_styles(st, navigation_hidden=st.session_state["navigation_hidden"])
+
+def pindah(halaman):
+    navigate(st.session_state, halaman)
+
+def toggle_navigation():
+    st.session_state["navigation_hidden"] = not st.session_state["navigation_hidden"]
+
+logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
+logo_data = base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
 
 with st.sidebar:
-    logo_path = Path(__file__).parent / "assets" / "vectrion_logo.png"
-    if logo_path.exists():
-        st.image(str(logo_path), use_container_width=True)
+    if logo_data:
+        st.markdown(
+            f'<div class="brand-logo brand-logo-sidebar"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+            unsafe_allow_html=True,
+        )
     else:
         st.markdown("## VECTRION")
     st.caption("Structural Engineering Suite")
     st.markdown("---")
-    halaman_sidebar = st.radio(
-        "Navigasi aplikasi", ["Beranda", "Pra-Desain", "Pasca-ETABS"],
-        index=["Beranda", "Pra-Desain", "Pasca-ETABS"].index(st.session_state["halaman"]),
-        key="sidebar_page",
-    )
-    if halaman_sidebar != st.session_state["halaman"]:
-        navigate(st.session_state, halaman_sidebar)
+    with st.container(key="primary-navigation"):
+        st.caption("Navigasi aplikasi")
+        for page, icon in (("Beranda", "⌂"), ("Pra-Desain", "▤"), ("Pasca-ETABS", "⌁")):
+            st.button(
+                f"{icon}  {page}",
+                key=f"nav_{page}",
+                type="primary" if st.session_state["halaman"] == page else "secondary",
+                use_container_width=True,
+                on_click=pindah,
+                args=(page,),
+            )
     if st.session_state["halaman"] == "Pra-Desain":
         st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
 
-st.title("VECTRION")
-st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
-
-def pindah(halaman):
-    if "sidebar_page" in st.session_state:
-        st.session_state["sidebar_page"] = halaman
-    navigate(st.session_state, halaman)
+menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
+with menu_col:
+    with st.container(key="navigation-toggle"):
+        st.button("☰", key="toggle_navigation", type="primary", help="Sembunyikan / tampilkan panel navigasi", on_click=toggle_navigation)
+with title_col:
+    st.title("VECTRION")
+    st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
+render_engineering_disclaimer(st)
 
 if st.session_state["halaman"] == "Beranda":
-    st.markdown("## Rekayasa struktur, dimulai dari pradesain")
-    st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
-    render_engineering_disclaimer(st)
-    logo_path = Path(__file__).parent / "assets" / "vectrion_logo.png"
-    if logo_path.exists():
-        st.image(str(logo_path), width=440)
+    hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
+    with hero_copy:
+        st.markdown("## Rekayasa struktur, dimulai dari pradesain")
+        st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
+        st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
+    with hero_brand:
+        if logo_data:
+            st.markdown(
+                f'<div class="brand-logo brand-logo-hero"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+                unsafe_allow_html=True,
+            )
     kiri, kanan = st.columns(2)
     with kiri:
         with st.container(border=True):
@@ -85,7 +107,6 @@ if st.session_state["halaman"] == "Beranda":
 
 elif st.session_state["halaman"] == "Pra-Desain":
     st.markdown("## Analisis Pra-Desain")
-    render_engineering_disclaimer(st)
     modul = st.session_state["modul_pra"]
     if modul == "Kolom":
         render_column_module(st)
@@ -107,7 +128,6 @@ elif st.session_state["halaman"] == "Pra-Desain":
         draft = st.session_state["draft_balok"]
         if draft:
             st.write(f"**{draft['kode']}** · Bentang {draft['bentang']} mm · {draft['kondisi']}")
-            render_engineering_disclaimer(st)
             c1, c2 = st.columns(2)
             c1.metric("Tinggi minimum awal", f"{draft['h_min']:.2f} mm")
             c2.metric("Rekomendasi praktis", f"{draft['h_rekom']} mm")
@@ -139,12 +159,10 @@ elif st.session_state["halaman"] == "Pra-Desain":
         render_modul_pelat(st)
 elif st.session_state["halaman"] == "Pasca-ETABS":
     st.markdown("## Analisis Pasca-ETABS")
-    render_engineering_disclaimer(st)
     st.info("Belum tersedia")
 
 # Rekap lintas halaman: tetap berada di session_state saat navigasi.
 st.divider()
-render_engineering_disclaimer(st)
 st.markdown("### Rekap analisis")
 if st.session_state["rekap_balok"]:
     st.markdown("**Balok**")

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+  <title id="title">VECTRION — Structural Engineering Suite</title>
+  <desc id="desc">Lambang V berupa rangka struktur dan gunungan Jawa dalam warna cokelat dan emas.</desc>
+  <defs>
+    <linearGradient id="bronze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9C744A"/><stop offset=".52" stop-color="#684A34"/><stop offset="1" stop-color="#3E3027"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D1B27D"/><stop offset="1" stop-color="#A47B49"/>
+    </linearGradient>
+  </defs>
+  <!-- Gunungan outline and V-shaped structural frame -->
+  <path d="M214 34 C199 78 164 100 132 133 C108 158 99 186 106 216 C117 271 153 317 205 380 C257 317 293 271 304 216 C311 186 302 158 278 133 C246 100 221 78 214 34Z"
+        fill="none" stroke="url(#gold)" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M139 151 L205 317 L271 151 M165 151 L205 251 L245 151" fill="none" stroke="url(#bronze)" stroke-width="17" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M151 184 H259 M165 221 H245 M180 258 H230 M157 188 L242 258 M253 188 L168 258" fill="none" stroke="#A47B49" stroke-width="4" opacity=".9"/>
+  <!-- Simple kawung and tendril accents inside the gunungan -->
+  <g fill="none" stroke="#A47B49" stroke-width="3" opacity=".92">
+    <path d="M205 71 C190 84 190 96 205 106 C220 96 220 84 205 71Z M205 106 C190 119 190 131 205 141 C220 131 220 119 205 106Z"/>
+    <path d="M177 112 C165 117 162 126 170 135 C180 132 184 124 177 112Z M233 112 C245 117 248 126 240 135 C230 132 226 124 233 112Z"/>
+    <path d="M133 207 C149 192 158 194 161 207 C157 220 147 222 133 207Z M277 207 C261 192 252 194 249 207 C253 220 263 222 277 207Z"/>
+  </g>
+  <circle cx="205" cy="153" r="6" fill="#A47B49"/>
+  <path d="M115 395 H295" stroke="#A47B49" stroke-width="4"/>
+  <text x="345" y="235" fill="#493629" font-family="Georgia, 'Times New Roman', serif" font-size="126" font-weight="700" letter-spacing="7">VECTRION</text>
+  <path d="M352 270 H1065" stroke="#B58D5B" stroke-width="3"/>
+  <text x="355" y="321" fill="#71583F" font-family="'Segoe UI', Arial, sans-serif" font-size="31" font-weight="600" letter-spacing="8">STRUCTURAL ENGINEERING SUITE</text>
+  <text x="358" y="371" fill="#897865" font-family="'Segoe UI', Arial, sans-serif" font-size="20" letter-spacing="3">REKAYASA STRUKTUR · ESTIMASI PRA-DESAIN</text>
+</svg>
