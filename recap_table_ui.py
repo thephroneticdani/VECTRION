@@ -1,32 +1,42 @@
-"""Compact conventional-style recap tables with per-row clear buttons."""
+"""Responsive HTML recap tables with Streamlit row-clear controls."""
 
 from html import escape
 
 
-def render_recap_table(st, *, key, title, headers, rows, widths, clear_column=True):
-    """Render aligned desktop columns and readable label/value pairs on phones."""
+def render_recap_table(st, *, key, title, headers, rows, widths=None, clear_column=True):
+    """Render a semantic table on desktop and label/value cards on mobile."""
     if not rows:
         return
+
+    value_headers = headers[:-1] if clear_column else headers
     st.markdown(f"**{escape(str(title))}**")
-    with st.container(key=f"recap-grid-{key}-header"):
-        header_cells = st.columns(widths, vertical_alignment="center", gap="small")
-        for cell, label in zip(header_cells, headers):
-            cell.markdown(
-                f"<div class='vx-recap-header'>{escape(str(label))}</div>",
-                unsafe_allow_html=True,
+
+    table_rows = []
+    for row in rows:
+        cells = []
+        for label, value in zip(value_headers, row["values"]):
+            cells.append(
+                "<td><span class='vx-recap-mobile-label'>"
+                f"{escape(str(label))}</span><span class='vx-recap-value'>"
+                f"{escape(str(value))}</span></td>"
             )
-    for index, row in enumerate(rows):
-        with st.container(key=f"recap-grid-{key}-row-{index}"):
-            cells = st.columns(widths, vertical_alignment="center", gap="small")
-            value_cells = cells[:-1] if clear_column else cells
-            for cell, label, value in zip(value_cells, headers, row["values"]):
-                cell.markdown(
-                    "<div class='vx-recap-cell'>"
-                    f"<span class='vx-recap-mobile-label'>{escape(str(label))}</span>"
-                    f"<span class='vx-recap-value'>{escape(str(value))}</span>"
-                    "</div>",
-                    unsafe_allow_html=True,
-                )
-            if clear_column and cells[-1].button("Clear", key=f"clear-{key}-{index}", use_container_width=True):
-                row["clear"]()
-                st.rerun()
+        table_rows.append("<tr>" + "".join(cells) + "</tr>")
+
+    html = (
+        "<div class='vx-recap-table-wrap'><table class='vx-recap-table'>"
+        "<thead><tr>"
+        + "".join(f"<th scope='col'>{escape(str(label))}</th>" for label in value_headers)
+        + "</tr></thead><tbody>"
+        + "".join(table_rows)
+        + "</tbody></table></div>"
+    )
+    st.markdown(html, unsafe_allow_html=True)
+
+    if clear_column:
+        with st.container(key=f"recap-actions-{key}"):
+            for index, row in enumerate(rows):
+                descriptor = " · ".join(str(value) for value in row["values"][:2])
+                label = f"Clear — {descriptor}" if descriptor else "Clear"
+                if st.button(label, key=f"clear-{key}-{index}"):
+                    row["clear"]()
+                    st.rerun()
