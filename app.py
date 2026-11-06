@@ -77,15 +77,20 @@ with st.sidebar:
         st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
     if st.session_state["halaman"].startswith("Pasca-ETABS-"):
         st.caption("Modul Pasca-ETABS")
-        for subpage, caption, icon in (
-            ("Pasca-ETABS-Balok", "Balok", "▤"),
-            ("Pasca-ETABS-Kolom", "Kolom", "▥"),
-        ):
-            st.button(
-                f"{icon}  {caption}", key=f"nav_{subpage}",
-                type="primary" if st.session_state["halaman"] == subpage else "secondary",
-                use_container_width=True, on_click=pindah, args=(subpage,),
-            )
+        with st.container(key="post-etabs-module-navigation"):
+            beam_nav, column_nav = st.columns(2, gap="small")
+            with beam_nav:
+                st.button(
+                    "▤  Balok", key="nav_Pasca-ETABS-Balok",
+                    type="primary" if st.session_state["halaman"] == "Pasca-ETABS-Balok" else "secondary",
+                    use_container_width=True, on_click=pindah, args=("Pasca-ETABS-Balok",),
+                )
+            with column_nav:
+                st.button(
+                    "▥  Kolom", key="nav_Pasca-ETABS-Kolom",
+                    type="primary" if st.session_state["halaman"] == "Pasca-ETABS-Kolom" else "secondary",
+                    use_container_width=True, on_click=pindah, args=("Pasca-ETABS-Kolom",),
+                )
 
 menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
 with menu_col:

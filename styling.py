@@ -295,6 +295,16 @@ def inject_global_styles(st, navigation_hidden=False):
           section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] > div:has([data-testid="stButton"]) [data-testid="stVerticalBlock"] {{
             flex-direction:row !important; align-items:stretch !important; gap:.22rem !important;
           }}
+          section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="stHorizontalBlock"] {{
+            display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+            align-items:stretch !important; gap:.3rem !important;
+          }}
+          section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="column"] {{
+            flex:1 1 50% !important; width:50% !important; min-width:0 !important;
+          }}
+          section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="stButton"] {{
+            width:100% !important; min-width:0 !important;
+          }}
           section[data-testid="stSidebar"] [data-testid="stButton"] {{ flex:1 1 0 !important; min-width:0 !important; }}
           section[data-testid="stSidebar"] [data-testid="stButton"] button {{
             min-height:3.4rem; height:auto !important; justify-content:center !important;
