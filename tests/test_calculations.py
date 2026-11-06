@@ -1,4 +1,5 @@
 import unittest
+from io import BytesIO
 
 from beam import (
     bulatkan_ke_atas_50_mm,
@@ -21,6 +22,7 @@ from column import (
     validate_column_code,
 )
 from recap import beam_recap_warnings, column_recap_summary, slab_recap_summary
+from etabs_beam import hitung_tulangan_balok, read_etabs_beam_summary, status_kebutuhan
 
 
 class BeamTests(unittest.TestCase):
@@ -209,6 +211,51 @@ class RecapPresentationTests(unittest.TestCase):
         self.assertEqual(title, "K1 · 450 × 450 mm")
         self.assertIn("Rekomendasi VECTRION 300 × 300 mm", details)
         self.assertIn("klu/r 22.22", details)
+
+
+class EtabsBeamTests(unittest.TestCase):
+    def test_area_conversion_and_requirement_status(self):
+        result = hitung_tulangan_balok([16, 13], [1, 0], [16, 13], [1, 0])
+        self.assertAlmostEqual(result["As atas tersedia (mm²)"], 201.0619298)
+        self.assertEqual(status_kebutuhan(result["As atas tersedia (mm²)"], 200), "Memenuhi")
+        self.assertEqual(status_kebutuhan(199, 200), "Tidak memenuhi")
+        self.assertEqual(status_kebutuhan(200, 200), "Memenuhi")
+
+    def test_excel_grouping_keeps_story_and_maxima_independent(self):
+        from openpyxl import Workbook
+
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.title = "Conc Bm Sum - ACI 318-19"
+        sheet.append(["TABLE: Concrete Beam Design Summary"])
+        sheet.append(["Story", "Label", "UniqueName", "DesignSect", "Station", "AsTopTotal", "AsBotTotal"])
+        sheet.append(["", "", "", "", "mm", "mm²", "mm²"])
+        sheet.append(["Lantai 1", "B2", 1, "Balok 30x50", 0, 200, 150])
+        sheet.append(["Lantai 1", "B50", 1, "Balok 30x50", 1, 150, 200])
+        sheet.append(["Lantai 2", "B2", 2, "Balok 30x50", 0, 180, 160])
+        stream = BytesIO()
+        stream.name = "example.xlsx"
+        workbook.save(stream)
+        stream.seek(0)
+        stream.name = "example.xlsx"
+
+        result = read_etabs_beam_summary(stream)
+        self.assertEqual(len(result["rows"]), 2)
+        floor1 = next(row for row in result["rows"] if row["Story"] == "Lantai 1")
+        self.assertEqual(floor1["AsTopTotal"], 200)
+        self.assertEqual(floor1["AsBotTotal"], 200)
+        self.assertEqual(floor1["jumlah_data"], 2)
+        self.assertNotIn("Label", floor1)
+
+    def test_two_post_etabs_routes_and_recap_state(self):
+        state = {"rekap_balok": {"B1": {"ok": True}}}
+        initialize_state(state)
+        navigate(state, "Pasca-ETABS-Balok")
+        self.assertEqual(state["halaman"], "Pasca-ETABS-Balok")
+        state["rekap_etabs_balok"]["Balok 30x50|Lantai 1"] = {"As atas tersedia (mm²)": 200}
+        navigate(state, "Pasca-ETABS-Kolom")
+        self.assertEqual(state["rekap_etabs_balok"]["Balok 30x50|Lantai 1"]["As atas tersedia (mm²)"], 200)
+        self.assertEqual(state["rekap_balok"]["B1"]["ok"], True)
 
 
 if __name__ == "__main__":

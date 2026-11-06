@@ -1,7 +1,7 @@
 """Small, testable helpers for page state and cross-page recap persistence."""
 
 
-PAGES = ("Beranda", "Pra-Desain", "Pasca-ETABS")
+PAGES = ("Beranda", "Pra-Desain", "Pasca-ETABS", "Pasca-ETABS-Balok", "Pasca-ETABS-Kolom")
 
 
 def initialize_state(state):
@@ -12,6 +12,9 @@ def initialize_state(state):
         "rekap_pelat": {},
         "rekap_kolom": {},
         "draft_pelat": None,
+        "etabs_beam_summary": None,
+        "rekap_etabs_balok": {},
+        "show_etabs_rebar": False,
     }
     for key, value in defaults.items():
         if key not in state:

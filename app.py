@@ -19,6 +19,7 @@ from styling import COLORS
 from column_ui import render_column_module
 from recap import beam_recap_warnings, slab_recap_summary, column_recap_summary
 from engineering_disclaimer import render_engineering_disclaimer
+from post_etabs_ui import render_post_etabs_beam, render_post_etabs_column
 
 # ==================================================
 # NAVIGASI DAN SESSION STATE
@@ -58,17 +59,32 @@ with st.sidebar:
     st.markdown("---")
     with st.container(key="primary-navigation"):
         st.caption("Navigasi aplikasi")
-        for page, icon in (("Beranda", "⌂"), ("Pra-Desain", "▤"), ("Pasca-ETABS", "⌁")):
+        page_buttons = (("Beranda", "⌂"), ("Pra-Desain", "▤"), ("Pasca-ETABS", "⌁"))
+        for page, icon in page_buttons:
+            active = st.session_state["halaman"] == page or (
+                page == "Pasca-ETABS" and st.session_state["halaman"].startswith("Pasca-ETABS-")
+            )
             st.button(
                 f"{icon}  {page}",
                 key=f"nav_{page}",
-                type="primary" if st.session_state["halaman"] == page else "secondary",
+                type="primary" if active else "secondary",
                 use_container_width=True,
                 on_click=pindah,
                 args=(page,),
             )
     if st.session_state["halaman"] == "Pra-Desain":
         st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
+    if st.session_state["halaman"].startswith("Pasca-ETABS-"):
+        st.caption("Modul Pasca-ETABS")
+        for subpage, caption, icon in (
+            ("Pasca-ETABS-Balok", "Balok", "▤"),
+            ("Pasca-ETABS-Kolom", "Kolom", "▥"),
+        ):
+            st.button(
+                f"{icon}  {caption}", key=f"nav_{subpage}",
+                type="primary" if st.session_state["halaman"] == subpage else "secondary",
+                use_container_width=True, on_click=pindah, args=(subpage,),
+            )
 
 menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
 with menu_col:
@@ -77,9 +93,9 @@ with menu_col:
 with title_col:
     st.title("VECTRION")
     st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
-render_engineering_disclaimer(st)
 
 if st.session_state["halaman"] == "Beranda":
+    render_engineering_disclaimer(st)
     hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
     with hero_copy:
         st.markdown("## Rekayasa struktur, dimulai dari pradesain")
@@ -106,6 +122,7 @@ if st.session_state["halaman"] == "Beranda":
                       on_click=pindah, args=("Pasca-ETABS",))
 
 elif st.session_state["halaman"] == "Pra-Desain":
+    render_engineering_disclaimer(st)
     st.markdown("## Analisis Pra-Desain")
     modul = st.session_state["modul_pra"]
     if modul == "Kolom":
@@ -159,7 +176,24 @@ elif st.session_state["halaman"] == "Pra-Desain":
         render_modul_pelat(st)
 elif st.session_state["halaman"] == "Pasca-ETABS":
     st.markdown("## Analisis Pasca-ETABS")
-    st.info("Belum tersedia")
+    render_engineering_disclaimer(st)
+    st.write("Pilih elemen yang ingin diperiksa dari hasil ekspor ETABS.")
+    beam_col, column_col = st.columns(2)
+    with beam_col, st.container(border=True):
+        st.markdown("### Balok")
+        st.write("Unggah ringkasan desain dan bandingkan kebutuhan As dengan tulangan pilihan.")
+        st.button("Buka Pasca-ETABS Balok →", type="primary", use_container_width=True,
+                  on_click=pindah, args=("Pasca-ETABS-Balok",))
+    with column_col, st.container(border=True):
+        st.markdown("### Kolom")
+        st.write("Modul pemeriksaan kolom disiapkan untuk tahap berikutnya.")
+        st.button("Buka Pasca-ETABS Kolom →", use_container_width=True,
+                  on_click=pindah, args=("Pasca-ETABS-Kolom",))
+elif st.session_state["halaman"] == "Pasca-ETABS-Balok":
+    render_post_etabs_beam(st)
+elif st.session_state["halaman"] == "Pasca-ETABS-Kolom":
+    render_engineering_disclaimer(st)
+    render_post_etabs_column(st)
 
 # Rekap lintas halaman: tetap berada di session_state saat navigasi.
 st.divider()
