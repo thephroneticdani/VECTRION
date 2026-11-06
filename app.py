@@ -187,7 +187,7 @@ elif st.session_state["halaman"] == "Pasca-ETABS":
                   on_click=pindah, args=("Pasca-ETABS-Balok",))
     with column_col, st.container(border=True):
         st.markdown("### Kolom")
-        st.write("Modul pemeriksaan kolom disiapkan untuk tahap berikutnya.")
+        st.write("Periksa rasio luas tulangan longitudinal kolom dengan tiga kombinasi diameter dan jumlah batang.")
         st.button("Buka Pasca-ETABS Kolom →", use_container_width=True,
                   on_click=pindah, args=("Pasca-ETABS-Kolom",))
 elif st.session_state["halaman"] == "Pasca-ETABS-Balok":
