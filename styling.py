@@ -243,18 +243,24 @@ def inject_global_styles(st, navigation_hidden=False):
         .brand-logo-hero img {{ width:100%; max-width:430px; margin:0 auto; }}
         [class*="st-key-recap-grid-"][class*="-header"] {{
           background:#F1EADF !important; border-top:1px solid #C8B7A3;
-          border-bottom:1px solid #B79C7E; padding:.48rem .55rem !important;
+          border-right:1px solid #C8B7A3; border-bottom:2px solid #9C7658;
+          border-left:1px solid #C8B7A3; border-radius:7px 7px 0 0;
+          padding:.48rem .55rem !important; overflow:hidden;
         }}
         [class*="st-key-recap-grid-"][class*="-row-"] {{
-          border-bottom:1px solid #E6DED4; padding:.42rem .55rem !important;
+          border:1px solid #C8B7A3 !important; border-top:0 !important;
+          border-radius:0 0 7px 7px; padding:.4rem .55rem !important;
+          margin-bottom:.55rem; overflow:hidden;
         }}
         [class*="st-key-recap-grid-"][class*="-row-"]:hover {{ background:#F7F3ED !important; }}
         [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="stButton"] button {{
           min-height:2.1rem !important; padding:.3rem .45rem !important; font-size:.78rem !important;
           border-radius:6px !important; box-shadow:none !important;
         }}
-        .vx-recap-header {{ color:#553B29; font-size:.82rem; font-weight:700; line-height:1.3; }}
-        .vx-recap-cell {{ color:#332A23; font-size:.9rem; line-height:1.4; overflow-wrap:anywhere; }}
+        .vx-recap-header {{ color:#553B29; font-size:.82rem; font-weight:700; line-height:1.3; overflow-wrap:anywhere; }}
+        .vx-recap-cell {{ color:#332A23; font-size:.9rem; line-height:1.4; min-width:0; overflow-wrap:anywhere; }}
+        .vx-recap-mobile-label {{ display:none; }}
+        .vx-recap-value {{ display:block; min-width:0; overflow-wrap:anywhere; word-break:normal; }}
         *:focus-visible {{ outline:2px solid {c['accent']} !important; outline-offset:2px; }}
         @media (max-width: 800px) {{
           [data-testid="stMainBlockContainer"] {{ padding-left:1rem; padding-right:1rem; padding-top:1.25rem; padding-bottom:{mobile_bottom_padding}; }}
@@ -311,6 +317,29 @@ def inject_global_styles(st, navigation_hidden=False):
           section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] > div:first-child {{
             width:0 !important; height:0 !important; opacity:0 !important; margin:0 !important;
           }}
+          [class*="st-key-recap-grid-"][class*="-header"] {{ display:none !important; }}
+          [class*="st-key-recap-grid-"][class*="-row-"] {{
+            border:1px solid #A9896B !important; border-radius:9px !important;
+            padding:.35rem .7rem !important; margin:.55rem 0 .75rem !important;
+            background:#FFFCF7 !important; box-shadow:0 2px 7px #4937250D;
+          }}
+          [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="stHorizontalBlock"] {{
+            flex-direction:column !important; gap:0 !important;
+          }}
+          [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="column"] {{
+            width:100% !important; min-width:0 !important; flex:1 1 auto !important;
+            padding:.36rem 0 !important; border-bottom:1px solid #E6DED4;
+          }}
+          [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="column"]:last-child {{ border-bottom:0; }}
+          [class*="st-key-recap-grid-"][class*="-row-"] .vx-recap-cell {{
+            display:flex; align-items:flex-start; gap:.65rem; width:100%;
+          }}
+          .vx-recap-mobile-label {{
+            display:block; flex:0 0 41%; max-width:41%; color:#63472F;
+            font-size:.82rem; font-weight:700; line-height:1.4; overflow-wrap:anywhere;
+          }}
+          .vx-recap-value {{ flex:1 1 auto; font-size:.88rem; text-align:right; }}
+          [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="stButton"] {{ padding-top:.42rem; }}
         }}
         </style>
         """,
