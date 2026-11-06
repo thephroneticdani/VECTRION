@@ -67,3 +67,23 @@ def column_recap_summary(data):
         f"klu/r {float(data['Rasio kelangsingan']):.2f}"
     )
     return title, secondary
+
+
+def etabs_beam_recap_key(data):
+    """Use the visible DesignSect/story pair as a stable recap identity."""
+    return f"{data['DesignSect']}|{data['Story']}"
+
+
+def save_etabs_beam_recap(state, data):
+    """Save one beam check to both the Pasca-ETABS and global analysis recaps."""
+    key = etabs_beam_recap_key(data)
+    saved = dict(data)
+    state.setdefault("rekap_etabs_balok", {})[key] = saved.copy()
+    state.setdefault("rekap_analisis_etabs", {})[key] = saved.copy()
+    return key
+
+
+def clear_etabs_beam_recap(state, key):
+    """Clear a saved ETABS beam row from both recap views."""
+    state.setdefault("rekap_etabs_balok", {}).pop(key, None)
+    state.setdefault("rekap_analisis_etabs", {}).pop(key, None)

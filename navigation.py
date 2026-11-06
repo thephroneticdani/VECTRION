@@ -14,6 +14,7 @@ def initialize_state(state):
         "draft_pelat": None,
         "etabs_beam_summary": None,
         "rekap_etabs_balok": {},
+        "rekap_analisis_etabs": {},
         "show_etabs_rebar": False,
     }
     for key, value in defaults.items():

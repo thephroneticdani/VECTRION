@@ -18,6 +18,7 @@ from styling import inject_global_styles
 from styling import COLORS
 from column_ui import render_column_module
 from recap import beam_recap_warnings, slab_recap_summary, column_recap_summary
+from recap import clear_etabs_beam_recap
 from engineering_disclaimer import render_engineering_disclaimer
 from post_etabs_ui import render_post_etabs_beam, render_post_etabs_column
 
@@ -234,5 +235,19 @@ if st.session_state["rekap_kolom"]:
             if action_col.button("Clear", key=f"clear_kolom_{kode_key}", use_container_width=True):
                 del st.session_state["rekap_kolom"][kode_key]
                 st.rerun()
-if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"]:
+if st.session_state["rekap_analisis_etabs"]:
+    st.markdown("**Balok Pasca-ETABS**")
+    for index, (recap_key, data) in enumerate(list(st.session_state["rekap_analisis_etabs"].items())):
+        with st.container(key=f"rekap-card-etabs-{index}", border=True):
+            data_col, action_col = st.columns([5, 1], vertical_alignment="center")
+            data_col.markdown(f"**{data['DesignSect']} · {data['Story']}**")
+            data_col.caption(
+                f"As atas {data['As atas tersedia (mm²)']:,.2f} / perlu {data['AsTopTotal maks.']:,.2f} mm² "
+                f"({data['Status atas']}) · As bawah {data['As bawah tersedia (mm²)']:,.2f} / "
+                f"perlu {data['AsBotTotal maks.']:,.2f} mm² ({data['Status bawah']})"
+            )
+            if action_col.button("Clear", key=f"clear_etabs_analysis_{index}", use_container_width=True):
+                clear_etabs_beam_recap(st.session_state, recap_key)
+                st.rerun()
+if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"]:
     st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")

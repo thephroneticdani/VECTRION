@@ -21,7 +21,10 @@ from column import (
     recommend_square_column,
     validate_column_code,
 )
-from recap import beam_recap_warnings, column_recap_summary, slab_recap_summary
+from recap import (
+    beam_recap_warnings, clear_etabs_beam_recap, column_recap_summary,
+    save_etabs_beam_recap, slab_recap_summary,
+)
 from etabs_beam import hitung_tulangan_balok, read_etabs_beam_summary, status_kebutuhan
 
 
@@ -252,10 +255,27 @@ class EtabsBeamTests(unittest.TestCase):
         initialize_state(state)
         navigate(state, "Pasca-ETABS-Balok")
         self.assertEqual(state["halaman"], "Pasca-ETABS-Balok")
-        state["rekap_etabs_balok"]["Balok 30x50|Lantai 1"] = {"As atas tersedia (mm²)": 200}
+        record = {
+            "DesignSect": "Balok 30x50", "Story": "Lantai 1",
+            "As atas tersedia (mm²)": 200, "Status atas": "Memenuhi",
+        }
+        key = save_etabs_beam_recap(state, record)
         navigate(state, "Pasca-ETABS-Kolom")
-        self.assertEqual(state["rekap_etabs_balok"]["Balok 30x50|Lantai 1"]["As atas tersedia (mm²)"], 200)
+        self.assertEqual(state["rekap_etabs_balok"][key]["As atas tersedia (mm²)"], 200)
+        self.assertEqual(state["rekap_analisis_etabs"][key]["As atas tersedia (mm²)"], 200)
         self.assertEqual(state["rekap_balok"]["B1"]["ok"], True)
+        clear_etabs_beam_recap(state, key)
+        self.assertNotIn(key, state["rekap_etabs_balok"])
+        self.assertNotIn(key, state["rekap_analisis_etabs"])
+
+    def test_save_updates_existing_pair_without_touching_other_analysis(self):
+        state = {
+            "rekap_analisis_etabs": {"Lain|Atap": {"As atas tersedia (mm²)": 310}},
+            "rekap_etabs_balok": {},
+        }
+        save_etabs_beam_recap(state, {"DesignSect": "200x300", "Story": "Lantai 1", "As atas tersedia (mm²)": 220})
+        self.assertEqual(state["rekap_analisis_etabs"]["Lain|Atap"]["As atas tersedia (mm²)"], 310)
+        self.assertIn("200x300|Lantai 1", state["rekap_analisis_etabs"])
 
 
 if __name__ == "__main__":

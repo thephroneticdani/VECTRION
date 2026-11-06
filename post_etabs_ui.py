@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 from etabs_beam import BAR_DIAMETERS_MM, hitung_tulangan_balok, read_etabs_beam_summary, status_kebutuhan
+from recap import save_etabs_beam_recap
 
 
 POST_BEAM_DISCLAIMER = (
@@ -55,11 +56,18 @@ def _render_beam_row(item, units, ordinal):
                 unsafe_allow_html=True,
             )
         st.caption("As tersedia = jumlah (π × Ø² / 4 × banyak batang), dihitung terpisah untuk atas dan bawah.")
-        st.session_state.setdefault("rekap_etabs_balok", {})[row_key] = {
+        record = {
             "DesignSect": item["DesignSect"], "Story": item["Story"],
             "AsTopTotal maks.": top_required, "AsBotTotal maks.": bottom_required,
+            "Ø atas 1 (mm)": d1, "Jumlah atas 1": int(n1),
+            "Ø atas 2 (mm)": d2, "Jumlah atas 2": int(n2),
+            "Ø bawah 1 (mm)": db1, "Jumlah bawah 1": int(nb1),
+            "Ø bawah 2 (mm)": db2, "Jumlah bawah 2": int(nb2),
             **as_values, "Status atas": top_status, "Status bawah": bottom_status,
         }
+        if st.button("Simpan ke Rekap", key=f"save_etabs_rebar_{ordinal}", type="primary"):
+            save_etabs_beam_recap(st.session_state, record)
+            st.success("Pilihan tulangan tersimpan di Rekap Tulangan Pasca-ETABS dan Rekap Analisis.")
 
 
 def render_post_etabs_beam(st):
@@ -76,7 +84,6 @@ def render_post_etabs_beam(st):
             try:
                 result = read_etabs_beam_summary(upload)
                 st.session_state["etabs_beam_summary"] = result
-                st.session_state["rekap_etabs_balok"] = {}
                 st.success(f"Sheet '{result['sheet']}' dibaca: {len(result['rows'])} kombinasi DesignSect/story.")
             except (ValueError, RuntimeError) as exc:
                 st.error(str(exc))
