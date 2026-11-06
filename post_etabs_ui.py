@@ -14,7 +14,8 @@ from etabs_beam import (
     status_kombinasi_balok,
     ukuran_dari_designsect,
 )
-from recap import save_etabs_beam_recap
+from etabs_column import BAR_DIAMETERS_MM as COLUMN_BAR_DIAMETERS_MM, format_kombinasi_tulangan_kolom, hitung_tulangan_kolom
+from recap import save_etabs_beam_recap, save_etabs_column_recap, clear_etabs_column_recap
 from recap_table_ui import render_recap_table
 
 
@@ -138,4 +139,80 @@ def render_post_etabs_beam(st):
 
 def render_post_etabs_column(st):
     st.markdown("## Pasca-ETABS · Kolom")
-    st.info("Coming soon — perhitungan kolom Pasca-ETABS belum tersedia.", icon="🏗️")
+    st.info(
+        "Cek dasar luas tulangan longitudinal: target minimum 1–8% dari luas bruto penampang. "
+        "Bukan desain kapasitas kolom; gaya aksial, momen, kelangsingan, sengkang, dan detailing tidak dihitung.",
+        icon="ℹ️",
+    )
+    with st.form("post_etabs_column_form"):
+        code = st.text_input("Kode kolom", value="K1", max_chars=40)
+        dim_a, dim_b, dim_r = st.columns(3)
+        width = dim_a.number_input("Lebar b (mm)", min_value=100, max_value=3000, value=400, step=10)
+        depth = dim_b.number_input("Tinggi h (mm)", min_value=100, max_value=3000, value=400, step=10)
+        ratio = dim_r.number_input("Target As minimum (%)", min_value=1.0, max_value=8.0, value=1.0, step=0.5)
+        st.markdown("**Tulangan longitudinal — maksimal tiga kombinasi**")
+        bar_cols = st.columns(3)
+        diameters, quantities = [], []
+        for index, column in enumerate(bar_cols, start=1):
+            with column:
+                st.caption(f"Kombinasi {index}")
+                diameters.append(st.selectbox(f"Diameter {index} (mm)", COLUMN_BAR_DIAMETERS_MM, index=COLUMN_BAR_DIAMETERS_MM.index(16), key=f"post_column_d{index}"))
+                quantities.append(st.number_input(f"Jumlah {index}", min_value=0, value=0, step=1, key=f"post_column_n{index}"))
+        submitted = st.form_submit_button("Hitung As Kolom", type="primary")
+
+    if submitted:
+        try:
+            code_value = code.strip()
+            if not code_value:
+                raise ValueError("Kode kolom wajib diisi.")
+            result = hitung_tulangan_kolom(width, depth, ratio, diameters, quantities)
+            st.session_state["draft_etabs_kolom"] = {
+                "Kode": code_value,
+                "Ukuran": f"{width:g}×{depth:g}",
+                "b (mm)": float(width), "h (mm)": float(depth),
+                "Diameter (mm)": list(diameters),
+                "Jumlah": [int(value) for value in quantities],
+                "Kombinasi tulangan": format_kombinasi_tulangan_kolom(diameters, quantities),
+                **result,
+            }
+            st.session_state.pop("post_column_error", None)
+        except ValueError as exc:
+            st.session_state["post_column_error"] = str(exc)
+    if st.session_state.get("post_column_error"):
+        st.error(st.session_state["post_column_error"])
+
+    draft = st.session_state.get("draft_etabs_kolom")
+    if draft:
+        st.markdown("### Hasil pemeriksaan As kolom")
+        result_cols = st.columns(4)
+        result_cols[0].metric("Luas penampang", f"{draft['Luas penampang (mm²)']:,.0f} mm²")
+        result_cols[1].metric("As minimum", f"{draft['As minimum (mm²)']:,.2f} mm²")
+        result_cols[2].metric("As tersedia", f"{draft['As tersedia (mm²)']:,.2f} mm²")
+        result_cols[3].metric("Rasio aktual", f"{draft['Rasio aktual (%)']:.2f}%")
+        if draft["Status"] == "Memenuhi":
+            st.success("As tersedia berada di antara target minimum dan batas input 8%.")
+        elif draft["Status"] == "Melebihi 8%":
+            st.error("As tersedia melebihi batas maksimum 8% dari luas bruto.")
+        else:
+            st.error("As tersedia belum mencapai target minimum.")
+        st.caption(f"{draft['Kode']} · {draft['Ukuran']} mm · {draft['Kombinasi tulangan']}")
+        if st.button("Simpan ke Rekap", key="save_post_etabs_column", type="primary"):
+            save_etabs_column_recap(st.session_state, draft)
+            st.success("Hasil kolom tersimpan di Rekap Pasca-ETABS dan Rekap Analisis.")
+
+    recap = st.session_state.get("rekap_etabs_kolom", {})
+    if recap:
+        st.markdown("### Rekap tulangan Pasca-ETABS · Kolom")
+        rows = []
+        for key, data in recap.items():
+            rows.append({
+                "values": [data["Kode"], data["Ukuran"], data["Kombinasi tulangan"],
+                           f"{data['As tersedia (mm²)']:,.2f}", f"{data['Rasio aktual (%)']:.2f}%",
+                           f"{data['As minimum (mm²)']:,.2f}", data["Status"]],
+                "clear": lambda k=key: clear_etabs_column_recap(st.session_state, k),
+            })
+        render_recap_table(
+            st, key="post-etabs-column", title="Rekap tulangan kolom",
+            headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
+            rows=rows,
+        )

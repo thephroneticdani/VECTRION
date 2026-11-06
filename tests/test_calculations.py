@@ -23,7 +23,8 @@ from column import (
 )
 from recap import (
     beam_recap_warnings, clear_etabs_beam_recap, column_recap_summary,
-    save_etabs_beam_recap, slab_recap_summary,
+    save_etabs_beam_recap, slab_recap_summary, save_etabs_column_recap,
+    clear_etabs_column_recap,
 )
 from etabs_beam import (
     format_kombinasi_tulangan,
@@ -33,6 +34,7 @@ from etabs_beam import (
     status_kombinasi_balok,
     ukuran_dari_designsect,
 )
+from etabs_column import format_kombinasi_tulangan_kolom, hitung_tulangan_kolom
 
 
 class BeamTests(unittest.TestCase):
@@ -232,6 +234,30 @@ class EtabsBeamTests(unittest.TestCase):
         self.assertEqual(ukuran_dari_designsect("200 × 300"), "200×300")
         self.assertEqual(status_kombinasi_balok({"Status atas": "Memenuhi", "Status bawah": "Memenuhi"}), "Memenuhi")
         self.assertEqual(status_kombinasi_balok({"Status atas": "Memenuhi", "Status bawah": "Tidak memenuhi"}), "Tidak memenuhi")
+
+    def test_column_reinforcement_area_minimum_and_maximum(self):
+        result = hitung_tulangan_kolom(400, 400, 1, [19, 16, 10], [4, 4, 8])
+        expected = 4 * 3.141592653589793 * 19**2 / 4 + 4 * 3.141592653589793 * 16**2 / 4 + 8 * 3.141592653589793 * 10**2 / 4
+        self.assertAlmostEqual(result["Luas penampang (mm²)"], 160000)
+        self.assertAlmostEqual(result["As minimum (mm²)"], 1600)
+        self.assertAlmostEqual(result["As tersedia (mm²)"], expected)
+        self.assertEqual(result["Status"], "Memenuhi")
+        self.assertEqual(format_kombinasi_tulangan_kolom([19, 16, 10], [4, 4, 8]), "4D19 + 4D16 + 8D10")
+        self.assertEqual(format_kombinasi_tulangan_kolom([19, 16, 10], [4, 0, 0]), "4D19")
+        self.assertEqual(hitung_tulangan_kolom(400, 400, 1, [8, 8, 8], [1, 0, 0])["Status"], "Kurang dari minimum")
+        self.assertEqual(hitung_tulangan_kolom(100, 100, 1, [32, 32, 32], [3, 3, 3])["Status"], "Melebihi 8%")
+        with self.assertRaises(ValueError):
+            hitung_tulangan_kolom(400, 400, 8.1, [16, 16, 16], [4, 4, 4])
+
+    def test_column_recap_persists_and_clears_both_views(self):
+        state = {}
+        data = {"Kode": "K1", "Ukuran": "400×400", "Status": "Memenuhi"}
+        key = save_etabs_column_recap(state, data)
+        self.assertEqual(state["rekap_etabs_kolom"][key]["Kode"], "K1")
+        self.assertEqual(state["rekap_analisis_etabs_kolom"][key]["Ukuran"], "400×400")
+        clear_etabs_column_recap(state, key)
+        self.assertNotIn(key, state["rekap_etabs_kolom"])
+        self.assertNotIn(key, state["rekap_analisis_etabs_kolom"])
 
     def test_area_conversion_and_requirement_status(self):
         result = hitung_tulangan_balok([16, 13], [1, 0], [16, 13], [1, 0])

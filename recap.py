@@ -87,3 +87,20 @@ def clear_etabs_beam_recap(state, key):
     """Clear a saved ETABS beam row from both recap views."""
     state.setdefault("rekap_etabs_balok", {}).pop(key, None)
     state.setdefault("rekap_analisis_etabs", {}).pop(key, None)
+
+
+def etabs_column_recap_key(data):
+    return f"{str(data['Kode']).strip().upper()}|{data['Ukuran']}"
+
+
+def save_etabs_column_recap(state, data):
+    key = etabs_column_recap_key(data)
+    saved = dict(data)
+    state.setdefault("rekap_etabs_kolom", {})[key] = saved.copy()
+    state.setdefault("rekap_analisis_etabs_kolom", {})[key] = saved.copy()
+    return key
+
+
+def clear_etabs_column_recap(state, key):
+    state.setdefault("rekap_etabs_kolom", {}).pop(key, None)
+    state.setdefault("rekap_analisis_etabs_kolom", {}).pop(key, None)

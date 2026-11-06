@@ -16,7 +16,7 @@ st.set_page_config(
 
 from styling import inject_global_styles
 from column_ui import render_column_module
-from recap import clear_etabs_beam_recap
+from recap import clear_etabs_beam_recap, clear_etabs_column_recap
 from recap_table_ui import render_recap_table
 from etabs_beam import format_kombinasi_tulangan, status_kombinasi_balok, ukuran_dari_designsect
 from engineering_disclaimer import render_engineering_disclaimer
@@ -267,5 +267,19 @@ if st.session_state["rekap_analisis_etabs"]:
         headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
         widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
     )
-if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"]:
+if st.session_state["rekap_analisis_etabs_kolom"]:
+    column_rows = []
+    for recap_key, data in list(st.session_state["rekap_analisis_etabs_kolom"].items()):
+        column_rows.append({
+            "values": [data["Kode"], data["Ukuran"], data["Kombinasi tulangan"],
+                       f"{data['As tersedia (mm²)']:,.2f}", f"{data['Rasio aktual (%)']:.2f}%",
+                       f"{data['As minimum (mm²)']:,.2f}", data["Status"]],
+            "clear": lambda k=recap_key: clear_etabs_column_recap(st.session_state, k),
+        })
+    render_recap_table(
+        st, key="post-column", title="Kolom Pasca-ETABS",
+        headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
+        rows=column_rows,
+    )
+if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"] and not st.session_state["rekap_analisis_etabs_kolom"]:
     st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")
