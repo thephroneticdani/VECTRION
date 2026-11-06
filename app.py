@@ -15,10 +15,10 @@ st.set_page_config(
 )
 
 from styling import inject_global_styles
-from styling import COLORS
 from column_ui import render_column_module
-from recap import beam_recap_warnings, slab_recap_summary, column_recap_summary
 from recap import clear_etabs_beam_recap
+from recap_table_ui import render_recap_table
+from etabs_beam import format_kombinasi_tulangan, status_kombinasi_balok, ukuran_dari_designsect
 from engineering_disclaimer import render_engineering_disclaimer
 from post_etabs_ui import render_post_etabs_beam, render_post_etabs_column
 
@@ -200,54 +200,72 @@ elif st.session_state["halaman"] == "Pasca-ETABS-Kolom":
 st.divider()
 st.markdown("### Rekap analisis")
 if st.session_state["rekap_balok"]:
-    st.markdown("**Balok**")
+    beam_rows = []
     for kode_key, data in list(st.session_state["rekap_balok"].items()):
-        with st.container(key=f"rekap-card-balok-{kode_key}", border=True):
-            data_col, action_col = st.columns([5, 1], vertical_alignment="center")
-            data_col.markdown(f"**{data['Kode balok']}** · {data['Dimensi (b × h)']}")
-            data_col.caption(f"Bentang {data['Bentang (mm)']} mm · Rasio b/h {data['Rasio b/h']:.3f} · Luas {data['Luas penampang (mm²)']:,} mm²")
-            for warning in beam_recap_warnings(data):
-                data_col.markdown(f"<span style=\"color:{COLORS['error']}\">{warning}</span>", unsafe_allow_html=True)
-            if action_col.button("Clear", key=f"clear_balok_{kode_key}", use_container_width=True):
-                del st.session_state["rekap_balok"][kode_key]
-                st.rerun()
+        beam_rows.append({
+            "values": [
+                data["Kode balok"], f"{data['Bentang (mm)']:,} mm", data["Kondisi tumpuan"],
+                data["Dimensi (b × h)"], f"{data['Tinggi minimum (mm)']:,.0f} mm",
+                f"{data['Tinggi rekomendasi (mm)']:,.0f} mm", f"{data['Rasio b/h']:.3f}",
+                f"{data['Luas penampang (mm²)']:,} mm²",
+            ],
+            "clear": lambda k=kode_key: st.session_state["rekap_balok"].pop(k, None),
+        })
+    render_recap_table(
+        st, key="pre-beam", title="Balok Pra-Desain",
+        headers=["Kode", "Bentang", "Tumpuan", "Dimensi", "h minimum", "h rekomendasi", "Rasio b/h", "Luas penampang", "Aksi"],
+        widths=[.7, .8, 1.15, .8, .8, .9, .65, 1.0, .6], rows=beam_rows,
+    )
 if st.session_state["rekap_pelat"]:
-    st.markdown("**Pelat**")
+    slab_rows = []
     for kode_key, data in list(st.session_state["rekap_pelat"].items()):
-        with st.container(key=f"rekap-card-pelat-{kode_key}", border=True):
-            data_col, action_col = st.columns([5, 1], vertical_alignment="center")
-            slab_title, slab_details, slab_warning = slab_recap_summary(data)
-            data_col.markdown(f"**{slab_title}**")
-            data_col.caption(slab_details)
-            if slab_warning:
-                data_col.markdown(f"<span style=\"color:{COLORS['error']}\">{slab_warning}</span>", unsafe_allow_html=True)
-            if action_col.button("Clear", key=f"clear_pelat_{kode_key}", use_container_width=True):
-                del st.session_state["rekap_pelat"][kode_key]
-                st.rerun()
+        slab_rows.append({
+            "values": [
+                data["Kode panel"], data.get("Jenis pelat", data.get("Sistem", "Pelat")),
+                f"{data['Bentang acuan (mm)']:,} mm", data["Kondisi tumpuan"],
+                f"{data['h_min_mm']:.1f} mm", f"{data['Rekomendasi (mm)']:,} mm",
+                f"{data['Pilihan (mm)']:,} mm", data["Pemeriksaan"],
+            ],
+            "clear": lambda k=kode_key: st.session_state["rekap_pelat"].pop(k, None),
+        })
+    render_recap_table(
+        st, key="pre-slab", title="Pelat Pra-Desain",
+        headers=["Kode panel", "Jenis", "Bentang", "Tumpuan", "h minimum", "Rekomendasi", "Pilihan", "Status", "Aksi"],
+        widths=[.75, 1.2, .8, 1.05, .75, .85, .7, 1.6, .6], rows=slab_rows,
+    )
 if st.session_state["rekap_kolom"]:
-    st.markdown("**Kolom**")
+    column_rows = []
     for kode_key, data in list(st.session_state["rekap_kolom"].items()):
-        with st.container(key=f"rekap-card-kolom-{kode_key}", border=True):
-            data_col, action_col = st.columns([5, 1], vertical_alignment="center")
-            column_title, column_details = column_recap_summary(data)
-            data_col.markdown(f"**{column_title}**")
-            data_col.caption(column_details)
-            if action_col.button("Clear", key=f"clear_kolom_{kode_key}", use_container_width=True):
-                del st.session_state["rekap_kolom"][kode_key]
-                st.rerun()
+        selection = data.get("Pilihan pengguna (mm)")
+        dimension = f"{selection:,.0f} × {selection:,.0f} mm" if selection else "Belum dipilih"
+        column_rows.append({
+            "values": [
+                data["Kode kolom"], dimension, data["Rekomendasi VECTRION"],
+                f"{data['lu (mm)']:,.0f} mm", f"{data['Rasio kelangsingan']:.2f}",
+            ],
+            "clear": lambda k=kode_key: st.session_state["rekap_kolom"].pop(k, None),
+        })
+    render_recap_table(
+        st, key="pre-column", title="Kolom Pra-Desain",
+        headers=["Kode", "Dimensi pilihan", "Rekomendasi", "Panjang tak tertumpu", "Rasio kelangsingan", "Aksi"],
+        widths=[.75, 1.0, 1.0, 1.0, 1.0, .6], rows=column_rows,
+    )
 if st.session_state["rekap_analisis_etabs"]:
-    st.markdown("**Balok Pasca-ETABS**")
-    for index, (recap_key, data) in enumerate(list(st.session_state["rekap_analisis_etabs"].items())):
-        with st.container(key=f"rekap-card-etabs-{index}", border=True):
-            data_col, action_col = st.columns([5, 1], vertical_alignment="center")
-            data_col.markdown(f"**{data['DesignSect']} · {data['Story']}**")
-            data_col.caption(
-                f"As atas {data['As atas tersedia (mm²)']:,.2f} / perlu {data['AsTopTotal maks.']:,.2f} mm² "
-                f"({data['Status atas']}) · As bawah {data['As bawah tersedia (mm²)']:,.2f} / "
-                f"perlu {data['AsBotTotal maks.']:,.2f} mm² ({data['Status bawah']})"
-            )
-            if action_col.button("Clear", key=f"clear_etabs_analysis_{index}", use_container_width=True):
-                clear_etabs_beam_recap(st.session_state, recap_key)
-                st.rerun()
+    etabs_rows = []
+    for recap_key, data in list(st.session_state["rekap_analisis_etabs"].items()):
+        etabs_rows.append({
+            "values": [
+                ukuran_dari_designsect(data["DesignSect"]), data["Story"],
+                format_kombinasi_tulangan(data.get("Ø atas 1 (mm)"), data.get("Jumlah atas 1", 0), data.get("Ø atas 2 (mm)"), data.get("Jumlah atas 2", 0)),
+                format_kombinasi_tulangan(data.get("Ø bawah 1 (mm)"), data.get("Jumlah bawah 1", 0), data.get("Ø bawah 2 (mm)"), data.get("Jumlah bawah 2", 0)),
+                status_kombinasi_balok(data),
+            ],
+            "clear": lambda k=recap_key: clear_etabs_beam_recap(st.session_state, k),
+        })
+    render_recap_table(
+        st, key="post-beam", title="Balok Pasca-ETABS",
+        headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
+        widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
+    )
 if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"]:
     st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")

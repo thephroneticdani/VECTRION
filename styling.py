@@ -241,12 +241,20 @@ def inject_global_styles(st, navigation_hidden=False):
         .brand-logo img {{ display:block; height:auto; max-width:100%; }}
         .brand-logo-sidebar img {{ width:100%; max-width:230px; margin:0 auto; }}
         .brand-logo-hero img {{ width:100%; max-width:430px; margin:0 auto; }}
-        [class*="st-key-rekap-card-"] {{
-          background:linear-gradient(135deg,#FFFFFF,{c['surface_elevated']}) !important;
-          border:1px solid {c['border']} !important; border-radius:13px !important;
-          padding:.35rem .55rem !important; margin-bottom:.55rem !important;
-          box-shadow:0 2px 10px #4937250A;
+        [class*="st-key-recap-grid-"][class*="-header"] {{
+          background:#F1EADF !important; border-top:1px solid #C8B7A3;
+          border-bottom:1px solid #B79C7E; padding:.48rem .55rem !important;
         }}
+        [class*="st-key-recap-grid-"][class*="-row-"] {{
+          border-bottom:1px solid #E6DED4; padding:.42rem .55rem !important;
+        }}
+        [class*="st-key-recap-grid-"][class*="-row-"]:hover {{ background:#F7F3ED !important; }}
+        [class*="st-key-recap-grid-"][class*="-row-"] [data-testid="stButton"] button {{
+          min-height:2.1rem !important; padding:.3rem .45rem !important; font-size:.78rem !important;
+          border-radius:6px !important; box-shadow:none !important;
+        }}
+        .vx-recap-header {{ color:#553B29; font-size:.82rem; font-weight:700; line-height:1.3; }}
+        .vx-recap-cell {{ color:#332A23; font-size:.9rem; line-height:1.4; overflow-wrap:anywhere; }}
         *:focus-visible {{ outline:2px solid {c['accent']} !important; outline-offset:2px; }}
         @media (max-width: 800px) {{
           [data-testid="stMainBlockContainer"] {{ padding-left:1rem; padding-right:1rem; padding-top:1.25rem; padding-bottom:{mobile_bottom_padding}; }}

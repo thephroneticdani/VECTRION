@@ -25,7 +25,14 @@ from recap import (
     beam_recap_warnings, clear_etabs_beam_recap, column_recap_summary,
     save_etabs_beam_recap, slab_recap_summary,
 )
-from etabs_beam import hitung_tulangan_balok, read_etabs_beam_summary, status_kebutuhan
+from etabs_beam import (
+    format_kombinasi_tulangan,
+    hitung_tulangan_balok,
+    read_etabs_beam_summary,
+    status_kebutuhan,
+    status_kombinasi_balok,
+    ukuran_dari_designsect,
+)
 
 
 class BeamTests(unittest.TestCase):
@@ -217,6 +224,15 @@ class RecapPresentationTests(unittest.TestCase):
 
 
 class EtabsBeamTests(unittest.TestCase):
+    def test_recap_bar_combinations_omit_empty_groups(self):
+        self.assertEqual(format_kombinasi_tulangan(10, 4, 13, 2), "4D10 + 2D13")
+        self.assertEqual(format_kombinasi_tulangan(13, 6, 13, 0), "6D13")
+        self.assertEqual(format_kombinasi_tulangan(13, 0, 13, 0), "—")
+        self.assertEqual(ukuran_dari_designsect("Balok 20x30"), "20x30")
+        self.assertEqual(ukuran_dari_designsect("200 × 300"), "200×300")
+        self.assertEqual(status_kombinasi_balok({"Status atas": "Memenuhi", "Status bawah": "Memenuhi"}), "Memenuhi")
+        self.assertEqual(status_kombinasi_balok({"Status atas": "Memenuhi", "Status bawah": "Tidak memenuhi"}), "Tidak memenuhi")
+
     def test_area_conversion_and_requirement_status(self):
         result = hitung_tulangan_balok([16, 13], [1, 0], [16, 13], [1, 0])
         self.assertAlmostEqual(result["As atas tersedia (mm²)"], 201.0619298)

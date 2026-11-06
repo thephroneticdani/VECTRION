@@ -121,3 +121,29 @@ def status_kebutuhan(as_provided, as_required):
     required = _number(as_required, "As perlu", "input")
     provided = _number(as_provided, "As tersedia", "input")
     return "Memenuhi" if provided >= required else "Tidak memenuhi"
+
+
+def format_kombinasi_tulangan(diameter_1, jumlah_1, diameter_2, jumlah_2):
+    """Format up to two bar groups, omitting groups with zero bars."""
+    groups = []
+    for diameter, quantity in ((diameter_1, jumlah_1), (diameter_2, jumlah_2)):
+        count = int(float(quantity or 0))
+        if count > 0:
+            groups.append(f"{count}D{int(float(diameter))}")
+    return " + ".join(groups) if groups else "—"
+
+
+def ukuran_dari_designsect(designsect):
+    """Show a section dimension token when present; otherwise keep its name."""
+    text = str(designsect or "").strip()
+    match = re.search(r"(?<!\w)(\d+\s*[xX×]\s*\d+)(?!\w)", text)
+    if match:
+        return re.sub(r"\s*([xX×])\s*", r"\1", match.group(1))
+    return text
+
+
+def status_kombinasi_balok(record):
+    """Combined row status is satisfied only when both top and bottom pass."""
+    if record.get("Status atas") == "Memenuhi" and record.get("Status bawah") == "Memenuhi":
+        return "Memenuhi"
+    return "Tidak memenuhi"

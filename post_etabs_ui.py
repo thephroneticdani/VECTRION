@@ -5,8 +5,17 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from etabs_beam import BAR_DIAMETERS_MM, hitung_tulangan_balok, read_etabs_beam_summary, status_kebutuhan
+from etabs_beam import (
+    BAR_DIAMETERS_MM,
+    format_kombinasi_tulangan,
+    hitung_tulangan_balok,
+    read_etabs_beam_summary,
+    status_kebutuhan,
+    status_kombinasi_balok,
+    ukuran_dari_designsect,
+)
 from recap import save_etabs_beam_recap
+from recap_table_ui import render_recap_table
 
 
 POST_BEAM_DISCLAIMER = (
@@ -109,7 +118,22 @@ def render_post_etabs_beam(st):
     recap = st.session_state.get("rekap_etabs_balok", {})
     if recap:
         st.markdown("### Rekap tulangan Pasca-ETABS")
-        st.dataframe(pd.DataFrame(recap.values()), hide_index=True, width="stretch")
+        table_rows = []
+        for data in recap.values():
+            table_rows.append({
+                "values": [
+                    ukuran_dari_designsect(data["DesignSect"]),
+                    data["Story"],
+                    format_kombinasi_tulangan(data.get("Ø atas 1 (mm)"), data.get("Jumlah atas 1", 0), data.get("Ø atas 2 (mm)"), data.get("Jumlah atas 2", 0)),
+                    format_kombinasi_tulangan(data.get("Ø bawah 1 (mm)"), data.get("Jumlah bawah 1", 0), data.get("Ø bawah 2 (mm)"), data.get("Jumlah bawah 2", 0)),
+                    status_kombinasi_balok(data),
+                ]
+            })
+        render_recap_table(
+            st, key="post-etabs-summary", title="Rekap tulangan Pasca-ETABS",
+            headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status"],
+            widths=[1.0, 0.9, 1.5, 1.5, 0.9], rows=table_rows, clear_column=False,
+        )
 
 
 def render_post_etabs_column(st):
