@@ -296,14 +296,20 @@ def inject_global_styles(st, navigation_hidden=False):
             flex-direction:row !important; align-items:stretch !important; gap:.22rem !important;
           }}
           section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="stHorizontalBlock"] {{
-            display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
-            align-items:stretch !important; gap:.3rem !important;
+            display:grid !important; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr) !important;
+            width:100% !important; max-width:100% !important; box-sizing:border-box !important;
+            align-items:stretch !important; gap:.45rem !important;
           }}
           section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="column"] {{
-            flex:1 1 50% !important; width:50% !important; min-width:0 !important;
+            width:100% !important; min-width:0 !important; max-width:100% !important;
+            flex:initial !important; box-sizing:border-box !important;
           }}
           section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="stButton"] {{
-            width:100% !important; min-width:0 !important;
+            width:100% !important; min-width:0 !important; max-width:100% !important;
+          }}
+          section[data-testid="stSidebar"] [class*="st-key-post-etabs-module-navigation"] [data-testid="stButton"] button {{
+            display:flex !important; width:100% !important; min-width:0 !important; max-width:100% !important;
+            box-sizing:border-box !important; white-space:nowrap !important; overflow:hidden !important;
           }}
           section[data-testid="stSidebar"] [data-testid="stButton"] {{ flex:1 1 0 !important; min-width:0 !important; }}
           section[data-testid="stSidebar"] [data-testid="stButton"] button {{
