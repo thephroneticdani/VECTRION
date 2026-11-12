@@ -39,7 +39,12 @@ initialize_state(st.session_state)
 st.session_state.setdefault("rekap_kolom", {})
 st.session_state.setdefault("navigation_hidden", False)
 st.session_state.setdefault("theme_mode", "Terang")
-inject_global_styles(st, navigation_hidden=st.session_state["navigation_hidden"], theme=st.session_state["theme_mode"])
+inject_global_styles(
+    st,
+    navigation_hidden=st.session_state["navigation_hidden"],
+    theme=st.session_state["theme_mode"],
+    homepage=st.session_state["halaman"] == "Beranda",
+)
 
 def pindah(halaman):
     navigate(st.session_state, halaman)
@@ -102,23 +107,24 @@ with st.sidebar:
                     use_container_width=True, on_click=pindah, args=("Pasca-ETABS-Kolom",),
                 )
 
-menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
-with menu_col:
-    with st.container(key="navigation-toggle"):
-        st.button("☰", key="toggle_navigation", type="primary", help="Sembunyikan / tampilkan panel navigasi", on_click=toggle_navigation)
-with title_col:
-    st.title("VECTRION")
-    st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
+with st.container(key="page-title"):
+    menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
+    with menu_col:
+        with st.container(key="navigation-toggle"):
+            st.button("☰", key="toggle_navigation", type="primary", help="Sembunyikan / tampilkan panel navigasi", on_click=toggle_navigation)
+    with title_col:
+        st.title("VECTRION")
+        st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
 
 if st.session_state["halaman"] == "Beranda":
-    render_engineering_disclaimer(st)
-    with st.container(key="home-hero"):
-        st.html(
-            """<div class="vx-home-video-layer" aria-hidden="true">
+    st.html(
+        """<div class="vx-site-video-layer" aria-hidden="true">
 <video autoplay muted loop playsinline preload="metadata" tabindex="-1">
 <source src="app/static/hero_construction.mp4" type="video/mp4">
-</video><div class="vx-home-video-shade"></div></div>"""
-        )
+</video><div class="vx-site-video-shade"></div></div>"""
+    )
+    render_engineering_disclaimer(st)
+    with st.container(key="home-hero"):
         hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
         with hero_copy:
             st.markdown("## Rekayasa struktur, dimulai dari pradesain")

@@ -53,7 +53,7 @@ SIDEBAR_BATIK_SVG = BATIK_KAWUNG_SVG.replace("stroke-opacity='.018'", "stroke-op
 SIDEBAR_BATIK_DATA = base64.b64encode(SIDEBAR_BATIK_SVG.encode("utf-8")).decode("ascii")
 
 
-def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
+def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=False):
     c = COLORS
     sidebar_visibility = 'section[data-testid="stSidebar"]{display:none !important;}' if navigation_hidden else ""
     mobile_bottom_padding = "2rem" if navigation_hidden else "8rem"
@@ -75,16 +75,35 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
       .vx-recap-mobile-label{color:#e0b890}
       @media(max-width:768px){section[data-testid="stSidebar"]>div:first-child{background:#19222c!important}.vx-recap-table tbody tr{background:#202b36;border-color:#526170;box-shadow:none}.vx-recap-table td{border-color:#394957}}
     """ if theme == "Gelap" else ""
-    hero_theme_css = """[class*="st-key-home-hero"]{background:#111820!important}
+    hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
       [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(17,24,32,.85);border-color:#81909f99;color:#e8edf2}
       [class*="st-key-home-hero"] h2,[class*="st-key-home-hero"] p,[class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#e8edf2!important;text-shadow:none!important}
       [class*="st-key-home-hero"] .brand-logo-hero img{filter:brightness(1.35) contrast(1.1)}
-    """ if theme == "Gelap" else """[class*="st-key-home-hero"]{background:#F6F1E9!important}
+    """ if theme == "Gelap" else """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
       [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(251,250,247,.85);border-color:#81583d66;color:#332a23}
       [class*="st-key-home-hero"] h2{color:#63452f!important;text-shadow:none!important}
       [class*="st-key-home-hero"] p{color:#332a23!important;text-shadow:none!important}
       [class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#5c5046!important;text-shadow:none!important}
     """
+    page_surface = "rgba(17,24,32,.85)" if theme == "Gelap" else "rgba(251,250,247,.85)"
+    page_border = "#81909f99" if theme == "Gelap" else "#81583d55"
+    page_fallback = "#111820" if theme == "Gelap" else "#FBFAF7"
+    alert_surface = "rgba(52,49,31,.9)" if theme == "Gelap" else "rgba(255,248,213,.92)"
+    page_overlay = ".24" if theme == "Gelap" else ".16"
+    homepage_css = f""".stApp{{position:relative;isolation:isolate;background:{page_fallback}!important;background-image:none!important}}
+      html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{background:transparent!important}}
+      [data-testid="stAppViewContainer"]{{position:relative}}
+      header[data-testid="stHeader"]{{background:{page_surface}!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+      section[data-testid="stSidebar"]>div:first-child{{background:{page_surface}!important;background-image:none!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+      [data-testid="stMainBlockContainer"] [class*="st-key-page-title"],[data-testid="stMainBlockContainer"] [class*="st-key-recap-section"]{{background:{page_surface};border:1px solid {page_border};border-radius:16px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+      [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){{background:{page_surface}!important;border-color:{page_border}!important;border-radius:14px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+      [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{{background:{alert_surface}!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
+      [data-testid="stMainBlockContainer"] .element-container:has(.vx-site-video-layer){{position:static!important;height:0!important;margin:0!important;padding:0!important}}
+      .vx-site-video-layer{{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:-1;overflow:hidden;pointer-events:none}}
+      .vx-site-video-layer video{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}}
+      .vx-site-video-shade{{position:absolute;inset:0;background:linear-gradient(120deg,rgba(10,16,23,{page_overlay}),rgba(10,16,23,.08))}}
+      @media(prefers-reduced-motion:reduce){{.vx-site-video-layer video{{display:none}}}}
+    """ if homepage else ""
     st.markdown(
         f"""
         <style>
@@ -388,6 +407,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
           [class*="st-key-recap-actions-"] [data-testid="stButton"] button {{ width:100% !important; }}
         }}
         {dark_theme_css}
+        {homepage_css}
         [class*="st-key-home-hero"] {{ position:relative; min-height:20rem; padding:0 !important; overflow:hidden; border:1px solid #FFFFFF48; border-radius:18px; background:#F6F1E9; isolation:isolate; }}
         [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:17rem; justify-content:center; }}
         [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
