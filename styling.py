@@ -72,6 +72,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .brand-logo img{filter:brightness(1.28) saturate(1.25) drop-shadow(0 0 5px #f4c783bb) drop-shadow(0 0 14px #c78c50aa)}
       section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"]{background:#25313d!important;color:#e8edf2!important;border-color:#526170!important}
       section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"] *{color:#e8edf2!important}
+      [data-testid="stMainBlockContainer"] button:disabled,[data-testid="stMainBlockContainer"] button[aria-disabled="true"]{background:#eef1f5!important;color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
+      [data-testid="stMainBlockContainer"] button:disabled *,[data-testid="stMainBlockContainer"] button[aria-disabled="true"] *{color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
       .vx-recap-table{color:#e8edf2;background:#202b36;border-color:#526170}
       .vx-recap-table th{background:#2e3b47;color:#f0d7c0;border-color:#526170}
       .vx-recap-table td{border-color:#394957}.vx-recap-table tbody tr:nth-child(even){background:#25313d}
@@ -132,6 +134,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){background:rgba(8,12,29,.8)!important;border:1px solid #24d8ee77!important;border-radius:18px!important;padding:1.5rem!important;margin:.75rem 0 1.35rem!important;box-shadow:0 0 28px #0ad7eb36,0 0 44px #db35ff18,inset 0 0 18px #0ad7eb0d}
       [data-testid="stMainBlockContainer"] [class*="st-key-page-title"],[data-testid="stMainBlockContainer"] [class*="st-key-recap-section"]{background:rgba(8,12,29,.8)!important;border-color:#26ddf077!important;padding:1.5rem!important;box-shadow:0 0 28px #0ad7eb36,0 0 44px #db35ff18}
       [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{color:#f4efff!important;border:1px solid #cc4cff99!important;box-shadow:0 0 18px #c43bff22}
+      [data-testid="stMainBlockContainer"] button:disabled,[data-testid="stMainBlockContainer"] button[aria-disabled="true"]{background:#eef1f5!important;color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
+      [data-testid="stMainBlockContainer"] button:disabled *,[data-testid="stMainBlockContainer"] button[aria-disabled="true"] *{color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
       .vx-site-video-shade{background:linear-gradient(120deg,#07102133,#05283422,#30104133,#07102122)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
       [data-testid="stMainBlockContainer"] .stButton button{background:linear-gradient(105deg,#0c5065,#542565)!important;color:#fff!important;border:1px solid #30eaff99!important;box-shadow:0 0 12px #07cde833}
       [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{background:#111a30!important;color:#f5f4ff!important;border-color:#27dff277!important}
