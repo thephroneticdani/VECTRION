@@ -116,7 +116,7 @@ if st.session_state["halaman"] == "Beranda":
         st.html(
             """<div class="vx-home-video-layer" aria-hidden="true">
 <video autoplay muted loop playsinline preload="metadata" tabindex="-1">
-<source src="/app/static/hero_construction.mp4" type="video/mp4">
+<source src="app/static/hero_construction.mp4" type="video/mp4">
 </video><div class="vx-home-video-shade"></div></div>"""
         )
         hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
