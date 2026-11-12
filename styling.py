@@ -54,6 +54,8 @@ SIDEBAR_BATIK_DATA = base64.b64encode(SIDEBAR_BATIK_SVG.encode("utf-8")).decode(
 
 
 def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=False):
+    # Infer the page from session state so older call sites remain compatible.
+    homepage = homepage or st.session_state.get("halaman") == "Beranda"
     c = COLORS
     sidebar_visibility = 'section[data-testid="stSidebar"]{display:none !important;}' if navigation_hidden else ""
     mobile_bottom_padding = "2rem" if navigation_hidden else "8rem"

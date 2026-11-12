@@ -43,7 +43,6 @@ inject_global_styles(
     st,
     navigation_hidden=st.session_state["navigation_hidden"],
     theme=st.session_state["theme_mode"],
-    homepage=st.session_state["halaman"] == "Beranda",
 )
 
 def pindah(halaman):
