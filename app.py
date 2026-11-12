@@ -37,13 +37,17 @@ from slab_ui import render_modul_pelat
 initialize_state(st.session_state)
 st.session_state.setdefault("rekap_kolom", {})
 st.session_state.setdefault("navigation_hidden", False)
-inject_global_styles(st, navigation_hidden=st.session_state["navigation_hidden"])
+st.session_state.setdefault("theme_mode", "Terang")
+inject_global_styles(st, navigation_hidden=st.session_state["navigation_hidden"], theme=st.session_state["theme_mode"])
 
 def pindah(halaman):
     navigate(st.session_state, halaman)
 
 def toggle_navigation():
     st.session_state["navigation_hidden"] = not st.session_state["navigation_hidden"]
+
+def toggle_theme():
+    st.session_state["theme_mode"] = "Gelap" if st.session_state["theme_mode"] == "Terang" else "Terang"
 
 logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
 logo_data = base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
@@ -73,6 +77,11 @@ with st.sidebar:
                 on_click=pindah,
                 args=(page,),
             )
+        st.button(
+            f"☾  Gelap" if st.session_state["theme_mode"] == "Terang" else "☀  Terang",
+            key="toggle_theme", type="secondary", use_container_width=True,
+            on_click=toggle_theme,
+        )
     if st.session_state["halaman"] == "Pra-Desain":
         st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
     if st.session_state["halaman"].startswith("Pasca-ETABS-"):
@@ -202,89 +211,94 @@ elif st.session_state["halaman"] == "Pasca-ETABS-Kolom":
     render_post_etabs_column(st)
 
 # Rekap lintas halaman: tetap berada di session_state saat navigasi.
-st.divider()
-st.markdown("### Rekap analisis")
-if st.session_state["rekap_balok"]:
-    beam_rows = []
-    for kode_key, data in list(st.session_state["rekap_balok"].items()):
-        beam_rows.append({
-            "values": [
-                data["Kode balok"], f"{data['Bentang (mm)']:,} mm", data["Kondisi tumpuan"],
-                data["Dimensi (b × h)"], f"{data['Tinggi minimum (mm)']:,.0f} mm",
-                f"{data['Tinggi rekomendasi (mm)']:,.0f} mm", f"{data['Rasio b/h']:.3f}",
-                f"{data['Luas penampang (mm²)']:,} mm²",
-            ],
-            "clear": lambda k=kode_key: st.session_state["rekap_balok"].pop(k, None),
-        })
-    render_recap_table(
-        st, key="pre-beam", title="Balok Pra-Desain",
-        headers=["Kode", "Bentang", "Tumpuan", "Dimensi", "h minimum", "h rekomendasi", "Rasio b/h", "Luas penampang", "Aksi"],
-        widths=[.7, .8, 1.15, .8, .8, .9, .65, 1.0, .6], rows=beam_rows,
+with st.container(key="recap-section"):
+    st.divider()
+    st.markdown("### Rekap analisis")
+    st.html(
+        """<button class="vx-print-button" onclick="window.print()">🖨️ Cetak rekap</button>""",
+        unsafe_allow_javascript=True,
     )
-if st.session_state["rekap_pelat"]:
-    slab_rows = []
-    for kode_key, data in list(st.session_state["rekap_pelat"].items()):
-        slab_rows.append({
-            "values": [
-                data["Kode panel"], data.get("Jenis pelat", data.get("Sistem", "Pelat")),
-                f"{data['Bentang acuan (mm)']:,} mm", data["Kondisi tumpuan"],
-                f"{data['h_min_mm']:.1f} mm", f"{data['Rekomendasi (mm)']:,} mm",
-                f"{data['Pilihan (mm)']:,} mm", data["Pemeriksaan"],
-            ],
-            "clear": lambda k=kode_key: st.session_state["rekap_pelat"].pop(k, None),
-        })
-    render_recap_table(
-        st, key="pre-slab", title="Pelat Pra-Desain",
-        headers=["Kode panel", "Jenis", "Bentang", "Tumpuan", "h minimum", "Rekomendasi", "Pilihan", "Status", "Aksi"],
-        widths=[.75, 1.2, .8, 1.05, .75, .85, .7, 1.6, .6], rows=slab_rows,
-    )
-if st.session_state["rekap_kolom"]:
-    column_rows = []
-    for kode_key, data in list(st.session_state["rekap_kolom"].items()):
-        selection = data.get("Pilihan pengguna (mm)")
-        dimension = f"{selection:,.0f} × {selection:,.0f} mm" if selection else "Belum dipilih"
-        column_rows.append({
-            "values": [
-                data["Kode kolom"], dimension, data["Rekomendasi VECTRION"],
-                f"{data['lu (mm)']:,.0f} mm", f"{data['Rasio kelangsingan']:.2f}",
-            ],
-            "clear": lambda k=kode_key: st.session_state["rekap_kolom"].pop(k, None),
-        })
-    render_recap_table(
-        st, key="pre-column", title="Kolom Pra-Desain",
-        headers=["Kode", "Dimensi pilihan", "Rekomendasi", "Panjang tak tertumpu", "Rasio kelangsingan", "Aksi"],
-        widths=[.75, 1.0, 1.0, 1.0, 1.0, .6], rows=column_rows,
-    )
-if st.session_state["rekap_analisis_etabs"]:
-    etabs_rows = []
-    for recap_key, data in list(st.session_state["rekap_analisis_etabs"].items()):
-        etabs_rows.append({
-            "values": [
-                ukuran_dari_designsect(data["DesignSect"]), data["Story"],
-                format_kombinasi_tulangan(data.get("Ø atas 1 (mm)"), data.get("Jumlah atas 1", 0), data.get("Ø atas 2 (mm)"), data.get("Jumlah atas 2", 0)),
-                format_kombinasi_tulangan(data.get("Ø bawah 1 (mm)"), data.get("Jumlah bawah 1", 0), data.get("Ø bawah 2 (mm)"), data.get("Jumlah bawah 2", 0)),
-                status_kombinasi_balok(data),
-            ],
-            "clear": lambda k=recap_key: clear_etabs_beam_recap(st.session_state, k),
-        })
-    render_recap_table(
-        st, key="post-beam", title="Balok Pasca-ETABS",
-        headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
-        widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
-    )
-if st.session_state["rekap_analisis_etabs_kolom"]:
-    column_rows = []
-    for recap_key, data in list(st.session_state["rekap_analisis_etabs_kolom"].items()):
-        column_rows.append({
-            "values": [data["Kode"], data["Ukuran"], data["Kombinasi tulangan"],
-                       f"{data['As tersedia (mm²)']:,.2f}", f"{data['Rasio aktual (%)']:.2f}%",
-                       f"{data['As minimum (mm²)']:,.2f}", data["Status"]],
-            "clear": lambda k=recap_key: clear_etabs_column_recap(st.session_state, k),
-        })
-    render_recap_table(
-        st, key="post-column", title="Kolom Pasca-ETABS",
-        headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
-        rows=column_rows,
-    )
-if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"] and not st.session_state["rekap_analisis_etabs_kolom"]:
-    st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")
+    if st.session_state["rekap_balok"]:
+        beam_rows = []
+        for kode_key, data in list(st.session_state["rekap_balok"].items()):
+            beam_rows.append({
+                "values": [
+                    data["Kode balok"], f"{data['Bentang (mm)']:,} mm", data["Kondisi tumpuan"],
+                    data["Dimensi (b × h)"], f"{data['Tinggi minimum (mm)']:,.0f} mm",
+                    f"{data['Tinggi rekomendasi (mm)']:,.0f} mm", f"{data['Rasio b/h']:.3f}",
+                    f"{data['Luas penampang (mm²)']:,} mm²",
+                ],
+                "clear": lambda k=kode_key: st.session_state["rekap_balok"].pop(k, None),
+            })
+        render_recap_table(
+            st, key="pre-beam", title="Balok Pra-Desain",
+            headers=["Kode", "Bentang", "Tumpuan", "Dimensi", "h minimum", "h rekomendasi", "Rasio b/h", "Luas penampang", "Aksi"],
+            widths=[.7, .8, 1.15, .8, .8, .9, .65, 1.0, .6], rows=beam_rows,
+        )
+    if st.session_state["rekap_pelat"]:
+        slab_rows = []
+        for kode_key, data in list(st.session_state["rekap_pelat"].items()):
+            slab_rows.append({
+                "values": [
+                    data["Kode panel"], data.get("Jenis pelat", data.get("Sistem", "Pelat")),
+                    f"{data['Bentang acuan (mm)']:,} mm", data["Kondisi tumpuan"],
+                    f"{data['h_min_mm']:.1f} mm", f"{data['Rekomendasi (mm)']:,} mm",
+                    f"{data['Pilihan (mm)']:,} mm", data["Pemeriksaan"],
+                ],
+                "clear": lambda k=kode_key: st.session_state["rekap_pelat"].pop(k, None),
+            })
+        render_recap_table(
+            st, key="pre-slab", title="Pelat Pra-Desain",
+            headers=["Kode panel", "Jenis", "Bentang", "Tumpuan", "h minimum", "Rekomendasi", "Pilihan", "Status", "Aksi"],
+            widths=[.75, 1.2, .8, 1.05, .75, .85, .7, 1.6, .6], rows=slab_rows,
+        )
+    if st.session_state["rekap_kolom"]:
+        column_rows = []
+        for kode_key, data in list(st.session_state["rekap_kolom"].items()):
+            selection = data.get("Pilihan pengguna (mm)")
+            dimension = f"{selection:,.0f} × {selection:,.0f} mm" if selection else "Belum dipilih"
+            column_rows.append({
+                "values": [
+                    data["Kode kolom"], dimension, data["Rekomendasi VECTRION"],
+                    f"{data['lu (mm)']:,.0f} mm", f"{data['Rasio kelangsingan']:.2f}",
+                ],
+                "clear": lambda k=kode_key: st.session_state["rekap_kolom"].pop(k, None),
+            })
+        render_recap_table(
+            st, key="pre-column", title="Kolom Pra-Desain",
+            headers=["Kode", "Dimensi pilihan", "Rekomendasi", "Panjang tak tertumpu", "Rasio kelangsingan", "Aksi"],
+            widths=[.75, 1.0, 1.0, 1.0, 1.0, .6], rows=column_rows,
+        )
+    if st.session_state["rekap_analisis_etabs"]:
+        etabs_rows = []
+        for recap_key, data in list(st.session_state["rekap_analisis_etabs"].items()):
+            etabs_rows.append({
+                "values": [
+                    ukuran_dari_designsect(data["DesignSect"]), data["Story"],
+                    format_kombinasi_tulangan(data.get("Ø atas 1 (mm)"), data.get("Jumlah atas 1", 0), data.get("Ø atas 2 (mm)"), data.get("Jumlah atas 2", 0)),
+                    format_kombinasi_tulangan(data.get("Ø bawah 1 (mm)"), data.get("Jumlah bawah 1", 0), data.get("Ø bawah 2 (mm)"), data.get("Jumlah bawah 2", 0)),
+                    status_kombinasi_balok(data),
+                ],
+                "clear": lambda k=recap_key: clear_etabs_beam_recap(st.session_state, k),
+            })
+        render_recap_table(
+            st, key="post-beam", title="Balok Pasca-ETABS",
+            headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
+            widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
+        )
+    if st.session_state["rekap_analisis_etabs_kolom"]:
+        column_rows = []
+        for recap_key, data in list(st.session_state["rekap_analisis_etabs_kolom"].items()):
+            column_rows.append({
+                "values": [data["Kode"], data["Ukuran"], data["Kombinasi tulangan"],
+                           f"{data['As tersedia (mm²)']:,.2f}", f"{data['Rasio aktual (%)']:.2f}%",
+                           f"{data['As minimum (mm²)']:,.2f}", data["Status"]],
+                "clear": lambda k=recap_key: clear_etabs_column_recap(st.session_state, k),
+            })
+        render_recap_table(
+            st, key="post-column", title="Kolom Pasca-ETABS",
+            headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
+            rows=column_rows,
+        )
+    if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"] and not st.session_state["rekap_analisis_etabs_kolom"]:
+        st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")

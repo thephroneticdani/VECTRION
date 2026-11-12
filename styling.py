@@ -53,10 +53,28 @@ SIDEBAR_BATIK_SVG = BATIK_KAWUNG_SVG.replace("stroke-opacity='.018'", "stroke-op
 SIDEBAR_BATIK_DATA = base64.b64encode(SIDEBAR_BATIK_SVG.encode("utf-8")).decode("ascii")
 
 
-def inject_global_styles(st, navigation_hidden=False):
+def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
     c = COLORS
     sidebar_visibility = 'section[data-testid="stSidebar"]{display:none !important;}' if navigation_hidden else ""
     mobile_bottom_padding = "2rem" if navigation_hidden else "8rem"
+    dark_theme_css = """html,body,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{background-color:#111820!important;color:#e8edf2!important}
+      .stApp{background-image:radial-gradient(ellipse at 5% 0%,#26313c55,transparent 38%),radial-gradient(ellipse at 100% 100%,#27342d55,transparent 32%)!important}
+      p,[data-testid="stMarkdownContainer"],label,[data-testid="stWidgetLabel"],h1,h2,h3,[data-testid="stCaptionContainer"]{color:#e8edf2!important;text-shadow:none!important}
+      header[data-testid="stHeader"]{background:rgba(17,24,32,.96)!important;border-color:#394550!important}
+      section[data-testid="stSidebar"]>div:first-child{background:#19222c!important;background-image:linear-gradient(180deg,#202b36,#151d26)!important;border-color:#394550!important}
+      .stTextInput input,.stNumberInput input,[data-testid="stSelectbox"] [data-baseweb="select"]>div,[data-baseweb="popover"]>div,[data-baseweb="menu"],[role="option"]{background:#202b36!important;color:#e8edf2!important;border-color:#526170!important}
+      [data-testid="stMetric"]{background:linear-gradient(135deg,#202b36,#283440)!important;border-color:#465461!important}
+      [data-testid="stMetricValue"]{color:#d8ad86!important}
+      [data-testid="stTable"]{background:#202b36!important;border-color:#465461!important}
+      [data-testid="stTable"] th{background:#2e3b47!important;color:#f0d7c0!important}[data-testid="stTable"] td{color:#e8edf2!important}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"]{background:#25313d!important;color:#e8edf2!important;border-color:#526170!important}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"] *{color:#e8edf2!important}
+      .vx-recap-table{color:#e8edf2;background:#202b36;border-color:#526170}
+      .vx-recap-table th{background:#2e3b47;color:#f0d7c0;border-color:#526170}
+      .vx-recap-table td{border-color:#394957}.vx-recap-table tbody tr:nth-child(even){background:#25313d}
+      .vx-recap-mobile-label{color:#e0b890}
+      @media(max-width:768px){section[data-testid="stSidebar"]>div:first-child{background:#19222c!important}.vx-recap-table tbody tr{background:#202b36;border-color:#526170;box-shadow:none}.vx-recap-table td{border-color:#394957}}
+    """ if theme == "Gelap" else ""
     st.markdown(
         f"""
         <style>
@@ -258,6 +276,7 @@ def inject_global_styles(st, navigation_hidden=False):
         }}
         .vx-recap-table tbody tr:last-child td {{ border-bottom:0; }}
         .vx-recap-table tbody tr:nth-child(even) {{ background:#F9F5EF; }}
+        .vx-print-button {{ padding:9px 14px; border:1px solid {c['primary']}; border-radius:8px; background:{c['primary']}; color:#fff; font-weight:600; cursor:pointer; }}
         .vx-recap-mobile-label {{ display:none; }}
         .vx-recap-value {{ display:block; min-width:0; overflow-wrap:anywhere; }}
         [class*="st-key-recap-actions-"] {{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:-.4rem; }}
@@ -359,6 +378,22 @@ def inject_global_styles(st, navigation_hidden=False):
           [class*="st-key-recap-actions-"] {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(9rem, 1fr)); gap:.45rem; margin:.1rem 0 .9rem; }}
           [class*="st-key-recap-actions-"] [data-testid="stButton"] button {{ width:100% !important; }}
         }}
+        @media print {{
+          @page {{ size:auto; margin:12mm; }}
+          body * {{ visibility:hidden !important; }}
+          [class*="st-key-recap-section"], [class*="st-key-recap-section"] * {{ visibility:visible !important; }}
+          [class*="st-key-recap-section"] {{ position:absolute !important; left:0 !important; top:0 !important; width:100% !important; padding:0 !important; background:#fff !important; color:#111 !important; }}
+          [class*="st-key-recap-section"] .vx-print-button, [class*="st-key-recap-section"] [class*="st-key-recap-actions-"] {{ display:none !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table {{ color:#111 !important; background:#fff !important; border:1px solid #777 !important; font-size:9pt !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table th {{ background:#eee !important; color:#111 !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table td {{ border-color:#bbb !important; }}
+          [class*="st-key-recap-section"] .vx-recap-mobile-label {{ display:none !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table thead {{ display:table-header-group !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table, [class*="st-key-recap-section"] .vx-recap-table tbody {{ display:table !important; width:100% !important; }}
+          [class*="st-key-recap-section"] .vx-recap-table tr {{ display:table-row !important; break-inside:avoid; }}
+          [class*="st-key-recap-section"] .vx-recap-table td, [class*="st-key-recap-section"] .vx-recap-table th {{ display:table-cell !important; padding:5px !important; }}
+        }}
+        {dark_theme_css}
         </style>
         """,
         unsafe_allow_html=True,
