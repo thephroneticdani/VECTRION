@@ -18,6 +18,7 @@ from styling import inject_global_styles
 from column_ui import render_column_module
 from recap import clear_etabs_beam_recap, clear_etabs_column_recap
 from recap_table_ui import render_recap_table
+from recap_export import build_recap_html
 from etabs_beam import format_kombinasi_tulangan, status_kombinasi_balok, ukuran_dari_designsect
 from engineering_disclaimer import render_engineering_disclaimer
 from post_etabs_ui import render_post_etabs_beam, render_post_etabs_column
@@ -214,9 +215,13 @@ elif st.session_state["halaman"] == "Pasca-ETABS-Kolom":
 with st.container(key="recap-section"):
     st.divider()
     st.markdown("### Rekap analisis")
-    st.html(
-        """<button class="vx-print-button" onclick="window.print()">🖨️ Cetak rekap</button>""",
-        unsafe_allow_javascript=True,
+    st.download_button(
+        "⬇️ Unduh rekap siap cetak",
+        data=build_recap_html(st.session_state),
+        file_name="rekap-analisis-vectrion.html",
+        mime="text/html",
+        key="download-recap",
+        help="Unduh halaman rekap; buka file lalu pilih Cetak / Simpan PDF.",
     )
     if st.session_state["rekap_balok"]:
         beam_rows = []

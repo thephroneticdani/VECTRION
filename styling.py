@@ -276,7 +276,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
         }}
         .vx-recap-table tbody tr:last-child td {{ border-bottom:0; }}
         .vx-recap-table tbody tr:nth-child(even) {{ background:#F9F5EF; }}
-        .vx-print-button {{ padding:9px 14px; border:1px solid {c['primary']}; border-radius:8px; background:{c['primary']}; color:#fff; font-weight:600; cursor:pointer; }}
         .vx-recap-mobile-label {{ display:none; }}
         .vx-recap-value {{ display:block; min-width:0; overflow-wrap:anywhere; }}
         [class*="st-key-recap-actions-"] {{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:-.4rem; }}
@@ -377,21 +376,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
           .vx-recap-value {{ text-align:right; font-size:.89rem; }}
           [class*="st-key-recap-actions-"] {{ display:grid; grid-template-columns:repeat(auto-fit, minmax(9rem, 1fr)); gap:.45rem; margin:.1rem 0 .9rem; }}
           [class*="st-key-recap-actions-"] [data-testid="stButton"] button {{ width:100% !important; }}
-        }}
-        @media print {{
-          @page {{ size:auto; margin:12mm; }}
-          body * {{ visibility:hidden !important; }}
-          [class*="st-key-recap-section"], [class*="st-key-recap-section"] * {{ visibility:visible !important; }}
-          [class*="st-key-recap-section"] {{ position:absolute !important; left:0 !important; top:0 !important; width:100% !important; padding:0 !important; background:#fff !important; color:#111 !important; }}
-          [class*="st-key-recap-section"] .vx-print-button, [class*="st-key-recap-section"] [class*="st-key-recap-actions-"] {{ display:none !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table {{ color:#111 !important; background:#fff !important; border:1px solid #777 !important; font-size:9pt !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table th {{ background:#eee !important; color:#111 !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table td {{ border-color:#bbb !important; }}
-          [class*="st-key-recap-section"] .vx-recap-mobile-label {{ display:none !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table thead {{ display:table-header-group !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table, [class*="st-key-recap-section"] .vx-recap-table tbody {{ display:table !important; width:100% !important; }}
-          [class*="st-key-recap-section"] .vx-recap-table tr {{ display:table-row !important; break-inside:avoid; }}
-          [class*="st-key-recap-section"] .vx-recap-table td, [class*="st-key-recap-section"] .vx-recap-table th {{ display:table-cell !important; padding:5px !important; }}
         }}
         {dark_theme_css}
         </style>
