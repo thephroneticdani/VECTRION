@@ -52,7 +52,9 @@ def toggle_navigation():
     st.session_state["navigation_hidden"] = not st.session_state["navigation_hidden"]
 
 def toggle_theme():
-    st.session_state["theme_mode"] = "Gelap" if st.session_state["theme_mode"] == "Terang" else "Terang"
+    themes = ("Terang", "Gelap", "Futuristik")
+    current = st.session_state["theme_mode"] if st.session_state["theme_mode"] in themes else "Terang"
+    st.session_state["theme_mode"] = themes[(themes.index(current) + 1) % len(themes)]
 
 logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
 logo_data = base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
@@ -82,8 +84,13 @@ with st.sidebar:
                 on_click=pindah,
                 args=(page,),
             )
+        next_theme_label = {
+            "Terang": "☾  Gelap",
+            "Gelap": "✦  Futuristik",
+            "Futuristik": "☀  Terang",
+        }.get(st.session_state["theme_mode"], "☾  Gelap")
         st.button(
-            f"☾  Gelap" if st.session_state["theme_mode"] == "Terang" else "☀  Terang",
+            next_theme_label,
             key="toggle_theme", type="secondary", use_container_width=True,
             on_click=toggle_theme,
         )
@@ -124,7 +131,7 @@ if st.session_state["halaman"] == "Beranda":
     )
     render_engineering_disclaimer(st)
     with st.container(key="home-hero"):
-        hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
+        hero_copy, hero_brand = st.columns([1, 1], vertical_alignment="center")
         with hero_copy:
             st.markdown("## Rekayasa struktur, dimulai dari pradesain")
             st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")

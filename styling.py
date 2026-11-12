@@ -76,22 +76,32 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .vx-recap-table td{border-color:#394957}.vx-recap-table tbody tr:nth-child(even){background:#25313d}
       .vx-recap-mobile-label{color:#e0b890}
       @media(max-width:768px){section[data-testid="stSidebar"]>div:first-child{background:#19222c!important}.vx-recap-table tbody tr{background:#202b36;border-color:#526170;box-shadow:none}.vx-recap-table td{border-color:#394957}}
-    """ if theme == "Gelap" else ""
-    hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
-      [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(17,24,32,.85);border-color:#81909f99;color:#e8edf2}
+    """ if theme in ("Gelap", "Futuristik") else ""
+    if theme == "Futuristik":
+        hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
+          [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(7,12,29,.58);border-color:#20e6ff99;color:#f5f4ff;box-shadow:0 0 28px #07cde833,inset 0 0 18px #bd35ff12}
+          [class*="st-key-home-hero"] h2{color:#47efff!important;text-shadow:0 0 12px #08cfff99!important}
+          [class*="st-key-home-hero"] p,[class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#eeeaff!important;text-shadow:0 0 8px #ca36ff66!important}
+          [class*="st-key-home-hero"] .brand-logo-hero img{filter:brightness(1.45) contrast(1.12) drop-shadow(0 0 12px #15dfff66)}
+        """
+    elif theme == "Gelap":
+        hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
+      [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(17,24,32,.68);border-color:#81909f99;color:#e8edf2}
       [class*="st-key-home-hero"] h2,[class*="st-key-home-hero"] p,[class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#e8edf2!important;text-shadow:none!important}
       [class*="st-key-home-hero"] .brand-logo-hero img{filter:brightness(1.35) contrast(1.1)}
-    """ if theme == "Gelap" else """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
-      [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(251,250,247,.85);border-color:#81583d66;color:#332a23}
+        """
+    else:
+        hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
+      [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(251,250,247,.68);border-color:#81583d66;color:#332a23}
       [class*="st-key-home-hero"] h2{color:#63452f!important;text-shadow:none!important}
       [class*="st-key-home-hero"] p{color:#332a23!important;text-shadow:none!important}
       [class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#5c5046!important;text-shadow:none!important}
-    """
-    page_surface = "rgba(17,24,32,.85)" if theme == "Gelap" else "rgba(251,250,247,.85)"
-    page_border = "#81909f99" if theme == "Gelap" else "#81583d55"
-    page_fallback = "#111820" if theme == "Gelap" else "#FBFAF7"
-    alert_surface = "rgba(52,49,31,.9)" if theme == "Gelap" else "rgba(255,248,213,.92)"
-    page_overlay = ".24" if theme == "Gelap" else ".16"
+        """
+    page_surface = {"Gelap": "rgba(17,24,32,.85)", "Futuristik": "rgba(7,12,29,.78)"}.get(theme, "rgba(251,250,247,.85)")
+    page_border = {"Gelap": "#81909f99", "Futuristik": "#22ddff88"}.get(theme, "#81583d55")
+    page_fallback = {"Gelap": "#111820", "Futuristik": "#080b18"}.get(theme, "#FBFAF7")
+    alert_surface = {"Gelap": "rgba(52,49,31,.9)", "Futuristik": "rgba(17,22,43,.94)"}.get(theme, "rgba(255,248,213,.92)")
+    page_overlay = {"Gelap": ".24", "Futuristik": ".2"}.get(theme, ".16")
     homepage_css = f""".stApp{{position:relative;isolation:isolate;background:{page_fallback}!important;background-image:none!important}}
       html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{background:transparent!important}}
       [data-testid="stAppViewContainer"]{{position:relative}}
@@ -106,6 +116,24 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .vx-site-video-shade{{position:absolute;inset:0;background:linear-gradient(120deg,rgba(10,16,23,{page_overlay}),rgba(10,16,23,.08))}}
       @media(prefers-reduced-motion:reduce){{.vx-site-video-layer video{{display:none}}}}
     """ if homepage else ""
+    futuristic_css = """
+      @keyframes vx-neon-drift{0%{background-position:0% 40%}50%{background-position:100% 60%}100%{background-position:0% 40%}}
+      :root{--primary-color:#10cfe8!important;--vx-bg:#080b18;--vx-surface:#10172b;--vx-raised:#17152e;--vx-primary:#13d9f2;--vx-text:#f5f4ff;--vx-border:#26d9f277}
+      .stApp:not(:has(.vx-site-video-layer)){color:#f5f4ff!important;background-color:#080b18!important;background-image:linear-gradient(125deg,#080b18,#0b1830,#21102f,#081b29)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
+      html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"]{color:#f5f4ff!important}
+      h1,h2,h3,h4,[data-testid="stMetricValue"]{color:#48eaff!important;text-shadow:0 0 10px #14dfff70,0 0 24px #b637ff44!important}
+      p,label,[data-testid="stMarkdownContainer"],[data-testid="stWidgetLabel"],[data-testid="stCaptionContainer"]{color:#e8e8fa!important}
+      header[data-testid="stHeader"],section[data-testid="stSidebar"]>div:first-child{background:rgba(8,12,29,.9)!important;border-color:#20ddff77!important;backdrop-filter:blur(16px)}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button{background:linear-gradient(120deg,#121b31,#21132f)!important;color:#e9faff!important;border-color:#1bd9ed88!important;box-shadow:0 0 12px #08d3e822}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button:hover{border-color:#ed49f8!important;box-shadow:0 0 18px #db35ff66}
+      [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){background:rgba(8,12,29,.7)!important;border-color:#24d8ee77!important;box-shadow:0 0 18px #0ad7eb22}
+      [data-testid="stMainBlockContainer"] [class*="st-key-page-title"],[data-testid="stMainBlockContainer"] [class*="st-key-recap-section"]{background:rgba(8,12,29,.76)!important;border-color:#26ddf077!important}
+      [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{color:#f4efff!important;border:1px solid #cc4cff99!important;box-shadow:0 0 18px #c43bff22}
+      .vx-site-video-shade{background:linear-gradient(120deg,#07102133,#05283422,#30104133,#07102122)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
+      [data-testid="stMainBlockContainer"] .stButton button{background:linear-gradient(105deg,#0c5065,#542565)!important;color:#fff!important;border:1px solid #30eaff99!important;box-shadow:0 0 12px #07cde833}
+      [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{background:#111a30!important;color:#f5f4ff!important;border-color:#27dff277!important}
+      @media(prefers-reduced-motion:reduce){.stApp,.vx-site-video-shade{animation:none!important}}
+    """ if theme == "Futuristik" else ""
     st.markdown(
         f"""
         <style>
@@ -410,16 +438,17 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         }}
         {dark_theme_css}
         {homepage_css}
+        {futuristic_css}
         [class*="st-key-home-hero"] {{ position:relative; min-height:20rem; padding:0 !important; overflow:hidden; border:1px solid #FFFFFF48; border-radius:18px; background:#F6F1E9; isolation:isolate; }}
         [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:17rem; justify-content:center; }}
         [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
         [class*="st-key-home-hero"] .vx-home-video-layer {{ position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events:none; }}
         [class*="st-key-home-hero"] .vx-home-video-layer video {{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; }}
         [class*="st-key-home-hero"] .vx-home-video-shade {{ position:absolute; inset:0; background:linear-gradient(120deg,rgba(12,19,27,.24),rgba(12,19,27,.12)),linear-gradient(0deg,rgba(12,19,27,.2),transparent 70%); }}
-        [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:clamp(1.2rem,4vw,3rem); }}
-        [class*="st-key-home-hero"] [data-testid="stColumn"] {{ padding:1.15rem 1.3rem; border:1px solid; border-radius:16px; backdrop-filter:blur(12px) saturate(120%); -webkit-backdrop-filter:blur(12px) saturate(120%); }}
+        [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }}
+        [class*="st-key-home-hero"] [data-testid="stColumn"] {{ min-height:17rem; padding:1.5rem 1.6rem; border:1px solid; border-radius:16px; backdrop-filter:blur(12px) saturate(120%); -webkit-backdrop-filter:blur(12px) saturate(120%); }}
         [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:flex; align-items:center; justify-content:center; }}
-        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:22rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:21rem; }} [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"] {{ padding:.8rem 1rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:none !important; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
+        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:22rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:21rem; }} [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"] {{ min-height:16rem; padding:1rem 1.2rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:none !important; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
         @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} }}
         {hero_theme_css}
         </style>
