@@ -112,17 +112,24 @@ with title_col:
 
 if st.session_state["halaman"] == "Beranda":
     render_engineering_disclaimer(st)
-    hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
-    with hero_copy:
-        st.markdown("## Rekayasa struktur, dimulai dari pradesain")
-        st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
-        st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
-    with hero_brand:
-        if logo_data:
-            st.markdown(
-                f'<div class="brand-logo brand-logo-hero"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
-                unsafe_allow_html=True,
-            )
+    with st.container(key="home-hero"):
+        st.html(
+            """<div class="vx-home-video-layer" aria-hidden="true">
+<video autoplay muted loop playsinline preload="metadata" tabindex="-1">
+<source src="/app/static/hero_construction.mp4" type="video/mp4">
+</video><div class="vx-home-video-shade"></div></div>"""
+        )
+        hero_copy, hero_brand = st.columns([1.15, 0.85], vertical_alignment="center")
+        with hero_copy:
+            st.markdown("## Rekayasa struktur, dimulai dari pradesain")
+            st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
+            st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
+        with hero_brand:
+            if logo_data:
+                st.markdown(
+                    f'<div class="brand-logo brand-logo-hero"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+                    unsafe_allow_html=True,
+                )
     kiri, kanan = st.columns(2)
     with kiri:
         with st.container(border=True):

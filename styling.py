@@ -378,6 +378,18 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang"):
           [class*="st-key-recap-actions-"] [data-testid="stButton"] button {{ width:100% !important; }}
         }}
         {dark_theme_css}
+        [class*="st-key-home-hero"] {{ position:relative; min-height:20rem; padding:0 !important; overflow:hidden; border:1px solid #FFFFFF48; border-radius:18px; background:#26313b; isolation:isolate; }}
+        [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:17rem; justify-content:center; }}
+        [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
+        [class*="st-key-home-hero"] .vx-home-video-layer {{ position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events:none; }}
+        [class*="st-key-home-hero"] .vx-home-video-layer video {{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; }}
+        [class*="st-key-home-hero"] .vx-home-video-shade {{ position:absolute; inset:0; background:linear-gradient(90deg,rgba(12,19,27,.88) 0%,rgba(12,19,27,.66) 50%,rgba(12,19,27,.34) 100%),linear-gradient(0deg,rgba(12,19,27,.4),transparent 68%); }}
+        [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:clamp(1.2rem,4vw,3rem); }}
+        [class*="st-key-home-hero"] h2 {{ color:#fff !important; text-shadow:0 2px 12px #0009 !important; }}
+        [class*="st-key-home-hero"] p, [class*="st-key-home-hero"] [data-testid="stCaptionContainer"] {{ color:#fff !important; text-shadow:0 1px 8px #000b; }}
+        [class*="st-key-home-hero"] .brand-logo img {{ filter:drop-shadow(0 2px 10px #0009); }}
+        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:22rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:21rem; }} [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} [class*="st-key-home-hero"] .vx-home-video-shade {{ background:linear-gradient(90deg,rgba(12,19,27,.88),rgba(12,19,27,.62)),linear-gradient(0deg,rgba(12,19,27,.4),transparent 68%); }} [class*="st-key-home-hero"] .brand-logo-hero {{ display:none !important; }} }}
+        @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} [class*="st-key-home-hero"] {{ background:linear-gradient(135deg,#26313b,#70543f); }} }}
         </style>
         """,
         unsafe_allow_html=True,
