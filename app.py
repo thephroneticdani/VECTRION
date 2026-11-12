@@ -19,7 +19,7 @@ from column_ui import render_column_module
 from recap import clear_etabs_beam_recap, clear_etabs_column_recap
 from recap_table_ui import render_recap_table
 from recap_export import build_recap_html
-from etabs_beam import format_kombinasi_tulangan, status_kombinasi_balok, ukuran_dari_designsect
+from etabs_beam import format_kombinasi_tulangan, status_kombinasi_balok
 from engineering_disclaimer import render_engineering_disclaimer
 from post_etabs_ui import render_post_etabs_beam, render_post_etabs_column
 
@@ -279,7 +279,7 @@ with st.container(key="recap-section"):
         for recap_key, data in list(st.session_state["rekap_analisis_etabs"].items()):
             etabs_rows.append({
                 "values": [
-                    ukuran_dari_designsect(data["DesignSect"]), data["Story"],
+                    data["DesignSect"], data["Story"],
                     format_kombinasi_tulangan(data.get("Ø atas 1 (mm)"), data.get("Jumlah atas 1", 0), data.get("Ø atas 2 (mm)"), data.get("Jumlah atas 2", 0)),
                     format_kombinasi_tulangan(data.get("Ø bawah 1 (mm)"), data.get("Jumlah bawah 1", 0), data.get("Ø bawah 2 (mm)"), data.get("Jumlah bawah 2", 0)),
                     status_kombinasi_balok(data),
@@ -288,7 +288,7 @@ with st.container(key="recap-section"):
             })
         render_recap_table(
             st, key="post-beam", title="Balok Pasca-ETABS",
-            headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
+            headers=["Nama", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
             widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
         )
     if st.session_state["rekap_analisis_etabs_kolom"]:

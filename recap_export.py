@@ -2,29 +2,91 @@
 
 from html import escape
 
+from etabs_beam import format_kombinasi_tulangan
+
+
+def _mm(value):
+    return f"{value:,} mm" if isinstance(value, (int, float)) else str(value or "—")
+
+
+def _dimension(entry):
+    value = entry.get("Pilihan pengguna (mm)")
+    return f"{value:,.0f} × {value:,.0f} mm" if value else "Belum dipilih"
+
+
+def _slab_code(entry):
+    return entry.get("Kode panel", entry.get("Kode", "—"))
+
+
+def _slab_type(entry):
+    return entry.get("Jenis pelat", entry.get("Sistem", "Pelat"))
+
+
+def _ratio(entry):
+    value = entry.get("Rasio kelangsingan")
+    return f"{value:.2f}" if isinstance(value, (int, float)) else str(value or "—")
+
+
+def _beam_top(entry):
+    return format_kombinasi_tulangan(
+        entry.get("Ø atas 1 (mm)"), entry.get("Jumlah atas 1", 0),
+        entry.get("Ø atas 2 (mm)"), entry.get("Jumlah atas 2", 0),
+    )
+
+
+def _beam_bottom(entry):
+    return format_kombinasi_tulangan(
+        entry.get("Ø bawah 1 (mm)"), entry.get("Jumlah bawah 1", 0),
+        entry.get("Ø bawah 2 (mm)"), entry.get("Jumlah bawah 2", 0),
+    )
+
 
 RECAP_SECTIONS = (
-    ("Balok Pra-Desain", "rekap_balok"),
-    ("Pelat Pra-Desain", "rekap_pelat"),
-    ("Kolom Pra-Desain", "rekap_kolom"),
-    ("Balok Pasca-ETABS", "rekap_analisis_etabs"),
-    ("Kolom Pasca-ETABS", "rekap_analisis_etabs_kolom"),
+    ("Pra-Analisis — Balok", "rekap_balok", (
+        ("Kode", lambda row: row.get("Kode balok", "—")),
+        ("Bentang", lambda row: _mm(row.get("Bentang (mm)"))),
+        ("Tumpuan", lambda row: row.get("Kondisi tumpuan", "—")),
+        ("Dimensi", lambda row: row.get("Dimensi (b × h)", "—")),
+    )),
+    ("Pra-Analisis — Pelat", "rekap_pelat", (
+        ("Kode", _slab_code),
+        ("Jenis", _slab_type),
+        ("Tumpuan", lambda row: row.get("Kondisi tumpuan", "—")),
+        ("h pilihan", lambda row: _mm(row.get("Pilihan (mm)"))),
+    )),
+    ("Pra-Analisis — Kolom", "rekap_kolom", (
+        ("Kode", lambda row: row.get("Kode kolom", "—")),
+        ("Panjang tak tertumpu", lambda row: _mm(row.get("lu (mm)"))),
+        ("Rasio kelangsingan", _ratio),
+        ("Dimensi pilihan", _dimension),
+    )),
+    ("Pasca-ETABS — Balok", "rekap_analisis_etabs", (
+        ("Nama", lambda row: row.get("DesignSect", "—")),
+        ("Story", lambda row: row.get("Story", "—")),
+        ("Kombinasi tulangan atas", _beam_top),
+        ("Kombinasi tulangan bawah", _beam_bottom),
+    )),
+    ("Pasca-ETABS — Kolom", "rekap_analisis_etabs_kolom", (
+        ("Kode", lambda row: row.get("Kode", "—")),
+        ("Kombinasi tulangan", lambda row: row.get("Kombinasi tulangan", "—")),
+    )),
 )
 
 
 def build_recap_html(state):
     """Return a responsive HTML document containing every saved recap row."""
     sections = []
-    for title, state_key in RECAP_SECTIONS:
+    for title, state_key, columns in RECAP_SECTIONS:
         entries = list(state.get(state_key, {}).values())
         if not entries:
             continue
 
-        headers = list(dict.fromkeys(key for entry in entries for key in entry))
-        header_html = "".join(f"<th>{escape(str(header))}</th>" for header in headers)
+        header_html = "".join(f"<th>{escape(label)}</th>" for label, _ in columns)
         row_html = []
         for entry in entries:
-            cells = "".join(f"<td>{escape(str(entry.get(header, '—')))}</td>" for header in headers)
+            cells = "".join(
+                f"<td>{escape(str(getter(entry)))}</td>" for _, getter in columns
+            )
             row_html.append(f"<tr>{cells}</tr>")
         sections.append(
             f"<section><h2>{escape(title)}</h2><div class='table-wrap'>"
