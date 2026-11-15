@@ -150,6 +150,72 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{background:#111a30!important;color:#f5f4ff!important;border-color:#27dff277!important}
       @media(prefers-reduced-motion:reduce){.stApp,.vx-site-video-shade{animation:none!important}}
     """ if theme == "Futuristik" else ""
+    crystal_palette = {
+        "Terang": {
+            "face": "linear-gradient(135deg,#fbf8ff 0%,#e6d8ff 25%,#c6a5f2 48%,#eee5ff 68%,#b68de8 100%)",
+            "face_active": "linear-gradient(135deg,#e8d8ff 0%,#c09af6 28%,#9664dc 55%,#d5b5ff 78%,#8d59d0 100%)",
+            "border": "#8762b8", "text": "#302044", "etch_light": "#ffffffcc",
+            "etch_dark": "#68449c99", "glow": "#9d69df66", "shadow": "#62458b35",
+            "facet": "#ffffff66", "facet_low": "#603c9940", "shard": "#ffffffd9",
+        },
+        "Gelap": {
+            "face": "linear-gradient(135deg,#372451 0%,#65408d 26%,#352147 52%,#8053aa 76%,#241a36 100%)",
+            "face_active": "linear-gradient(135deg,#7048a0 0%,#a35bd2 28%,#60358b 55%,#bd79e9 78%,#482766 100%)",
+            "border": "#bc83e0", "text": "#fff8ff", "etch_light": "#fceaffbb",
+            "etch_dark": "#1b102dcc", "glow": "#bd67f277", "shadow": "#07030e99",
+            "facet": "#ffffff55", "facet_low": "#160d2780", "shard": "#f7dfff",
+        },
+        "Futuristik": {
+            "face": "linear-gradient(135deg,#13384f 0%,#245a83 22%,#432568 48%,#812e91 72%,#183548 100%)",
+            "face_active": "linear-gradient(135deg,#1b7890 0%,#4b4f9f 28%,#8a36a4 58%,#c52b9a 82%,#24446c 100%)",
+            "border": "#52eaff", "text": "#fffaff", "etch_light": "#e9ffffcc",
+            "etch_dark": "#180c38cc", "glow": "#d72bff99", "shadow": "#050714cc",
+            "facet": "#63f4ff66", "facet_low": "#080a2866", "shard": "#f29cff",
+        },
+    }.get(theme, {})
+    navigation_crystal_css = f"""
+      section[data-testid="stSidebar"] [data-testid="stButton"] button {{
+        position:relative!important; isolation:isolate; overflow:hidden!important;
+        background:{crystal_palette['face']}!important; color:{crystal_palette['text']}!important;
+        -webkit-text-fill-color:{crystal_palette['text']}!important;
+        border:1px solid {crystal_palette['border']}!important;
+        border-radius:11px 6px 11px 6px!important; font-weight:700!important;
+        text-shadow:0 1px 0 {crystal_palette['etch_light']},0 -1px 0 {crystal_palette['etch_dark']},0 0 5px {crystal_palette['glow']}!important;
+        box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 5px 13px {crystal_palette['shadow']}!important;
+        transition:transform .18s ease,filter .18s ease,box-shadow .18s ease!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button::before {{
+        content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
+        background:linear-gradient(132deg,transparent 0 17%,{crystal_palette['facet']} 17.4% 18%,transparent 18.5% 54%,{crystal_palette['facet_low']} 54.5% 55.5%,transparent 56%),linear-gradient(32deg,transparent 0 69%,{crystal_palette['facet']} 69.5% 70.5%,transparent 71%);
+        opacity:.82;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button::after {{
+        content:"";position:absolute;z-index:0;pointer-events:none;right:12px;top:7px;width:6px;height:6px;
+        transform:rotate(45deg);clip-path:polygon(50% 0,100% 42%,62% 100%,0 63%);
+        background:{crystal_palette['shard']};opacity:.8;
+        box-shadow:-10px 12px 0 -1px {crystal_palette['facet']},-20px -2px 0 -2px {crystal_palette['shard']},12px 20px 0 -2px {crystal_palette['facet']};
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button > div {{position:relative;z-index:1}}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"] *,
+      section[data-testid="stSidebar"] [data-testid="stBaseButton-secondary"] *,
+      section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="primary"] *,
+      section[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {{
+        color:{crystal_palette['text']}!important;-webkit-text-fill-color:{crystal_palette['text']}!important;
+        text-shadow:0 1px 0 {crystal_palette['etch_light']},0 -1px 0 {crystal_palette['etch_dark']},0 0 5px {crystal_palette['glow']}!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="primary"],
+      section[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {{
+        background:{crystal_palette['face_active']}!important;color:{crystal_palette['text']}!important;
+        -webkit-text-fill-color:{crystal_palette['text']}!important;border-color:{crystal_palette['border']}!important;
+        box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 0 14px {crystal_palette['glow']},0 6px 16px {crystal_palette['shadow']}!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button:hover {{
+        transform:translateY(-2px);filter:brightness(1.12) saturate(1.15);
+        box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 0 18px {crystal_palette['glow']},0 8px 18px {crystal_palette['shadow']}!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stButton"] button:focus-visible {{outline:2px solid {crystal_palette['border']}!important;outline-offset:2px}}
+      @media(prefers-reduced-motion:reduce) {{section[data-testid="stSidebar"] [data-testid="stButton"] button {{transition:none!important}}}}
+    """
     st.markdown(
         f"""
         <style>
@@ -468,6 +534,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:12rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:10rem; }} .brand-logo-page-title img {{ max-width:300px; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
         @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} }}
         {hero_theme_css}
+        {navigation_crystal_css}
         </style>
         """,
         unsafe_allow_html=True,
