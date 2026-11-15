@@ -35,7 +35,10 @@ from slab import (
 from navigation import initialize_state, navigate
 from slab_ui import render_modul_pelat
 
+module_from_url = st.query_params.get("modul_pra")
 initialize_state(st.session_state)
+if module_from_url in {"Balok", "Pelat", "Kolom"}:
+    st.session_state["modul_pra"] = module_from_url
 st.session_state.setdefault("rekap_kolom", {})
 st.session_state.setdefault("theme_mode", "Terang")
 inject_global_styles(
@@ -48,6 +51,7 @@ def pindah(halaman):
 
 def pilih_modul_pra(modul):
     st.session_state["modul_pra"] = modul
+    st.query_params["modul_pra"] = modul
 
 def toggle_theme():
     themes = ("Terang", "Gelap", "Futuristik")
