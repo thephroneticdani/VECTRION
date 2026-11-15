@@ -269,6 +269,37 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 0 18px {crystal_palette['glow']},0 8px 18px {crystal_palette['shadow']}!important;
       }}
       section[data-testid="stSidebar"] [data-testid="stButton"] button:focus-visible {{outline:2px solid {crystal_palette['border']}!important;outline-offset:2px}}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {{display:flex;flex-direction:column;gap:.48rem}}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] {{
+        position:relative!important;isolation:isolate;overflow:hidden!important;width:100%!important;box-sizing:border-box!important;
+        min-height:3.4rem;padding:.55rem .8rem!important;justify-content:center!important;
+        background:{crystal_palette['face']}!important;color:{crystal_palette['text']}!important;
+        border:1px solid {crystal_palette['border']}!important;border-radius:11px 6px 11px 6px!important;
+        font-weight:700!important;text-shadow:0 1px 0 {crystal_palette['etch_light']},0 -1px 0 {crystal_palette['etch_dark']},0 0 5px {crystal_palette['glow']}!important;
+        box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 5px 13px {crystal_palette['shadow']}!important;
+        transition:transform .18s ease,filter .18s ease,box-shadow .18s ease!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"]::before {{
+        content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
+        background:linear-gradient(132deg,transparent 0 17%,{crystal_palette['facet']} 17.4% 18%,transparent 18.5% 54%,{crystal_palette['facet_low']} 54.5% 55.5%,transparent 56%),linear-gradient(32deg,transparent 0 69%,{crystal_palette['facet']} 69.5% 70.5%,transparent 71%);opacity:.82;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"]::after {{
+        content:"";position:absolute;z-index:0;pointer-events:none;right:12px;top:7px;width:6px;height:6px;
+        transform:rotate(45deg);clip-path:polygon(50% 0,100% 42%,62% 100%,0 63%);background:{crystal_palette['shard']};opacity:.8;
+        box-shadow:-10px 12px 0 -1px {crystal_palette['facet']},-20px -2px 0 -2px {crystal_palette['shard']},12px 20px 0 -2px {crystal_palette['facet']};
+      }}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] > div:first-child {{display:none!important}}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] > * {{position:relative;z-index:1;color:{crystal_palette['text']}!important}}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"][aria-checked="true"] {{
+        background:{crystal_palette['face_active']}!important;border-color:{crystal_palette['border']}!important;
+        box-shadow:inset 1px 1px 0 {crystal_palette['facet']},inset -2px -3px 0 {crystal_palette['facet_low']},0 0 14px {crystal_palette['glow']},0 6px 16px {crystal_palette['shadow']}!important;
+      }}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"]:hover {{transform:translateY(-2px);filter:brightness(1.12) saturate(1.15)}}
+      section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"]:focus-visible {{outline:2px solid {crystal_palette['border']}!important;outline-offset:2px}}
+      @media(max-width:768px) {{
+        section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {{flex-direction:row!important;gap:.3rem!important}}
+        section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] {{min-height:2.2rem;padding:.36rem .48rem!important;font-size:.77rem!important}}
+      }}
       @media(prefers-reduced-motion:reduce) {{section[data-testid="stSidebar"] [data-testid="stButton"] button {{transition:none!important}}}}
     """
     st.markdown(
@@ -532,24 +563,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           }}
           section[data-testid="stSidebar"] [data-testid="stButton"] button[aria-label^="▤"] {{ border-radius:5px !important; }}
           section[data-testid="stSidebar"] [data-testid="stButton"] button[aria-label^="⌁"] {{ border-radius:15px 5px 10px 5px !important; }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] {{ margin:0 !important; }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] > label {{ display:none !important; }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {{
-            display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
-            justify-content:center !important; align-items:center !important; gap:.3rem !important;
-          }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] {{
-            display:flex !important; flex-direction:row !important; align-items:center !important;
-            gap:.28rem !important; white-space:nowrap !important; padding:.38rem .5rem !important;
-            border:1px solid #C8B7A3 !important; border-radius:999px !important;
-            background:#FFFFFF !important; color:#493629 !important; font-size:.78rem !important;
-          }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"][aria-checked="true"] {{
-            background:#81583D !important; border-color:#63452F !important; color:#FFFFFF !important;
-          }}
-          section[data-testid="stSidebar"] [data-testid="stRadio"] [role="radio"] > div:first-child {{
-            width:0 !important; height:0 !important; opacity:0 !important; margin:0 !important;
-          }}
           .vx-recap-mobile-label {{
             display:block; color:#63472F; font-size:.83rem; font-weight:700;
             line-height:1.4; overflow-wrap:anywhere;

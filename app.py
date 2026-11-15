@@ -46,6 +46,9 @@ inject_global_styles(
 def pindah(halaman):
     navigate(st.session_state, halaman)
 
+def pilih_modul_pra(modul):
+    st.session_state["modul_pra"] = modul
+
 def toggle_theme():
     themes = ("Terang", "Gelap", "Futuristik")
     current = st.session_state["theme_mode"] if st.session_state["theme_mode"] in themes else "Terang"
@@ -94,7 +97,17 @@ with st.sidebar:
             on_click=toggle_theme,
         )
     if st.session_state["halaman"] == "Pra-Desain":
-        st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
+        st.caption("Modul pra-desain")
+        with st.container(key="pre-design-module-navigation"):
+            for modul in ("Balok", "Pelat", "Kolom"):
+                st.button(
+                    modul,
+                    key=f"nav-modul-pra-{modul.lower()}",
+                    type="primary" if st.session_state["modul_pra"] == modul else "secondary",
+                    use_container_width=True,
+                    on_click=pilih_modul_pra,
+                    args=(modul,),
+                )
     if st.session_state["halaman"].startswith("Pasca-ETABS-"):
         st.caption("Modul Pasca Modelling")
         with st.container(key="post-etabs-module-navigation"):
