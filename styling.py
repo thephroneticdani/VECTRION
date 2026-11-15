@@ -96,7 +96,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stExpander"] summary:hover{background:linear-gradient(105deg,#5a3c28,#493323)!important}
       [data-testid="stExpander"] [data-testid="stExpanderDetails"]{background:#202b36!important;color:#e8edf2!important}
       [data-testid="stExpander"] [data-testid="stExpanderDetails"] *{color:#e8edf2!important;-webkit-text-fill-color:#e8edf2!important}
-      [data-testid="stExpander"] svg,[data-testid="stExpander"] svg *{fill:#d6a66a!important;color:#d6a66a!important}
+      [data-testid="stExpander"] summary svg,[data-testid="stExpander"] summary svg *{fill:#d6a66a!important;color:#d6a66a!important}
       @media(max-width:768px){section[data-testid="stSidebar"]>div:first-child{background:#19222c!important}.vx-recap-table tbody tr{background:#202b36;border-color:#526170;box-shadow:none}.vx-recap-table td{border-color:#394957}}
     """ if theme in ("Gelap", "Futuristik") else ""
     if theme == "Futuristik":
@@ -220,7 +220,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stExpander"] summary:hover{background:linear-gradient(105deg,#2a1b46,#30204b)!important}
       [data-testid="stExpander"] [data-testid="stExpanderDetails"]{background:#11172a!important;color:#e7f8ff!important}
       [data-testid="stExpander"] [data-testid="stExpanderDetails"] *{color:#e7f8ff!important;-webkit-text-fill-color:#e7f8ff!important}
-      [data-testid="stExpander"] svg,[data-testid="stExpander"] svg *{fill:#8befff!important;color:#8befff!important}
+      [data-testid="stExpander"] summary svg,[data-testid="stExpander"] summary svg *{fill:#8befff!important;color:#8befff!important}
       [data-testid="stMetric"]{border-color:#47dff477!important}
       [data-testid="stTabs"] [data-baseweb="tab"]{color:#c5f5ff!important}
       [data-testid="stTabs"] [aria-selected="true"]{border-bottom-color:#54e5f5!important}
@@ -277,6 +277,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stExpander"] [data-baseweb="select"]>div{background:#202b36!important;border-color:#a87d58!important}
           [data-testid="stExpander"] [data-baseweb="select"] span,
           [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+          [data-testid="stExpander"] [data-baseweb="select"] svg,
+          [data-testid="stExpander"] [data-baseweb="select"] svg *{fill:#f0c18c!important;color:#f0c18c!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#202b36!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important;border-color:#a87d58!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#493323!important;color:#f0c18c!important;-webkit-text-fill-color:#f0c18c!important;border-color:#805c3d!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#684a34!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
@@ -290,6 +292,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stExpander"] [data-baseweb="select"]>div{background:#111a30!important;border-color:#39dff4!important}
           [data-testid="stExpander"] [data-baseweb="select"] span,
           [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
+          [data-testid="stExpander"] [data-baseweb="select"] svg,
+          [data-testid="stExpander"] [data-baseweb="select"] svg *{fill:#75e9fa!important;color:#75e9fa!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#111a30!important;color:#dffaff!important;-webkit-text-fill-color:#dffaff!important;border-color:#39dff4!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:linear-gradient(140deg,#16384e,#39204f)!important;color:#75e9fa!important;-webkit-text-fill-color:#75e9fa!important;border-color:#39dff4!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:linear-gradient(140deg,#205a70,#593076)!important;color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
