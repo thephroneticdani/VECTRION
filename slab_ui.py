@@ -8,7 +8,7 @@ from slab import (
 
 
 def render_modul_pelat(st):
-    st.markdown("### Analisis Pra-Desain Pelat")
+    st.markdown("### Analisis Pra-Modelling Pelat")
     jenis = st.radio(
         "Pilih jenis pelat",
         ["Pelat satu arah", "Pelat dua arah (pelat rusuk)"],

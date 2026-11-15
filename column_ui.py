@@ -9,7 +9,7 @@ from column import (
 
 
 def render_column_module(st):
-    st.markdown("### Analisis Pra-Desain Kolom")
+    st.markdown("### Analisis Pra-Modelling Kolom")
     st.caption("Penentuan geometri awal kolom beton bertulang sebelum pemodelan ETABS / SAP2000.")
     st.info("Modul ini memberi ukuran awal dan informasi kelangsingan. Ini bukan desain lengkap dan tidak menyatakan kolom aman.")
 

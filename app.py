@@ -77,7 +77,7 @@ with st.sidebar:
     st.markdown("---")
     with st.container(key="primary-navigation"):
         st.caption("Navigasi aplikasi")
-        page_buttons = (("Beranda", "Beranda", "⌂"), ("Pra-Desain", "Pra-Desain", "▤"), ("Pasca Modelling", "Pasca-ETABS", "⌁"))
+        page_buttons = (("Beranda", "Beranda", "⌂"), ("Pra-Modelling", "Pra-Desain", "▤"), ("Pasca Modelling", "Pasca-ETABS", "⌁"))
         for label, page, icon in page_buttons:
             active = st.session_state["halaman"] == page or (
                 page == "Pasca-ETABS" and st.session_state["halaman"].startswith("Pasca-ETABS-")
@@ -101,7 +101,7 @@ with st.sidebar:
             on_click=toggle_theme,
         )
     if st.session_state["halaman"] == "Pra-Desain":
-        st.caption("Modul pra-desain")
+        st.caption("Modul Pra-Modelling")
         with st.container(key="pre-design-module-navigation"):
             for modul in ("Balok", "Pelat", "Kolom"):
                 st.button(
@@ -153,9 +153,9 @@ if st.session_state["halaman"] == "Beranda":
         st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
     kiri, kanan = st.columns(2)
     with kiri:
-        st.markdown("### Analisis Pra-Desain")
+        st.markdown("### Analisis Pra-Modelling")
         st.write("Pemeriksaan awal dimensi balok dan pelat.")
-        st.button("Buka Pra-Desain →", type="primary", use_container_width=True,
+        st.button("Buka Pra-Modelling →", type="primary", use_container_width=True,
                   on_click=pindah, args=("Pra-Desain",))
     with kanan:
         st.markdown("### Analisis Pasca Modelling")
@@ -165,7 +165,7 @@ if st.session_state["halaman"] == "Beranda":
 
 elif st.session_state["halaman"] == "Pra-Desain":
     render_engineering_disclaimer(st)
-    st.markdown("## Analisis Pra-Desain")
+    st.markdown("## Analisis Pra-Modelling")
     modul = st.session_state["modul_pra"]
     if modul == "Kolom":
         render_column_module(st)
