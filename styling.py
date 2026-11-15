@@ -274,6 +274,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     }.get(theme, "")
     rebar_control_theme_css = {
         "Gelap": """
+          [data-testid="stSelectbox"]{opacity:1!important;filter:none!important;color-scheme:light!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]{opacity:1!important;filter:none!important}
+          [data-testid="stSelectbox"] [role="combobox"]{background:#f7f2eb!important;color:#332a23!important;-webkit-text-fill-color:#332a23!important;border-color:#a87d58!important;opacity:1!important;filter:none!important}
+          [data-testid="stSelectbox"] [role="combobox"] *{color:#332a23!important;-webkit-text-fill-color:#332a23!important;opacity:1!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"]{background:transparent!important;color:#694930!important;opacity:1!important;border:0!important;box-shadow:none!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"] svg{display:none!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"]:after{content:"";display:block;width:.42rem;height:.42rem;border-right:2px solid #694930;border-bottom:2px solid #694930;transform:rotate(45deg);margin:-.18rem auto 0;pointer-events:none}
           [data-testid="stSelectbox"] [data-baseweb="select"]>div{position:relative!important;background:#f7f2eb!important;color:#332a23!important;border-color:#a87d58!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] span,
           [data-testid="stSelectbox"] [data-baseweb="select"] [role="combobox"]{color:#332a23!important;-webkit-text-fill-color:#332a23!important}
@@ -281,8 +288,10 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stSelectbox"] [data-baseweb="select"]>div>div{background:transparent!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
           [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){display:none!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] svg{display:none!important}
-          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #694930;border-bottom:2px solid #694930;transform:rotate(45deg);pointer-events:none}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;z-index:3;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #694930;border-bottom:2px solid #694930;transform:rotate(45deg);pointer-events:none}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#f7f2eb!important;color:#332a23!important;-webkit-text-fill-color:#332a23!important;border-color:#a87d58!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#eadac8!important;color:#553e2b!important;-webkit-text-fill-color:#553e2b!important;border-color:#a87d58!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#dfc6aa!important;color:#3e2b1d!important;-webkit-text-fill-color:#3e2b1d!important}
@@ -293,6 +302,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [role="option"]:hover{background:#eadac8!important}
         """,
         "Futuristik": """
+          [data-testid="stSelectbox"]{opacity:1!important;filter:none!important;color-scheme:light!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]{opacity:1!important;filter:none!important}
+          [data-testid="stSelectbox"] [role="combobox"]{background:#f4f0e9!important;color:#182235!important;-webkit-text-fill-color:#182235!important;border-color:#39cfe5!important;opacity:1!important;filter:none!important}
+          [data-testid="stSelectbox"] [role="combobox"] *{color:#182235!important;-webkit-text-fill-color:#182235!important;opacity:1!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"]{background:transparent!important;color:#24617a!important;opacity:1!important;border:0!important;box-shadow:none!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"] svg{display:none!important}
+          [data-testid="stSelectbox"] button[aria-label="Open"]:after{content:"";display:block;width:.42rem;height:.42rem;border-right:2px solid #24617a;border-bottom:2px solid #24617a;transform:rotate(45deg);margin:-.18rem auto 0;pointer-events:none}
           [data-testid="stSelectbox"] [data-baseweb="select"]>div{position:relative!important;background:#f4f0e9!important;color:#182235!important;border-color:#39cfe5!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] span,
           [data-testid="stSelectbox"] [data-baseweb="select"] [role="combobox"]{color:#182235!important;-webkit-text-fill-color:#182235!important}
@@ -300,8 +316,10 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stSelectbox"] [data-baseweb="select"]>div>div{background:transparent!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
           [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){display:none!important}
           [data-testid="stSelectbox"] [data-baseweb="select"] svg{display:none!important}
-          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #24617a;border-bottom:2px solid #24617a;transform:rotate(45deg);pointer-events:none}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;z-index:3;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #24617a;border-bottom:2px solid #24617a;transform:rotate(45deg);pointer-events:none}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#f4f0e9!important;color:#182235!important;-webkit-text-fill-color:#182235!important;border-color:#39cfe5!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#e5e9f0!important;color:#244c64!important;-webkit-text-fill-color:#244c64!important;border-color:#39cfe5!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#d2eefa!important;color:#183c52!important;-webkit-text-fill-color:#183c52!important}
