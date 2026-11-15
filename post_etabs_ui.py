@@ -107,7 +107,8 @@ def render_post_etabs_beam(st):
         st.table(
             pd.DataFrame(result["rows"])[["Story", "DesignSect", "AsTopTotal", "AsBotTotal"]].rename(
                 columns={"AsTopTotal": "AsTopTotal maks.", "AsBotTotal": "AsBotTotal maks."}
-            )
+            ),
+            hide_index=True, width="stretch",
         )
     if st.button("Hitung Tulangan", key="toggle_etabs_rebar", type="primary"):
         st.session_state["show_etabs_rebar"] = not st.session_state.get("show_etabs_rebar", False)
