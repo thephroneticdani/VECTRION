@@ -274,11 +274,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     }.get(theme, "")
     rebar_control_theme_css = {
         "Gelap": """
-          [data-testid="stExpander"] [data-baseweb="select"]>div{background:#202b36!important;border-color:#a87d58!important}
-          [data-testid="stExpander"] [data-baseweb="select"] span,
-          [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
-          [data-testid="stExpander"] [data-baseweb="select"] svg,
-          [data-testid="stExpander"] [data-baseweb="select"] svg *{fill:#f0c18c!important;color:#f0c18c!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{position:relative!important;background:#202b36!important;color:#fff1df!important;border-color:#a87d58!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] span,
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [role="combobox"]{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] svg{display:none!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #f0c18c;border-bottom:2px solid #f0c18c;transform:rotate(45deg);pointer-events:none}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#202b36!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important;border-color:#a87d58!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#493323!important;color:#f0c18c!important;-webkit-text-fill-color:#f0c18c!important;border-color:#805c3d!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#684a34!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
@@ -289,11 +291,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stExpander"] [role="option"]:hover{background:#493323!important}
         """,
         "Futuristik": """
-          [data-testid="stExpander"] [data-baseweb="select"]>div{background:#111a30!important;border-color:#39dff4!important}
-          [data-testid="stExpander"] [data-baseweb="select"] span,
-          [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
-          [data-testid="stExpander"] [data-baseweb="select"] svg,
-          [data-testid="stExpander"] [data-baseweb="select"] svg *{fill:#75e9fa!important;color:#75e9fa!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{position:relative!important;background:#111a30!important;color:#dffaff!important;border-color:#39dff4!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] span,
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [role="combobox"]{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"] svg{display:none!important}
+          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #75e9fa;border-bottom:2px solid #75e9fa;transform:rotate(45deg);pointer-events:none}
           [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#111a30!important;color:#dffaff!important;-webkit-text-fill-color:#dffaff!important;border-color:#39dff4!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:linear-gradient(140deg,#16384e,#39204f)!important;color:#75e9fa!important;-webkit-text-fill-color:#75e9fa!important;border-color:#39dff4!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:linear-gradient(140deg,#205a70,#593076)!important;color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
