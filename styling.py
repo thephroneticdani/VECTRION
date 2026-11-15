@@ -100,12 +100,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [class*="st-key-home-hero"] p{color:#332a23!important;text-shadow:none!important}
       [class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#5c5046!important;text-shadow:none!important}
         """
-    if theme == "Futuristik":
-        home_options_css = """background:rgba(7,12,29,.8)!important;border:1px solid #20e6ff99!important;box-shadow:0 0 28px #07cde833,0 0 44px #d935ff18,inset 0 0 18px #bd35ff12!important"""
-    elif theme == "Gelap":
-        home_options_css = """background:rgba(17,24,32,.8)!important;border:1px solid #81909f99!important;box-shadow:0 8px 28px #00000030!important"""
-    else:
-        home_options_css = """background:rgba(251,250,247,.8)!important;border:1px solid #81583d66!important;box-shadow:0 8px 24px #49372518!important"""
     page_surface = {"Gelap": "rgba(17,24,32,.8)", "Futuristik": "rgba(7,12,29,.8)"}.get(theme, "rgba(251,250,247,.8)")
     navigation_surface = {"Gelap": "rgba(17,24,32,.85)", "Futuristik": "rgba(8,12,29,.9)"}.get(theme, "rgba(251,250,247,.85)")
     page_border = {"Gelap": "#81909f99", "Futuristik": "#22ddff88"}.get(theme, "#81583d55")
@@ -452,11 +446,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {dark_theme_css}
         {homepage_css}
         {futuristic_css}
-        [class*="st-key-home-options"] {{ {home_options_css}; border-radius:18px!important; padding:1rem 1.2rem!important; margin:.8rem 0 1.2rem!important; backdrop-filter:blur(12px) saturate(120%); -webkit-backdrop-filter:blur(12px) saturate(120%); }}
-        [class*="st-key-home-options"] [data-testid="stColumn"] {{ background:transparent!important; border:0!important; box-shadow:none!important; padding:.3rem .7rem!important; }}
-        [class*="st-key-home-options"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3) {{ background:transparent!important; border:0!important; border-radius:0!important; padding:.3rem .5rem!important; margin:0!important; box-shadow:none!important; }}
-        [class*="st-key-home-options"] [data-testid="stHorizontalBlock"] {{ gap:1rem; }}
-        @media(max-width:768px) {{ [class*="st-key-home-options"] {{ padding:.85rem!important; }} [class*="st-key-home-options"] [data-testid="stColumn"] {{ padding:.2rem .35rem!important; }} }}
         [class*="st-key-home-hero"] {{ position:relative; min-height:20rem; padding:0 !important; overflow:hidden; border:1px solid #FFFFFF48; border-radius:18px; background:#F6F1E9; isolation:isolate; }}
         [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:17rem; justify-content:center; }}
         [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
