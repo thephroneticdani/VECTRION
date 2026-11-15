@@ -148,17 +148,15 @@ if st.session_state["halaman"] == "Beranda":
                 )
     kiri, kanan = st.columns(2)
     with kiri:
-        with st.container(border=True):
-            st.markdown("### Analisis Pra-Desain")
-            st.write("Pemeriksaan awal dimensi balok dan pelat.")
-            st.button("Buka Pra-Desain →", type="primary", use_container_width=True,
-                      on_click=pindah, args=("Pra-Desain",))
+        st.markdown("### Analisis Pra-Desain")
+        st.write("Pemeriksaan awal dimensi balok dan pelat.")
+        st.button("Buka Pra-Desain →", type="primary", use_container_width=True,
+                  on_click=pindah, args=("Pra-Desain",))
     with kanan:
-        with st.container(border=True):
-            st.markdown("### Analisis Pasca-ETABS")
-            st.write("Alur pemeriksaan hasil analisis struktur.")
-            st.button("Buka Pasca-ETABS →", use_container_width=True,
-                      on_click=pindah, args=("Pasca-ETABS",))
+        st.markdown("### Analisis Pasca-ETABS")
+        st.write("Alur pemeriksaan hasil analisis struktur.")
+        st.button("Buka Pasca-ETABS →", use_container_width=True,
+                  on_click=pindah, args=("Pasca-ETABS",))
 
 elif st.session_state["halaman"] == "Pra-Desain":
     render_engineering_disclaimer(st)
