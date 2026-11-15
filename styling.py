@@ -78,6 +78,12 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .brand-logo img{filter:brightness(1.28) saturate(1.25) drop-shadow(0 0 5px #f4c783bb) drop-shadow(0 0 14px #c78c50aa)}
       section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"]{background:#25313d!important;color:#e8edf2!important;border-color:#526170!important}
       section[data-testid="stSidebar"] [data-testid="stButton"] button[kind="secondary"] *{color:#e8edf2!important}
+      [data-testid="stMainBlockContainer"] .stDownloadButton button,
+      [data-testid="stMainBlockContainer"] [data-testid="stDownloadButton"] button{background:linear-gradient(110deg,#684A34,#9A704C)!important;color:#FFF9F1!important;-webkit-text-fill-color:#FFF9F1!important;border:1px solid #C08A5D!important;box-shadow:0 2px 8px #07050355!important}
+      [data-testid="stMainBlockContainer"] .stDownloadButton button *,
+      [data-testid="stMainBlockContainer"] [data-testid="stDownloadButton"] button *{color:#FFF9F1!important;-webkit-text-fill-color:#FFF9F1!important}
+      [data-testid="stMainBlockContainer"] .stDownloadButton button:hover,
+      [data-testid="stMainBlockContainer"] [data-testid="stDownloadButton"] button:hover{background:linear-gradient(110deg,#80583C,#B17D55)!important;border-color:#D1A275!important}
       [data-testid="stMainBlockContainer"] button:disabled,[data-testid="stMainBlockContainer"] button[aria-disabled="true"]{background:#eef1f5!important;color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
       [data-testid="stMainBlockContainer"] button:disabled *,[data-testid="stMainBlockContainer"] button[aria-disabled="true"] *{color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
       .vx-recap-table{color:#e8edf2;background:#202b36;border-color:#526170}
