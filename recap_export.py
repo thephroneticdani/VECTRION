@@ -41,6 +41,17 @@ def _beam_bottom(entry):
     )
 
 
+def _column_size(entry):
+    width, height = entry.get("b (mm)"), entry.get("h (mm)")
+    if isinstance(width, (int, float)) and isinstance(height, (int, float)):
+        return f"{width:,.0f} × {height:,.0f} mm"
+    value = str(entry.get("Ukuran", "")).strip()
+    if not value:
+        return "—"
+    value = value.removesuffix("mm").strip().replace("×", " × ").replace("x", " × ")
+    return f"{' '.join(value.split())} mm"
+
+
 RECAP_SECTIONS = (
     ("Pra-Analisis — Balok", "rekap_balok", (
         ("Kode", lambda row: row.get("Kode balok", "—")),
@@ -68,6 +79,7 @@ RECAP_SECTIONS = (
     )),
     ("Pasca Modelling — Kolom", "rekap_analisis_etabs_kolom", (
         ("Kode", lambda row: row.get("Kode", "—")),
+        ("Ukuran", _column_size),
         ("Kombinasi tulangan", lambda row: row.get("Kombinasi tulangan", "—")),
     )),
 )
