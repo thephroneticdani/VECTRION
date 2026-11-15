@@ -146,15 +146,14 @@ if st.session_state["halaman"] == "Beranda":
                     f'<div class="brand-logo brand-logo-hero"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
                     unsafe_allow_html=True,
                 )
-    kiri, kanan = st.columns(2)
-    with kiri:
-        with st.container(border=True):
+    with st.container(key="home-options", border=True):
+        kiri, kanan = st.columns(2)
+        with kiri:
             st.markdown("### Analisis Pra-Desain")
-            st.write("Pemeriksaan awal dimensi balok dan pelat.")
+            st.write("Pemeriksaan awal dimensi balok, pelat, dan kolom.")
             st.button("Buka Pra-Desain →", type="primary", use_container_width=True,
                       on_click=pindah, args=("Pra-Desain",))
-    with kanan:
-        with st.container(border=True):
+        with kanan:
             st.markdown("### Analisis Pasca-ETABS")
             st.write("Alur pemeriksaan hasil analisis struktur.")
             st.button("Buka Pasca-ETABS →", use_container_width=True,
