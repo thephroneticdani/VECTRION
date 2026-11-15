@@ -213,6 +213,16 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     """ if theme == "Futuristik" else ""
     file_uploader_theme_css = {
         "Gelap": """
+          [data-testid="stFileUploader"]{
+            background:linear-gradient(135deg,#493323,#36271d)!important;border:1px solid #a87d58!important;
+            border-radius:9px!important;padding:.2rem!important
+          }
+          [data-testid="stFileUploader"] [data-testid*="Dropzone"],
+          [data-testid="stFileUploader"] section,
+          [data-testid="stFileUploader"] [data-baseweb="fileupload"],
+          [data-testid="stFileUploader"] div:has(>button){
+            background:linear-gradient(135deg,#493323,#36271d)!important;border-color:#a87d58!important;border-radius:8px!important
+          }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"]{
             background:linear-gradient(135deg,#493323,#36271d)!important;border:1px solid #a87d58!important;
             border-radius:9px!important;box-shadow:inset 0 1px 0 #d0a47a33!important
@@ -229,6 +239,16 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stFileUploader"] button *{color:#fff9f1!important;-webkit-text-fill-color:#fff9f1!important}
         """,
         "Futuristik": """
+          [data-testid="stFileUploader"]{
+            background:linear-gradient(120deg,#111a30,#17132d)!important;border:1px solid #39dff488!important;
+            border-radius:9px!important;padding:.2rem!important
+          }
+          [data-testid="stFileUploader"] [data-testid*="Dropzone"],
+          [data-testid="stFileUploader"] section,
+          [data-testid="stFileUploader"] [data-baseweb="fileupload"],
+          [data-testid="stFileUploader"] div:has(>button){
+            background:linear-gradient(120deg,#111a30,#17132d)!important;border-color:#39dff488!important;border-radius:8px!important
+          }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"]{
             background:linear-gradient(120deg,#111a30,#17132d)!important;border:1px solid #39dff488!important;
             border-radius:9px!important;box-shadow:0 0 14px #1ccfe322,inset 0 0 16px #a837ed11!important
