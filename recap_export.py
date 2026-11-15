@@ -53,19 +53,19 @@ def _column_size(entry):
 
 
 RECAP_SECTIONS = (
-    ("Pra-Analisis — Balok", "rekap_balok", (
+    ("Pra-Modelling — Balok", "rekap_balok", (
         ("Kode", lambda row: row.get("Kode balok", "—")),
         ("Bentang", lambda row: _mm(row.get("Bentang (mm)"))),
         ("Tumpuan", lambda row: row.get("Kondisi tumpuan", "—")),
         ("Dimensi", lambda row: row.get("Dimensi (b × h)", "—")),
     )),
-    ("Pra-Analisis — Pelat", "rekap_pelat", (
+    ("Pra-Modelling — Pelat", "rekap_pelat", (
         ("Kode", _slab_code),
         ("Jenis", _slab_type),
         ("Tumpuan", lambda row: row.get("Kondisi tumpuan", "—")),
         ("h pilihan", lambda row: _mm(row.get("Pilihan (mm)"))),
     )),
-    ("Pra-Analisis — Kolom", "rekap_kolom", (
+    ("Pra-Modelling — Kolom", "rekap_kolom", (
         ("Kode", lambda row: row.get("Kode kolom", "—")),
         ("Panjang tak tertumpu", lambda row: _mm(row.get("lu (mm)"))),
         ("Rasio kelangsingan", _ratio),
