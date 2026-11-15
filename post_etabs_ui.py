@@ -77,11 +77,11 @@ def _render_beam_row(item, units, ordinal):
         }
         if st.button("Simpan ke Rekap", key=f"save_etabs_rebar_{ordinal}", type="primary"):
             save_etabs_beam_recap(st.session_state, record)
-            st.success("Pilihan tulangan tersimpan di Rekap Tulangan Pasca-ETABS dan Rekap Analisis.")
+            st.success("Pilihan tulangan tersimpan di Rekap Tulangan Pasca Modelling dan Rekap Analisis.")
 
 
 def render_post_etabs_beam(st):
-    st.markdown("## Pasca-ETABS · Balok")
+    st.markdown("## Pasca Modelling · Balok")
     st.info(POST_BEAM_DISCLAIMER, icon="ℹ️")
     st.write("Unggah ringkasan desain balok ETABS berformat `.xlsx` untuk melihat kebutuhan As tiap DesignSect dan story.")
     with st.form("upload_etabs_beam_form"):
@@ -118,7 +118,7 @@ def render_post_etabs_beam(st):
             _render_beam_row(item, result["units"], index)
     recap = st.session_state.get("rekap_etabs_balok", {})
     if recap:
-        st.markdown("### Rekap tulangan Pasca-ETABS")
+        st.markdown("### Rekap tulangan Pasca Modelling")
         table_rows = []
         for data in recap.values():
             table_rows.append({
@@ -131,14 +131,14 @@ def render_post_etabs_beam(st):
                 ]
             })
         render_recap_table(
-            st, key="post-etabs-summary", title="Rekap tulangan Pasca-ETABS",
+            st, key="post-etabs-summary", title="Rekap tulangan Pasca Modelling",
             headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status"],
             widths=[1.0, 0.9, 1.5, 1.5, 0.9], rows=table_rows, clear_column=False,
         )
 
 
 def render_post_etabs_column(st):
-    st.markdown("## Pasca-ETABS · Kolom")
+    st.markdown("## Pasca Modelling · Kolom")
     st.info(
         "Cek dasar luas tulangan longitudinal: target minimum 1–8% dari luas bruto penampang. "
         "Bukan desain kapasitas kolom; gaya aksial, momen, kelangsingan, sengkang, dan detailing tidak dihitung.",
@@ -198,11 +198,11 @@ def render_post_etabs_column(st):
         st.caption(f"{draft['Kode']} · {draft['Ukuran']} mm · {draft['Kombinasi tulangan']}")
         if st.button("Simpan ke Rekap", key="save_post_etabs_column", type="primary"):
             save_etabs_column_recap(st.session_state, draft)
-            st.success("Hasil kolom tersimpan di Rekap Pasca-ETABS dan Rekap Analisis.")
+            st.success("Hasil kolom tersimpan di Rekap Pasca Modelling dan Rekap Analisis.")
 
     recap = st.session_state.get("rekap_etabs_kolom", {})
     if recap:
-        st.markdown("### Rekap tulangan Pasca-ETABS · Kolom")
+        st.markdown("### Rekap tulangan Pasca Modelling · Kolom")
         rows = []
         for key, data in recap.items():
             rows.append({

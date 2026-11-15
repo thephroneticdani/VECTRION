@@ -60,13 +60,13 @@ RECAP_SECTIONS = (
         ("Rasio kelangsingan", _ratio),
         ("Dimensi pilihan", _dimension),
     )),
-    ("Pasca-ETABS — Balok", "rekap_analisis_etabs", (
+    ("Pasca Modelling — Balok", "rekap_analisis_etabs", (
         ("Nama", lambda row: row.get("DesignSect", "—")),
         ("Story", lambda row: row.get("Story", "—")),
         ("Kombinasi tulangan atas", _beam_top),
         ("Kombinasi tulangan bawah", _beam_bottom),
     )),
-    ("Pasca-ETABS — Kolom", "rekap_analisis_etabs_kolom", (
+    ("Pasca Modelling — Kolom", "rekap_analisis_etabs_kolom", (
         ("Kode", lambda row: row.get("Kode", "—")),
         ("Kombinasi tulangan", lambda row: row.get("Kombinasi tulangan", "—")),
     )),

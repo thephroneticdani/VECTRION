@@ -123,8 +123,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stMainBlockContainer"] [class*="st-key-page-title"],[data-testid="stMainBlockContainer"] [class*="st-key-recap-section"]{{background:{page_surface};border:1px solid {page_border};border-radius:16px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
       [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){{background:{page_surface}!important;border-color:{page_border}!important;border-radius:14px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
       [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{{background:{alert_surface}!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) .element-container:has(.vx-site-video-layer){{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:-1;margin:0!important;padding:0!important;overflow:hidden;pointer-events:none}}
-      .vx-site-video-layer{{position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none}}
+      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) .element-container:has(.vx-site-video-layer){{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;z-index:-1;margin:0!important;padding:0!important;overflow:hidden;pointer-events:none}}
+      .vx-site-video-layer{{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:-1;overflow:hidden;pointer-events:none}}
       .vx-site-video-layer video{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}}
       .vx-site-video-shade{{position:absolute;inset:0;background:linear-gradient(120deg,rgba(10,16,23,{page_overlay}),rgba(10,16,23,.08))}}
       @media(prefers-reduced-motion:reduce){{.vx-site-video-layer video{{display:none}}}}
@@ -334,6 +334,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         .brand-logo img {{ display:block; height:auto; max-width:100%; }}
         .brand-logo-sidebar img {{ width:100%; max-width:230px; margin:0 auto; }}
         .brand-logo-hero img {{ width:100%; max-width:430px; margin:0 auto; }}
+        .brand-logo-page-title img {{ display:block; width:100%; max-width:430px; height:auto; margin:0; }}
         .vx-recap-table-wrap {{ width:100%; max-width:100%; margin:.55rem 0 1rem; }}
         .vx-recap-table {{
           width:100%; table-layout:auto; border-collapse:separate; border-spacing:0;
@@ -455,8 +456,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {dark_theme_css}
         {homepage_css}
         {futuristic_css}
-        [class*="st-key-home-hero"] {{ position:relative; min-height:20rem; padding:0 !important; overflow:hidden; border:1px solid #FFFFFF48; border-radius:18px; background:#F6F1E9; isolation:isolate; }}
-        [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:17rem; justify-content:center; }}
+        [class*="st-key-home-hero"] {{ position:relative; min-height:12rem; padding:0 !important; overflow:hidden; border:0; border-radius:18px; background:transparent!important; isolation:isolate; }}
+        [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:10rem; justify-content:center; }}
         [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
         [class*="st-key-home-hero"] .vx-home-video-layer {{ position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events:none; }}
         [class*="st-key-home-hero"] .vx-home-video-layer video {{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; }}
@@ -464,7 +465,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }}
         [class*="st-key-home-hero"] [data-testid="stColumn"] {{ min-height:17rem; padding:1.5rem 1.6rem; border:1px solid; border-radius:16px; backdrop-filter:blur(12px) saturate(120%); -webkit-backdrop-filter:blur(12px) saturate(120%); }}
         [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:flex; align-items:center; justify-content:center; }}
-        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:22rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:21rem; }} [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"] {{ min-height:16rem; padding:1rem 1.2rem; }} [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:none !important; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
+        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:12rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:10rem; }} .brand-logo-page-title img {{ max-width:300px; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
         @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} }}
         {hero_theme_css}
         </style>

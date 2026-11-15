@@ -75,13 +75,13 @@ with st.sidebar:
     st.markdown("---")
     with st.container(key="primary-navigation"):
         st.caption("Navigasi aplikasi")
-        page_buttons = (("Beranda", "⌂"), ("Pra-Desain", "▤"), ("Pasca-ETABS", "⌁"))
-        for page, icon in page_buttons:
+        page_buttons = (("Beranda", "Beranda", "⌂"), ("Pra-Desain", "Pra-Desain", "▤"), ("Pasca Modelling", "Pasca-ETABS", "⌁"))
+        for label, page, icon in page_buttons:
             active = st.session_state["halaman"] == page or (
                 page == "Pasca-ETABS" and st.session_state["halaman"].startswith("Pasca-ETABS-")
             )
             st.button(
-                f"{icon}  {page}",
+                f"{icon}  {label}",
                 key=f"nav_{page}",
                 type="primary" if active else "secondary",
                 use_container_width=True,
@@ -101,7 +101,7 @@ with st.sidebar:
     if st.session_state["halaman"] == "Pra-Desain":
         st.radio("Modul pra-desain", ["Balok", "Pelat", "Kolom"], horizontal=False, key="modul_pra")
     if st.session_state["halaman"].startswith("Pasca-ETABS-"):
-        st.caption("Modul Pasca-ETABS")
+        st.caption("Modul Pasca Modelling")
         with st.container(key="post-etabs-module-navigation"):
             beam_nav, column_nav = st.columns(2, gap="small")
             with beam_nav:
@@ -123,7 +123,13 @@ with st.container(key="page-title"):
         with st.container(key="navigation-toggle"):
             st.button("☰", key="toggle_navigation", type="primary", help="Sembunyikan / tampilkan panel navigasi", on_click=toggle_navigation)
     with title_col:
-        st.title("VECTRION")
+        if logo_data:
+            st.markdown(
+                f'<div class="brand-logo brand-logo-page-title"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.title("VECTRION")
         st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
 
 if st.session_state["halaman"] == "Beranda":
@@ -135,17 +141,9 @@ if st.session_state["halaman"] == "Beranda":
     )
     render_engineering_disclaimer(st)
     with st.container(key="home-hero"):
-        hero_copy, hero_brand = st.columns([1, 1], vertical_alignment="center")
-        with hero_copy:
-            st.markdown("## Rekayasa struktur, dimulai dari pradesain")
-            st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
-            st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
-        with hero_brand:
-            if logo_data:
-                st.markdown(
-                    f'<div class="brand-logo brand-logo-hero"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
-                    unsafe_allow_html=True,
-                )
+        st.markdown("## Rekayasa struktur, dimulai dari pradesain")
+        st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
+        st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
     kiri, kanan = st.columns(2)
     with kiri:
         st.markdown("### Analisis Pra-Desain")
@@ -153,9 +151,9 @@ if st.session_state["halaman"] == "Beranda":
         st.button("Buka Pra-Desain →", type="primary", use_container_width=True,
                   on_click=pindah, args=("Pra-Desain",))
     with kanan:
-        st.markdown("### Analisis Pasca-ETABS")
+        st.markdown("### Analisis Pasca Modelling")
         st.write("Alur pemeriksaan hasil analisis struktur.")
-        st.button("Buka Pasca-ETABS →", use_container_width=True,
+        st.button("Buka Pasca Modelling →", use_container_width=True,
                   on_click=pindah, args=("Pasca-ETABS",))
 
 elif st.session_state["halaman"] == "Pra-Desain":
@@ -212,19 +210,19 @@ elif st.session_state["halaman"] == "Pra-Desain":
     else:
         render_modul_pelat(st)
 elif st.session_state["halaman"] == "Pasca-ETABS":
-    st.markdown("## Analisis Pasca-ETABS")
+    st.markdown("## Analisis Pasca Modelling")
     render_engineering_disclaimer(st)
     st.write("Pilih elemen yang ingin diperiksa dari hasil ekspor ETABS.")
     beam_col, column_col = st.columns(2)
     with beam_col, st.container(border=True):
         st.markdown("### Balok")
         st.write("Unggah ringkasan desain dan bandingkan kebutuhan As dengan tulangan pilihan.")
-        st.button("Buka Pasca-ETABS Balok →", type="primary", use_container_width=True,
+        st.button("Buka Pasca Modelling Balok →", type="primary", use_container_width=True,
                   on_click=pindah, args=("Pasca-ETABS-Balok",))
     with column_col, st.container(border=True):
         st.markdown("### Kolom")
         st.write("Periksa rasio luas tulangan longitudinal kolom dengan tiga kombinasi diameter dan jumlah batang.")
-        st.button("Buka Pasca-ETABS Kolom →", use_container_width=True,
+        st.button("Buka Pasca Modelling Kolom →", use_container_width=True,
                   on_click=pindah, args=("Pasca-ETABS-Kolom",))
 elif st.session_state["halaman"] == "Pasca-ETABS-Balok":
     render_post_etabs_beam(st)
@@ -308,7 +306,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=recap_key: clear_etabs_beam_recap(st.session_state, k),
             })
         render_recap_table(
-            st, key="post-beam", title="Balok Pasca-ETABS",
+            st, key="post-beam", title="Balok Pasca Modelling",
             headers=["Nama", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
             widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
         )
@@ -322,7 +320,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=recap_key: clear_etabs_column_recap(st.session_state, k),
             })
         render_recap_table(
-            st, key="post-column", title="Kolom Pasca-ETABS",
+            st, key="post-column", title="Kolom Pasca Modelling",
             headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
             rows=column_rows,
         )
