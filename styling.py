@@ -272,6 +272,34 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:nth-child(even) td{background:#321d50!important}
         """,
     }.get(theme, "")
+    rebar_control_theme_css = {
+        "Gelap": """
+          [data-testid="stExpander"] [data-baseweb="select"]>div{background:#202b36!important;border-color:#a87d58!important}
+          [data-testid="stExpander"] [data-baseweb="select"] span,
+          [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#202b36!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important;border-color:#a87d58!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#493323!important;color:#f0c18c!important;-webkit-text-fill-color:#f0c18c!important;border-color:#805c3d!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#684a34!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg,
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#f0c18c!important;color:#f0c18c!important}
+          [data-testid="stExpander"] [data-baseweb="popover"]>div,[data-testid="stExpander"] [data-baseweb="menu"]{background:#202b36!important;color:#fff1df!important}
+          [data-testid="stExpander"] [role="option"]{background:#202b36!important;color:#fff1df!important}
+          [data-testid="stExpander"] [role="option"]:hover{background:#493323!important}
+        """,
+        "Futuristik": """
+          [data-testid="stExpander"] [data-baseweb="select"]>div{background:#111a30!important;border-color:#39dff4!important}
+          [data-testid="stExpander"] [data-baseweb="select"] span,
+          [data-testid="stExpander"] [data-baseweb="select"] [role="combobox"]{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#111a30!important;color:#dffaff!important;-webkit-text-fill-color:#dffaff!important;border-color:#39dff4!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:linear-gradient(140deg,#16384e,#39204f)!important;color:#75e9fa!important;-webkit-text-fill-color:#75e9fa!important;border-color:#39dff4!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:linear-gradient(140deg,#205a70,#593076)!important;color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg,
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#75e9fa!important;color:#75e9fa!important}
+          [data-baseweb="popover"]>div,[data-baseweb="menu"]{background:#111a30!important;color:#e7f8ff!important}
+          [role="option"]{background:#111a30!important;color:#e7f8ff!important}
+          [role="option"]:hover{background:#30204b!important}
+        """,
+    }.get(theme, "")
     crystal_palette = {
         "Terang": {
             "face": "linear-gradient(135deg,#f4e7d4 0%,#d7b58c 25%,#a8764e 48%,#e4c7a2 68%,#956541 100%)",
@@ -669,6 +697,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {hero_theme_css}
         {navigation_crystal_css}
         {futuristic_finish_css}
+        {rebar_control_theme_css}
         {etabs_beam_table_theme_css}
         {file_uploader_theme_css}
         </style>
