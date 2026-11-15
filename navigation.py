@@ -7,6 +7,7 @@ PAGES = ("Beranda", "Pra-Desain", "Pasca-ETABS", "Pasca-ETABS-Balok", "Pasca-ETA
 def initialize_state(state):
     defaults = {
         "halaman": "Beranda",
+        "modul_pra": "Balok",
         "draft_balok": None,
         "rekap_balok": {},
         "rekap_pelat": {},
