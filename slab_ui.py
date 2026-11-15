@@ -43,12 +43,6 @@ def render_modul_pelat(st):
     st.caption("Menerus berarti pelat berlanjut melewati tumpuan menuju bentang berikutnya.")
     pilihan = st.number_input("Tebal pelat pilihan (mm)", min_value=0, value=150, step=10, key="slab_choice_simple")
 
-    # Small schematic that changes with the chosen system.
-    if jenis == "Pelat satu arah":
-        st.markdown("""<div style="border:1px solid #8B5CF6;border-radius:10px;padding:10px;background:#160D25;text-align:center;color:#F5D0FE">▰ ━━━━━━━━━━━━━ ▰<br><small>Skema satu arah: beban menuju dua tumpuan berlawanan</small></div>""", unsafe_allow_html=True)
-    else:
-        st.markdown("""<div style="border:1px solid #8B5CF6;border-radius:10px;padding:10px;background:#160D25;text-align:center;color:#F5D0FE">┏━━━━━━━━━━┓<br>┃ &nbsp; PANEL &nbsp; ┃<br>┗━━━━━━━━━━┛<br><small>Skema dua arah: panel ditumpu pada keempat sisi (pastikan kondisi aktual)</small></div>""", unsafe_allow_html=True)
-
     with st.expander("Pengaturan lanjutan"):
         st.caption("Tabel acuan tidak menggunakan fy, αfm, atau faktor koreksi material. Nilai tersebut tidak dimasukkan ke rumus ini. Untuk pelat langsung ke kolom tanpa balok, metode ini belum didukung.")
         langsung_kolom = st.checkbox("Pelat langsung ditumpu kolom tanpa balok di keempat sisi", key="slab_flat_plate")
