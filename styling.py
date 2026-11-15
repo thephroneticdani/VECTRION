@@ -206,6 +206,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .vx-recap-table td{border-color:#3d89a288!important}
       .vx-recap-mobile-label{color:#c5f5ff!important}
       [data-testid="stTable"] th{color:#c5f5ff!important}
+      [data-testid="stExpander"]{background:#11172a!important;border-color:#8b43c0!important;border-radius:10px!important;box-shadow:0 0 14px #9b38e022!important}
+      [data-testid="stExpander"] summary{background:linear-gradient(105deg,#201536,#241839)!important;color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
+      [data-testid="stExpander"] summary *{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
+      [data-testid="stExpander"] summary:hover{background:linear-gradient(105deg,#2a1b46,#30204b)!important}
+      [data-testid="stExpander"] [data-testid="stExpanderDetails"]{background:#11172a!important;color:#e7f8ff!important}
+      [data-testid="stExpander"] [data-testid="stExpanderDetails"] *{color:#e7f8ff!important;-webkit-text-fill-color:#e7f8ff!important}
+      [data-testid="stExpander"] svg,[data-testid="stExpander"] svg *{fill:#8befff!important;color:#8befff!important}
       [data-testid="stMetric"]{border-color:#47dff477!important}
       [data-testid="stTabs"] [data-baseweb="tab"]{color:#c5f5ff!important}
       [data-testid="stTabs"] [aria-selected="true"]{border-bottom-color:#54e5f5!important}
