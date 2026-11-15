@@ -274,38 +274,42 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     }.get(theme, "")
     rebar_control_theme_css = {
         "Gelap": """
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{position:relative!important;background:#202b36!important;color:#fff1df!important;border-color:#a87d58!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] span,
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [role="combobox"]{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [data-baseweb="icon"],
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] svg{display:none!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #f0c18c;border-bottom:2px solid #f0c18c;transform:rotate(45deg);pointer-events:none}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#202b36!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important;border-color:#a87d58!important}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#493323!important;color:#f0c18c!important;-webkit-text-fill-color:#f0c18c!important;border-color:#805c3d!important}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#684a34!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div{position:relative!important;background:#f7f2eb!important;color:#332a23!important;border-color:#a87d58!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] span,
+          [data-testid="stSelectbox"] [data-baseweb="select"] [role="combobox"]{color:#332a23!important;-webkit-text-fill-color:#332a23!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] *{color:#332a23!important;-webkit-text-fill-color:#332a23!important;opacity:1!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div>div{background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] svg{display:none!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #694930;border-bottom:2px solid #694930;transform:rotate(45deg);pointer-events:none}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#f7f2eb!important;color:#332a23!important;-webkit-text-fill-color:#332a23!important;border-color:#a87d58!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#eadac8!important;color:#553e2b!important;-webkit-text-fill-color:#553e2b!important;border-color:#a87d58!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#dfc6aa!important;color:#3e2b1d!important;-webkit-text-fill-color:#3e2b1d!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button svg,
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#f0c18c!important;color:#f0c18c!important}
-          [data-testid="stExpander"] [data-baseweb="popover"]>div,[data-testid="stExpander"] [data-baseweb="menu"]{background:#202b36!important;color:#fff1df!important}
-          [data-testid="stExpander"] [role="option"]{background:#202b36!important;color:#fff1df!important}
-          [data-testid="stExpander"] [role="option"]:hover{background:#493323!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#553e2b!important;color:#553e2b!important}
+          [data-baseweb="popover"]>div,[data-baseweb="menu"]{background:#f7f2eb!important;color:#332a23!important}
+          [role="option"]{background:#f7f2eb!important;color:#332a23!important}
+          [role="option"]:hover{background:#eadac8!important}
         """,
         "Futuristik": """
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{position:relative!important;background:#111a30!important;color:#dffaff!important;border-color:#39dff4!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] span,
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [role="combobox"]{color:#dffaff!important;-webkit-text-fill-color:#dffaff!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] [data-baseweb="icon"],
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"] svg{display:none!important}
-          [data-testid="stMainBlockContainer"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #75e9fa;border-bottom:2px solid #75e9fa;transform:rotate(45deg);pointer-events:none}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#111a30!important;color:#dffaff!important;-webkit-text-fill-color:#dffaff!important;border-color:#39dff4!important}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:linear-gradient(140deg,#16384e,#39204f)!important;color:#75e9fa!important;-webkit-text-fill-color:#75e9fa!important;border-color:#39dff4!important}
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:linear-gradient(140deg,#205a70,#593076)!important;color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div{position:relative!important;background:#f4f0e9!important;color:#182235!important;border-color:#39cfe5!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] span,
+          [data-testid="stSelectbox"] [data-baseweb="select"] [role="combobox"]{color:#182235!important;-webkit-text-fill-color:#182235!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] *{color:#182235!important;-webkit-text-fill-color:#182235!important;opacity:1!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div>div{background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] [data-baseweb="icon"],
+          [data-testid="stSelectbox"] [data-baseweb="select"] div:has(>svg){background:transparent!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"] svg{display:none!important}
+          [data-testid="stSelectbox"] [data-baseweb="select"]>div:after{content:"";position:absolute;right:.8rem;top:calc(50% - .28rem);width:.42rem;height:.42rem;border-right:2px solid #24617a;border-bottom:2px solid #24617a;transform:rotate(45deg);pointer-events:none}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] input{background:#f4f0e9!important;color:#182235!important;-webkit-text-fill-color:#182235!important;border-color:#39cfe5!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button{background:#e5e9f0!important;color:#244c64!important;-webkit-text-fill-color:#244c64!important;border-color:#39cfe5!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button:hover{background:#d2eefa!important;color:#183c52!important;-webkit-text-fill-color:#183c52!important}
           [data-testid="stExpander"] [data-testid="stNumberInput"] button svg,
-          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#75e9fa!important;color:#75e9fa!important}
-          [data-baseweb="popover"]>div,[data-baseweb="menu"]{background:#111a30!important;color:#e7f8ff!important}
-          [role="option"]{background:#111a30!important;color:#e7f8ff!important}
-          [role="option"]:hover{background:#30204b!important}
+          [data-testid="stExpander"] [data-testid="stNumberInput"] button svg *{fill:#244c64!important;color:#244c64!important}
+          [data-baseweb="popover"]>div,[data-baseweb="menu"]{background:#f4f0e9!important;color:#182235!important}
+          [role="option"]{background:#f4f0e9!important;color:#182235!important}
+          [role="option"]:hover{background:#dff3f7!important}
         """,
     }.get(theme, "")
     crystal_palette = {
