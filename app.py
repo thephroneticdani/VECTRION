@@ -56,13 +56,17 @@ def toggle_theme():
     current = st.session_state["theme_mode"] if st.session_state["theme_mode"] in themes else "Terang"
     st.session_state["theme_mode"] = themes[(themes.index(current) + 1) % len(themes)]
 
-logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
+logo_filename = "vectrion_logo_futuristic.png" if st.session_state["theme_mode"] == "Futuristik" else "vectrion_logo_brown.png"
+logo_path = Path(__file__).parent / "assets" / logo_filename
+if not logo_path.exists():
+    logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
+logo_mime = "image/png" if logo_path.suffix.lower() == ".png" else "image/svg+xml"
 logo_data = base64.b64encode(logo_path.read_bytes()).decode("ascii") if logo_path.exists() else None
 
 with st.sidebar:
     if logo_data:
         st.markdown(
-            f'<div class="brand-logo brand-logo-sidebar"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+            f'<div class="brand-logo brand-logo-sidebar"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
             unsafe_allow_html=True,
         )
     else:
@@ -139,7 +143,7 @@ if st.session_state["halaman"] == "Beranda":
         with hero_brand:
             if logo_data:
                 st.markdown(
-                    f'<div class="brand-logo brand-logo-hero"><img src="data:image/svg+xml;base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+                    f'<div class="brand-logo brand-logo-hero"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
                     unsafe_allow_html=True,
                 )
     kiri, kanan = st.columns(2)

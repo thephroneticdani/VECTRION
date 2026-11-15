@@ -85,7 +85,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [class*="st-key-home-hero"] [data-testid="stColumn"]{background:rgba(7,12,29,.8);border-color:#20e6ff99;color:#f5f4ff;box-shadow:0 0 28px #07cde833,inset 0 0 18px #bd35ff12}
           [class*="st-key-home-hero"] h2{color:#47efff!important;text-shadow:0 0 12px #08cfff99!important}
           [class*="st-key-home-hero"] p,[class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#eeeaff!important;text-shadow:0 0 8px #ca36ff66!important}
-      [class*="st-key-home-hero"] .brand-logo-hero img{filter:brightness(1.18) contrast(1.12) saturate(1.35) drop-shadow(0 0 5px #18eaff) drop-shadow(0 0 14px #d63dffcc)!important}
+      [class*="st-key-home-hero"] .brand-logo-hero img{filter:drop-shadow(0 0 8px #8b37ff99) drop-shadow(0 0 18px #d12cff77)!important}
         """
     elif theme == "Gelap":
         hero_theme_css = """[class*="st-key-home-hero"]{background:transparent!important;border-color:transparent}
@@ -126,7 +126,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .stApp:not(:has(.vx-site-video-layer)){color:#f5f4ff!important;background-color:#080b18!important;background-image:linear-gradient(125deg,#080b18,#0b1830,#21102f,#081b29)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
       html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"]{color:#f5f4ff!important}
       h1,h2,h3,h4,[data-testid="stMetricValue"]{color:#48eaff!important;text-shadow:0 0 10px #14dfff70,0 0 24px #b637ff44!important}
-      .brand-logo img{filter:brightness(1.18) saturate(1.35) drop-shadow(0 0 5px #18eaff) drop-shadow(0 0 14px #d63dffcc)!important}
+      .brand-logo img{filter:drop-shadow(0 0 8px #8b37ff99) drop-shadow(0 0 18px #d12cff77)!important}
       p,label,[data-testid="stMarkdownContainer"],[data-testid="stWidgetLabel"],[data-testid="stCaptionContainer"]{color:#e8e8fa!important}
       header[data-testid="stHeader"],section[data-testid="stSidebar"]>div:first-child{background:rgba(8,12,29,.9)!important;border-color:#20ddff77!important;backdrop-filter:blur(16px)}
       section[data-testid="stSidebar"] [data-testid="stButton"] button{background:linear-gradient(120deg,#121b31,#21132f)!important;color:#e9faff!important;border-color:#1bd9ed88!important;box-shadow:0 0 12px #08d3e822}
