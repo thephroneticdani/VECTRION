@@ -57,6 +57,12 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     # Infer the page from session state so older call sites remain compatible.
     homepage = homepage or st.session_state.get("halaman") == "Beranda"
     c = COLORS
+    line_colors = {
+        "Terang": ("#81583D", "#B9845D", "#687858", "#81583D22"),
+        "Gelap": ("#B9845D", "#D6B783", "#82909B", "#D6B78333"),
+        "Futuristik": ("#39DDF4", "#86DDFB", "#A85BEB", "#39DDF455"),
+    }.get(theme, (c["primary"], c["secondary"], c["accent"], "#81583D22"))
+    line_start, line_mid, line_end, line_glow = line_colors
     sidebar_visibility = 'section[data-testid="stSidebar"]{display:none !important;}' if navigation_hidden else ""
     mobile_bottom_padding = "2rem" if navigation_hidden else "8rem"
     dark_theme_css = """html,body,.stApp,[data-testid="stAppViewContainer"],[data-testid="stMain"]{background-color:#111820!important;color:#e8edf2!important}
@@ -149,6 +155,55 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stMainBlockContainer"] .stButton button{background:linear-gradient(105deg,#0c5065,#542565)!important;color:#fff!important;border:1px solid #30eaff99!important;box-shadow:0 0 12px #07cde833}
       [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{background:#111a30!important;color:#f5f4ff!important;border-color:#27dff277!important}
       @media(prefers-reduced-motion:reduce){.stApp,.vx-site-video-shade{animation:none!important}}
+    """ if theme == "Futuristik" else ""
+    futuristic_finish_css = """
+      :root{--primary-color:#55e9f7!important;--vx-primary:#55e9f7;--vx-accent:#aa73f3;--vx-border:#48dff488}
+      h1,h2,h3,h4,h5,h6,[data-testid="stMetricValue"],[data-testid="stMetricLabel"],
+      [data-testid="stTable"] th,.vx-recap-table th,.vx-recap-mobile-label,
+      [data-testid="stWidgetLabel"],label{color:#c5f5ff!important}
+      h1,h2,h3,h4,h5,h6{ text-shadow:0 0 10px #34d9f344!important }
+      header[data-testid="stHeader"] button{color:#bcefff!important}
+      section[data-testid="stSidebar"]>div:first-child{border-color:#43deef88!important}
+      section[data-testid="stSidebar"]{border-right-color:#43deef88!important}
+      @media(max-width:768px){section[data-testid="stSidebar"]{border-top-color:#43deef88!important}}
+      [data-testid="stMainBlockContainer"] .stButton button:not(:disabled):not([aria-disabled="true"]),
+      [data-testid="stMainBlockContainer"] .stFormSubmitButton button:not(:disabled):not([aria-disabled="true"]),
+      [data-testid="stMainBlockContainer"] .stDownloadButton button:not(:disabled):not([aria-disabled="true"]),
+      [data-testid="stMainBlockContainer"] [data-testid="stDownloadButton"] button:not(:disabled):not([aria-disabled="true"]){
+        background:linear-gradient(105deg,#0c5065 0%,#315681 48%,#542565 100%)!important;
+        color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important;
+        border:1px solid #48dff4bb!important;
+        box-shadow:0 0 12px #07cde833,inset 0 1px 0 #ffffff22!important;
+      }
+      [data-testid="stMainBlockContainer"] .stButton button:not(:disabled):not([aria-disabled="true"]):hover,
+      [data-testid="stMainBlockContainer"] .stFormSubmitButton button:not(:disabled):not([aria-disabled="true"]):hover,
+      [data-testid="stMainBlockContainer"] .stDownloadButton button:not(:disabled):not([aria-disabled="true"]):hover,
+      [data-testid="stMainBlockContainer"] [data-testid="stDownloadButton"] button:not(:disabled):not([aria-disabled="true"]):hover{
+        background:linear-gradient(105deg,#14768d 0%,#476ca0 48%,#773c97 100%)!important;
+        border-color:#9becff!important;box-shadow:0 0 18px #20d9f555,0 0 24px #a747ee33!important;
+      }
+      [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div,
+      [data-testid="stMainBlockContainer"] [data-testid="stTextInput"] input,
+      [data-testid="stMainBlockContainer"] [data-testid="stNumberInput"] input{border-color:#49dff477!important}
+      [data-testid="stMainBlockContainer"] input:focus,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div:focus-within{
+        border-color:#8befff!important;box-shadow:0 0 0 3px #37dff233!important
+      }
+      [data-testid="stRadio"] input{accent-color:#45dff2!important}
+      [data-testid="stRadio"] [data-baseweb="radio"]>div:first-child{border-color:#77e9f6!important}
+      [data-testid="stRadio"] [data-baseweb="radio"] input:checked+div,
+      [data-testid="stRadio"] [data-baseweb="radio"][aria-checked="true"]>div:first-child{border-color:#45dff2!important;background-color:#45dff2!important}
+      [data-testid="stRadio"] [role="radio"][aria-checked="true"]>div:first-child{border-color:#45dff2!important;background-color:#45dff2!important}
+      [data-testid="stRadio"] [role="radio"][aria-checked="true"] svg,
+      [data-testid="stRadio"] [role="radio"][aria-checked="true"] svg *{fill:#45dff2!important;color:#45dff2!important}
+      .vx-recap-table{border-color:#42dff188!important}
+      .vx-recap-table th{color:#c5f5ff!important;border-bottom-color:#53dff4!important}
+      .vx-recap-table td{border-color:#3d89a288!important}
+      .vx-recap-mobile-label{color:#c5f5ff!important}
+      [data-testid="stTable"] th{color:#c5f5ff!important}
+      [data-testid="stMetric"]{border-color:#47dff477!important}
+      [data-testid="stTabs"] [data-baseweb="tab"]{color:#c5f5ff!important}
+      [data-testid="stTabs"] [aria-selected="true"]{border-bottom-color:#54e5f5!important}
+      *:focus-visible{outline-color:#73eaff!important}
     """ if theme == "Futuristik" else ""
     crystal_palette = {
         "Terang": {
@@ -289,8 +344,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         }}
         [data-testid="stToolbar"] {{ background:transparent !important; }}
         header[data-testid="stHeader"] button {{ color:{c['primary']} !important; }}
-        header button[data-testid="stSidebarCollapseButton"],
-        header button[data-testid="stSidebarExpandButton"] {{ display:none !important; }}
         h1,h2,h3 {{
           font-family:"Space Grotesk", Outfit, "Segoe UI", sans-serif !important;
           color:#63452F !important; font-weight:750 !important;
@@ -303,8 +356,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         }}
         hr {{
           border:0 !important; height:2px !important;
-          background:linear-gradient(90deg,{c['primary']},{c['secondary']},{c['accent']}) !important;
-          box-shadow:0 1px 5px #81583D20 !important;
+          background:linear-gradient(90deg,{line_start},{line_mid},{line_end}) !important;
+          box-shadow:0 1px 5px {line_glow} !important;
         }}
         .stTextInput input,.stNumberInput input {{
           background:{c['surface_input']} !important; color:var(--vx-text) !important;
@@ -535,6 +588,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} }}
         {hero_theme_css}
         {navigation_crystal_css}
+        {futuristic_finish_css}
         </style>
         """,
         unsafe_allow_html=True,

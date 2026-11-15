@@ -37,19 +37,14 @@ from slab_ui import render_modul_pelat
 
 initialize_state(st.session_state)
 st.session_state.setdefault("rekap_kolom", {})
-st.session_state.setdefault("navigation_hidden", False)
 st.session_state.setdefault("theme_mode", "Terang")
 inject_global_styles(
     st,
-    navigation_hidden=st.session_state["navigation_hidden"],
     theme=st.session_state["theme_mode"],
 )
 
 def pindah(halaman):
     navigate(st.session_state, halaman)
-
-def toggle_navigation():
-    st.session_state["navigation_hidden"] = not st.session_state["navigation_hidden"]
 
 def toggle_theme():
     themes = ("Terang", "Gelap", "Futuristik")
@@ -118,19 +113,14 @@ with st.sidebar:
                 )
 
 with st.container(key="page-title"):
-    menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
-    with menu_col:
-        with st.container(key="navigation-toggle"):
-            st.button("☰", key="toggle_navigation", type="primary", help="Sembunyikan / tampilkan panel navigasi", on_click=toggle_navigation)
-    with title_col:
-        if logo_data:
-            st.markdown(
-                f'<div class="brand-logo brand-logo-page-title"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
-                unsafe_allow_html=True,
-            )
-        else:
-            st.title("VECTRION")
-        st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
+    if logo_data:
+        st.markdown(
+            f'<div class="brand-logo brand-logo-page-title"><img src="data:{logo_mime};base64,{logo_data}" alt="VECTRION — Structural Engineering Suite"></div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.title("VECTRION")
+    st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
 
 if st.session_state["halaman"] == "Beranda":
     st.html(
