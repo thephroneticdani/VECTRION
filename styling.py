@@ -90,6 +90,13 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       .vx-recap-table th{background:#2e3b47;color:#f0d7c0;border-color:#526170}
       .vx-recap-table td{border-color:#394957}.vx-recap-table tbody tr:nth-child(even){background:#25313d}
       .vx-recap-mobile-label{color:#e0b890}
+      [data-testid="stExpander"]{background:#202b36!important;border:1px solid #a87d58!important;border-radius:10px!important;box-shadow:0 2px 10px #08060455!important}
+      [data-testid="stExpander"] summary{background:linear-gradient(105deg,#493323,#36271d)!important;color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+      [data-testid="stExpander"] summary *{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important}
+      [data-testid="stExpander"] summary:hover{background:linear-gradient(105deg,#5a3c28,#493323)!important}
+      [data-testid="stExpander"] [data-testid="stExpanderDetails"]{background:#202b36!important;color:#e8edf2!important}
+      [data-testid="stExpander"] [data-testid="stExpanderDetails"] *{color:#e8edf2!important;-webkit-text-fill-color:#e8edf2!important}
+      [data-testid="stExpander"] svg,[data-testid="stExpander"] svg *{fill:#d6a66a!important;color:#d6a66a!important}
       @media(max-width:768px){section[data-testid="stSidebar"]>div:first-child{background:#19222c!important}.vx-recap-table tbody tr{background:#202b36;border-color:#526170;box-shadow:none}.vx-recap-table td{border-color:#394957}}
     """ if theme in ("Gelap", "Futuristik") else ""
     if theme == "Futuristik":
