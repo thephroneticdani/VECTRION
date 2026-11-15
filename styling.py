@@ -213,19 +213,8 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
     """ if theme == "Futuristik" else ""
     file_uploader_theme_css = {
         "Gelap": """
-          [data-testid="stFileUploader"]{
-            background:linear-gradient(135deg,#493323,#36271d)!important;border:1px solid #a87d58!important;
-            border-radius:9px!important;padding:0!important
-          }
-          [data-testid="stFileUploader"] [data-testid*="Dropzone"],
-          [data-testid="stFileUploader"] section,
-          [data-testid="stFileUploader"] [data-baseweb="fileupload"],
-          [data-testid="stFileUploader"] div:has(>button){
-            background:linear-gradient(135deg,#493323,#36271d)!important;border-color:#a87d58!important;border-radius:8px!important
-          }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"]{
-            background:linear-gradient(135deg,#493323,#36271d)!important;border:1px solid #a87d58!important;
-            border-radius:9px!important;box-shadow:inset 0 1px 0 #d0a47a33!important
+            background:#493323!important
           }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"],
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] *{
@@ -233,25 +222,14 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] small{color:#d2b69d!important;-webkit-text-fill-color:#d2b69d!important}
           [data-testid="stFileUploader"] button{
-            background:linear-gradient(110deg,#684a34,#9a704c)!important;color:#fff9f1!important;
-            -webkit-text-fill-color:#fff9f1!important;border:1px solid #c08a5d!important
+            background:#8e6243!important;color:#fff9f1!important;
+            -webkit-text-fill-color:#fff9f1!important;border-color:#c08a5d!important
           }
           [data-testid="stFileUploader"] button *{color:#fff9f1!important;-webkit-text-fill-color:#fff9f1!important}
         """,
         "Futuristik": """
-          [data-testid="stFileUploader"]{
-            background:linear-gradient(120deg,#111a30,#17132d)!important;border:1px solid #39dff488!important;
-            border-radius:9px!important;padding:0!important
-          }
-          [data-testid="stFileUploader"] [data-testid*="Dropzone"],
-          [data-testid="stFileUploader"] section,
-          [data-testid="stFileUploader"] [data-baseweb="fileupload"],
-          [data-testid="stFileUploader"] div:has(>button){
-            background:linear-gradient(120deg,#111a30,#17132d)!important;border-color:#39dff488!important;border-radius:8px!important
-          }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"]{
-            background:linear-gradient(120deg,#111a30,#17132d)!important;border:1px solid #39dff488!important;
-            border-radius:9px!important;box-shadow:0 0 14px #1ccfe322,inset 0 0 16px #a837ed11!important
+            background:#211933!important
           }
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"],
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] *{
@@ -260,7 +238,7 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzoneInstructions"] small{color:#9edce9!important;-webkit-text-fill-color:#9edce9!important}
           [data-testid="stFileUploader"] button{
             background:linear-gradient(105deg,#0c5065,#542565)!important;color:#f3fcff!important;
-            -webkit-text-fill-color:#f3fcff!important;border:1px solid #48dff4bb!important;box-shadow:0 0 10px #07cde833!important
+            -webkit-text-fill-color:#f3fcff!important;border-color:#48dff4bb!important
           }
           [data-testid="stFileUploader"] button *{color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
         """,
@@ -676,10 +654,6 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {hero_theme_css}
         {navigation_crystal_css}
         {futuristic_finish_css}
-        [data-testid="stFileUploader"] [data-testid*="Dropzone"],
-        [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"]{{
-          width:100%!important;min-height:4rem!important;box-sizing:border-box!important;padding:.55rem .7rem!important
-        }}
         {etabs_beam_table_theme_css}
         {file_uploader_theme_css}
         </style>
