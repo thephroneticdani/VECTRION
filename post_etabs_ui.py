@@ -118,7 +118,10 @@ def render_post_etabs_beam(st):
     with st.container(key="etabs-beam-summary-table"):
         st.table(
             pd.DataFrame(result["rows"])[["Story", "DesignSect", "AsTopTotal", "AsBotTotal"]].rename(
-                columns={"AsTopTotal": "AsTopTotal maks.", "AsBotTotal": "AsBotTotal maks."}
+                columns={
+                    "AsTopTotal": "AsTopTotal maks. (mm²)",
+                    "AsBotTotal": "AsBotTotal maks. (mm²)",
+                }
             ),
             hide_index=True, width="stretch",
         )

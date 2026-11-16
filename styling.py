@@ -461,20 +461,42 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
           [data-testid="stFileUploader"] button *{color:#f3fcff!important;-webkit-text-fill-color:#f3fcff!important}
         """,
     }.get(theme, "")
-    etabs_beam_table_theme_css = {
-        "Gelap": """
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"]{background:#493323!important;border:1px solid #a87d58!important;border-radius:9px!important;overflow:hidden!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] thead th{background:#65472f!important;color:#fff1df!important;border-color:#a87d58!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody td{background:#493323!important;color:#f5e7d7!important;border-color:#805c3d!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:nth-child(even) td{background:#3d2c20!important}
-        """,
-        "Futuristik": """
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"]{background:#281746!important;border:1px solid #a84ee0!important;border-radius:9px!important;overflow:hidden!important;box-shadow:0 0 16px #9238d333!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] thead th{background:linear-gradient(110deg,#492267,#622786)!important;color:#f8eaff!important;border-color:#a84ee0!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody td{background:#281746!important;color:#f0e8ff!important;border-color:#603787!important}
-          [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:nth-child(even) td{background:#321d50!important}
-        """,
-    }.get(theme, "")
+    etabs_beam_table_theme_css = """
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] {
+        width:100%!important; max-width:100%!important; overflow-x:auto!important;
+        border:1px solid var(--vx-border)!important; border-radius:6px!important;
+        background:#202329!important; box-shadow:none!important;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] table {
+        width:100%!important; min-width:680px; table-layout:auto; border-collapse:collapse;
+        color:#F4F5F7!important; font-variant-numeric:tabular-nums;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] thead th {
+        padding:.78rem .9rem!important; background:#292E36!important; color:#E7BD65!important;
+        border:0!important; border-bottom:1px solid #373C45!important;
+        text-align:left!important; white-space:normal; overflow-wrap:anywhere;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody td {
+        padding:.78rem .9rem!important; background:#202329!important; color:#F4F5F7!important;
+        border:0!important; border-bottom:1px solid #373C45!important;
+        text-align:left!important; white-space:normal; overflow-wrap:anywhere; word-break:normal;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:nth-child(even) td {
+        background:#252A32!important;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:hover td {
+        background:rgba(214,166,62,.09)!important;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody td:nth-child(n+3) {
+        text-align:right!important; white-space:nowrap;
+      }
+      [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] tbody tr:last-child td {
+        border-bottom:0!important;
+      }
+      @media(max-width:700px) {
+        [class*="st-key-etabs-beam-summary-table"] [data-testid="stTable"] { overscroll-behavior-x:contain; }
+      }
+    """
     rebar_control_theme_css = {
         "Gelap": """
           [data-testid="stSelectbox"]{opacity:1!important;filter:none!important;color-scheme:light!important}
