@@ -125,12 +125,6 @@ with st.container(key="page-title"):
     st.caption("Structural Engineering Suite · Pemeriksaan awal dimensi dan kebutuhan tulangan beton bertulang")
 
 if st.session_state["halaman"] == "Beranda":
-    st.html(
-        """<div class="vx-site-video-layer" aria-hidden="true">
-<video autoplay muted loop playsinline preload="metadata" tabindex="-1">
-<source src="app/static/hero_construction.mp4" type="video/mp4">
-</video><div class="vx-site-video-shade"></div></div>"""
-    )
     render_engineering_disclaimer(st)
     with st.container(key="home-hero"):
         st.markdown("## Rekayasa struktur, dari pra hingga pasca modelling")

@@ -343,39 +343,19 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [class*="st-key-home-hero"] p{color:#332a23!important;text-shadow:none!important}
       [class*="st-key-home-hero"] [data-testid="stCaptionContainer"]{color:#5c5046!important;text-shadow:none!important}
         """
-    page_surface = {"Gelap": "rgba(17,24,32,.8)", "Futuristik": "rgba(7,12,29,.8)"}.get(theme, "rgba(251,250,247,.8)")
-    navigation_surface = {"Gelap": "rgba(17,24,32,.85)", "Futuristik": "rgba(8,12,29,.9)"}.get(theme, "rgba(251,250,247,.85)")
-    page_border = {"Gelap": "#81909f99", "Futuristik": "#22ddff88"}.get(theme, "#81583d55")
-    page_fallback = {"Gelap": "#111820", "Futuristik": "#080b18"}.get(theme, "#FBFAF7")
-    alert_surface = {"Gelap": "rgba(52,49,31,.8)", "Futuristik": "rgba(17,22,43,.8)"}.get(theme, "rgba(255,248,213,.8)")
-    page_overlay = {"Gelap": ".24", "Futuristik": ".2"}.get(theme, ".16")
-    homepage_css = f""".stApp{{position:relative;isolation:isolate;background:{page_fallback}!important;background-image:none!important}}
-      html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"],[data-testid="stMainBlockContainer"]{{background:transparent!important}}
-      [data-testid="stAppViewContainer"]{{position:relative}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero){{position:relative;background:transparent!important;border:0!important;box-shadow:none!important;padding:1rem 1.15rem!important;margin:1rem auto 2rem!important}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero)>[data-testid="stVerticalBlock"]{{position:relative;isolation:isolate;padding:1rem!important;border-radius:18px}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero)>[data-testid="stVerticalBlock"]::before{{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:{page_surface};border:1px solid {page_border};border-radius:18px;backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);box-shadow:0 10px 32px #00000020}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero)>[data-testid="stVerticalBlock"]>[data-testid="stElementContainer"]{{position:relative;z-index:1}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [class*="st-key-page-title"],[data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [class*="st-key-recap-section"]{{background:transparent!important;border-color:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [data-testid="stAlert"]{{background:transparent!important;border:0!important;box-shadow:none!important;padding:.25rem .15rem!important}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [data-testid="stAlertContainer"],[data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [data-testid^="stAlertContent"]{{background:transparent!important;border:0!important;box-shadow:none!important}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){{background:transparent!important;border:0!important;box-shadow:none!important;padding:.2rem .1rem!important;margin:.2rem 0 .5rem!important}}
-      @media(max-width:768px){{[data-testid="stMainBlockContainer"]:has(.st-key-home-hero){{padding:.7rem!important;margin:.5rem auto 1.5rem!important}}}}
-      header[data-testid="stHeader"]{{background:{page_surface}!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      section[data-testid="stSidebar"]>div:first-child{{background:{navigation_surface}!important;background-image:none!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      [data-testid="stMainBlockContainer"] [class*="st-key-page-title"],[data-testid="stMainBlockContainer"] [class*="st-key-recap-section"]{{background:{page_surface};border:1px solid {page_border};border-radius:16px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      [data-testid="stMainBlockContainer"] [data-testid="stVerticalBlock"]:has(>[data-testid="stElementContainer"] h3){{background:{page_surface}!important;border-color:{page_border}!important;border-radius:14px;padding:1rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{{background:{alert_surface}!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}}
-      [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) .element-container:has(.vx-site-video-layer){{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;z-index:-1;margin:0!important;padding:0!important;overflow:hidden;pointer-events:none}}
-      .vx-site-video-layer{{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:-1;overflow:hidden;pointer-events:none}}
-      .vx-site-video-layer video{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}}
-      .vx-site-video-shade{{position:absolute;inset:0;background:linear-gradient(120deg,rgba(10,16,23,{page_overlay}),rgba(10,16,23,.08))}}
-      @media(prefers-reduced-motion:reduce){{.vx-site-video-layer video{{display:none}}}}
+    homepage_css = """[data-testid="stMainBlockContainer"]:has(.st-key-home-hero) {
+        padding:1rem 1.15rem!important; margin:1rem auto 2rem!important;
+      }
+      @media(max-width:768px) {
+        [data-testid="stMainBlockContainer"]:has(.st-key-home-hero) {
+          padding:.7rem!important; margin:.5rem auto 1.5rem!important;
+        }
+      }
     """ if homepage else ""
     futuristic_css = """
       @keyframes vx-neon-drift{0%{background-position:0% 40%}50%{background-position:100% 60%}100%{background-position:0% 40%}}
       :root{--primary-color:#10cfe8!important;--vx-bg:#080b18;--vx-surface:#10172b;--vx-raised:#17152e;--vx-primary:#13d9f2;--vx-text:#f5f4ff;--vx-border:#26d9f277}
-      .stApp:not(:has(.vx-site-video-layer)){color:#f5f4ff!important;background-color:#080b18!important;background-image:linear-gradient(125deg,#080b18,#0b1830,#21102f,#081b29)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
+      .stApp{color:#f5f4ff!important;background-color:#080b18!important;background-image:linear-gradient(125deg,#080b18,#0b1830,#21102f,#081b29)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
       html,body,[data-testid="stAppViewContainer"],[data-testid="stMain"]{color:#f5f4ff!important}
       h1,h2,h3,h4,[data-testid="stMetricValue"]{color:#48eaff!important;text-shadow:0 0 10px #14dfff70,0 0 24px #b637ff44!important}
       .brand-logo img{filter:drop-shadow(0 0 8px #8b37ff99) drop-shadow(0 0 18px #d12cff77)!important}
@@ -389,10 +369,9 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
       [data-testid="stMainBlockContainer"] [data-testid="stAlert"]{color:#f4efff!important;border:1px solid #cc4cff99!important;box-shadow:0 0 18px #c43bff22}
       [data-testid="stMainBlockContainer"] button:disabled,[data-testid="stMainBlockContainer"] button[aria-disabled="true"]{background:#eef1f5!important;color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
       [data-testid="stMainBlockContainer"] button:disabled *,[data-testid="stMainBlockContainer"] button[aria-disabled="true"] *{color:#263346!important;-webkit-text-fill-color:#263346!important;opacity:1!important}
-      .vx-site-video-shade{background:linear-gradient(120deg,#07102133,#05283422,#30104133,#07102122)!important;background-size:300% 300%!important;animation:vx-neon-drift 18s ease infinite}
       [data-testid="stMainBlockContainer"] .stButton button{background:linear-gradient(105deg,#0c5065,#542565)!important;color:#fff!important;border:1px solid #30eaff99!important;box-shadow:0 0 12px #07cde833}
       [data-testid="stMainBlockContainer"] input,[data-testid="stMainBlockContainer"] [data-baseweb="select"]>div{background:#111a30!important;color:#f5f4ff!important;border-color:#27dff277!important}
-      @media(prefers-reduced-motion:reduce){.stApp,.vx-site-video-shade{animation:none!important}}
+      @media(prefers-reduced-motion:reduce){.stApp{animation:none!important}}
     """ if theme == "Futuristik" else ""
     futuristic_finish_css = """
       :root{--primary-color:#55e9f7!important;--vx-primary:#55e9f7;--vx-accent:#aa73f3;--vx-border:#48dff488}
@@ -939,15 +918,10 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {futuristic_css}
         [class*="st-key-home-hero"] {{ position:relative; min-height:12rem; padding:0 !important; overflow:hidden; border:0; border-radius:18px; background:transparent!important; isolation:isolate; }}
         [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ position:relative; z-index:1; min-height:10rem; justify-content:center; }}
-        [class*="st-key-home-hero"] .element-container:has(.vx-home-video-layer) {{ position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; z-index:0; }}
-        [class*="st-key-home-hero"] .vx-home-video-layer {{ position:absolute; inset:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events:none; }}
-        [class*="st-key-home-hero"] .vx-home-video-layer video {{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; }}
-        [class*="st-key-home-hero"] .vx-home-video-shade {{ position:absolute; inset:0; background:linear-gradient(120deg,rgba(12,19,27,.24),rgba(12,19,27,.12)),linear-gradient(0deg,rgba(12,19,27,.2),transparent 70%); }}
         [class*="st-key-home-hero"] [data-testid="stHorizontalBlock"] {{ padding:1rem; }}
         [class*="st-key-home-hero"] [data-testid="stColumn"] {{ min-height:17rem; padding:1.5rem 1.6rem; border:1px solid; border-radius:16px; backdrop-filter:blur(12px) saturate(120%); -webkit-backdrop-filter:blur(12px) saturate(120%); }}
         [class*="st-key-home-hero"] [data-testid="stColumn"]:has(.brand-logo-hero) {{ display:flex; align-items:center; justify-content:center; }}
-        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:12rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:10rem; }} .brand-logo-page-title img {{ max-width:300px; }} [class*="st-key-home-hero"] .vx-home-video-layer video {{ object-position:58% center; }} }}
-        @media(prefers-reduced-motion:reduce) {{ [class*="st-key-home-hero"] .vx-home-video-layer video {{ display:none; }} }}
+        @media(max-width:768px) {{ [class*="st-key-home-hero"] {{ min-height:12rem; }} [class*="st-key-home-hero"][data-testid="stVerticalBlock"] {{ min-height:10rem; }} .brand-logo-page-title img {{ max-width:300px; }} }}
         {hero_theme_css}
         {navigation_crystal_css}
         {futuristic_finish_css}
