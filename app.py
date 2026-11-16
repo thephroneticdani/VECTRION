@@ -53,7 +53,7 @@ def pilih_modul_pra(modul):
     st.session_state["modul_pra"] = modul
     st.query_params["modul_pra"] = modul
 
-logo_filename = "vectrion_logo_futuristic.png" if st.session_state["theme_mode"] == "Futuristik" else "vectrion_logo_brown.png"
+logo_filename = "vectrion_logo_dark_industrial.png"
 logo_path = Path(__file__).parent / "assets" / logo_filename
 if not logo_path.exists():
     logo_path = Path(__file__).parent / "assets" / "vectrion_logo_jawa.svg"
