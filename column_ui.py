@@ -61,6 +61,20 @@ def render_column_module(st):
 
     draft = st.session_state.get("draft_kolom")
     if draft:
+        try:
+            current_lu_mm = convert_unbraced_height_to_mm(lu_value, lu_unit)
+        except ValueError:
+            current_lu_mm = None
+        current_selection = float(selected_side) if use_selected else None
+        if (
+            draft["Kode kolom"] != code.strip()
+            or draft["lu (mm)"] != current_lu_mm
+            or draft["Lebar balok terbesar (mm)"] != float(beam_width)
+            or draft["Pilihan pengguna (mm)"] != current_selection
+        ):
+            st.info("Input berubah. Hitung kembali untuk menampilkan rekomendasi yang sesuai dengan input saat ini.")
+            draft = None
+    if draft:
         st.markdown("#### Informasi kolom")
         st.write(f"**{draft['Kode kolom']}** · lu {draft['lu (mm)']:,.0f} mm · lebar balok terbesar {draft['Lebar balok terbesar (mm)']:,.0f} mm")
         a, b = st.columns(2)

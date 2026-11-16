@@ -75,6 +75,17 @@ def render_modul_pelat(st):
         st.session_state["draft_pelat"] = draft
     draft = st.session_state.get("draft_pelat")
     if draft:
+        current_inputs = (
+            kode.strip(), jenis, bentang, arah, kondisi, pilihan,
+        )
+        calculated_inputs = (
+            draft["Kode panel"], draft["Jenis pelat"], draft["Bentang acuan (mm)"],
+            draft["Arah bentang"], draft["Kondisi tumpuan"], draft["Pilihan (mm)"],
+        )
+        if not ready or current_inputs != calculated_inputs:
+            st.info("Input berubah atau belum lengkap. Hitung kembali untuk melihat hasil yang sesuai dengan input saat ini.")
+            draft = None
+    if draft:
         st.markdown("#### Hasil pemeriksaan awal")
         st.write(f"**Metode:** {draft['Jenis pelat']} · {draft['metode']}")
         st.write(f"**Rasio bentang:** L/h = {draft['Rasio L/h']:g} · **Bentang acuan:** {draft['Bentang acuan (mm)']:,} mm · **Tumpuan:** {draft['Kondisi tumpuan']}")

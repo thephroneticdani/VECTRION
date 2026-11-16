@@ -1,25 +1,27 @@
 # VECTRION — Structural Engineering Suite
 
-**Preliminary Design. Engineering Verification. Better Decisions.**
+**Preliminary Sizing. Better Engineering Decisions.**
 
-VECTRION adalah aplikasi bantu pra-desain struktur berbasis Python dan Streamlit. Aplikasi membantu memperkirakan dimensi awal dan menyimpan rekap selama sesi aplikasi; hasilnya bukan desain struktur final.
+VECTRION adalah aplikasi bantu untuk pemeriksaan awal dimensi elemen beton bertulang sebelum pemodelan, serta pemeriksaan dasar kebutuhan tulangan dari ringkasan analisis ETABS. Hasil aplikasi bukan desain final dan tidak menggantikan analisis serta verifikasi engineering.
 
-## Fitur
+## Alur dan fitur
 
-- **Balok:** tinggi minimum awal, rekomendasi tinggi praktis dengan pembulatan ke atas per 50 mm, alternatif lebar, rasio b/h, luas penampang, serta rekap.
-- **Pelat:** pemeriksaan tebal awal satu arah dan dua arah/pelat rusuk memakai rasio Tabel 12.1 pada gambar acuan yang diberikan pengguna, untuk empat kondisi tumpuan. Tidak menghitung lendutan.
-- **Kolom:** rekomendasi dimensi awal berbasis heuristik aplikasi serta informasi kelangsingan awal.
-- **Rekap:** menyimpan ringkasan balok, pelat, dan kolom selama sesi Streamlit aktif.
-- **Pasca-ETABS:** belum tersedia.
+- **Pra-Modelling — Balok:** estimasi tinggi minimum awal, rekomendasi praktis, alternatif lebar, rasio b/h, luas penampang, dan rekap.
+- **Pra-Modelling — Pelat:** pemeriksaan tebal awal pelat satu arah dan dua arah/pelat rusuk berdasarkan rasio acuan yang tersedia di aplikasi. Tidak menghitung lendutan.
+- **Pra-Modelling — Kolom:** rekomendasi dimensi persegi berbasis heuristik VECTRION dan informasi kelangsingan awal.
+- **Pasca-Modelling — Balok:** membaca ringkasan desain ETABS `.xlsx`, mengelompokkan kebutuhan As per DesignSect dan story, lalu membandingkan konfigurasi tulangan pilihan.
+- **Pasca-Modelling — Kolom:** pemeriksaan dasar luas tulangan longitudinal terhadap target minimum dan batas input maksimum.
+- **Rekap dan ekspor:** rekap lintas modul tersedia selama sesi aktif dan dapat diunduh sebagai HTML untuk dicetak atau disimpan sebagai PDF.
 
-## Teknologi
+## Menggunakan Pasca-Modelling Balok
 
-- Python
-- Streamlit (`streamlit==1.66.1`)
+Unggah workbook `.xlsx` yang berisi kolom `Story`, `DesignSect`, `AsTopTotal`, dan `AsBotTotal`. Header dapat memakai variasi huruf besar/kecil dan tanda baca; pembaca mencari header pada 30 baris pertama. Nilai kebutuhan As harus benar-benar menggunakan satuan mm². Baris station/kombinasi untuk pasangan DesignSect dan story yang sama diringkas dengan mengambil nilai maksimum atas dan bawah.
+
+Setelah file dibaca, buka pilihan tulangan, isi jumlah batang atas dan bawah, tinjau status masing-masing sisi, lalu simpan hasil ke rekap. Membaca workbook baru akan mengganti ringkasan dan pilihan tulangan yang belum disimpan pada sesi tersebut. Rekap yang telah disimpan tetap terpisah.
 
 ## Menjalankan secara lokal
 
-Di Windows, dari folder proyek:
+Gunakan versi Python yang sama dengan environment deployment. Dependensi aplikasi tersedia di `requirements.txt`.
 
 ```powershell
 python -m venv .venv
@@ -27,30 +29,15 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-Atau, jika virtual environment proyek sudah tersedia:
+Logo berada di `assets/`; video Beranda berada di `static/`. Static serving diaktifkan melalui `.streamlit/config.toml`.
 
-```powershell
-.\.venv\Scripts\python.exe -m streamlit run app.py
-```
+## Batasan engineering
 
-## Batasan metode
+- **Balok dan pelat Pra-Modelling** hanya pemeriksaan dimensi awal. Modul ini bukan desain tulangan, analisis gaya dalam, atau verifikasi kapasitas.
+- **Pelat** tidak menghitung lendutan. Rasio pelat dua arah mengikuti acuan yang digunakan aplikasi dan perlu diverifikasi oleh engineer terhadap dokumen standar yang berlaku.
+- **Kolom Pra-Modelling** menggunakan heuristik rekomendasi ukuran dan asumsi kelangsingan awal. Klasifikasi goyangan, momen ujung, faktor k aktual, stabilitas lengkap, dan pemeriksaan strong-column–weak-beam tidak dilakukan.
+- **Pasca-Modelling Balok** hanya membandingkan luas tulangan pilihan dengan kebutuhan As dalam workbook. Aplikasi tidak memverifikasi kapasitas, detailing, penyaluran, sengkang, atau desain balok lengkap.
+- **Pasca-Modelling Kolom** hanya memeriksa luas tulangan longitudinal terhadap target yang dimasukkan. Gaya aksial, momen, stabilitas, sengkang, dan detailing tidak diperiksa.
+- Rekap disimpan di session state, bukan database permanen. Unduh hasil sebelum sesi berakhir.
 
-- Hasil balok dan pelat merupakan pemeriksaan dimensi awal, bukan desain tulangan atau verifikasi kapasitas.
-- Antarmuka pelat memakai rasio pada gambar Tabel 12.1 yang diberikan pengguna. Rasio tersebut belum dinyatakan diverifikasi terhadap dokumen SNI 2847:2019.
-- Rekomendasi kolom merupakan heuristik aplikasi. Informasi kelangsingan memakai asumsi awal dan bukan pemeriksaan stabilitas lengkap.
-- Modul tidak melakukan pemodelan, penentuan beban/kombinasi beban, analisis gaya dalam, desain tulangan, pemeriksaan lendutan, atau verifikasi keselamatan struktur.
-- Rekap hanya tersimpan dalam state sesi dan bukan penyimpanan permanen.
-
-## Disclaimer engineering
-
-> **PERHATIAN — VECTRION merupakan alat bantu pra-desain untuk estimasi dan pemeriksaan awal dimensi elemen struktur. Seluruh hasil perhitungan dan rekomendasi dimensi wajib melalui analisis struktur, verifikasi kapasitas, stabilitas, serta pemeriksaan engineering sesuai standar yang berlaku sebelum digunakan dalam desain final. Output aplikasi ini tidak boleh digunakan secara langsung sebagai dasar pelaksanaan konstruksi.**
-
-Analisis dan verifikasi lanjutan dapat dilakukan menggunakan ETABS, SAP2000, STAAD.Pro, atau perangkat lunak lain yang sesuai dengan sistem struktur dan kebutuhan engineering. Penggunaan perangkat lunak analisis saja tidak menjamin desain valid; penilaian profesional dan verifikasi independen tetap diperlukan.
-
-## Status rilis
-
-Pra-desain balok, pelat, dan kolom tersedia sebagai alat bantu awal. Analisis Pasca-ETABS belum diimplementasikan. Seluruh hasil memerlukan analisis dan verifikasi engineering independen sebelum digunakan dalam desain final.
-
-## Pengembangan selanjutnya
-
-Rencana Pasca-ETABS mencakup impor hasil analisis dan pemeriksaan awal pasca-analisis. Fitur tersebut belum termasuk dalam rilis ini.
+> **PERHATIAN — Hasil VECTRION adalah estimasi dan pemeriksaan awal, bukan desain final. Verifikasi dengan analisis struktur, standar yang berlaku, dan insinyur sebelum digunakan. Output aplikasi tidak boleh digunakan langsung sebagai dasar pelaksanaan konstruksi.**

@@ -50,14 +50,20 @@ def _render_beam_row(item, units, ordinal):
 
         as_values = hitung_tulangan_balok([d1, d2], [n1, n2], [db1, db2], [nb1, nb2])
         top_required, bottom_required = item["AsTopTotal"], item["AsBotTotal"]
-        top_status = status_kebutuhan(as_values["As atas tersedia (mm²)"], top_required)
-        bottom_status = status_kebutuhan(as_values["As bawah tersedia (mm²)"], bottom_required)
+        top_status = (
+            status_kebutuhan(as_values["As atas tersedia (mm²)"], top_required)
+            if n1 + n2 > 0 or top_required == 0 else "Belum dipilih"
+        )
+        bottom_status = (
+            status_kebutuhan(as_values["As bawah tersedia (mm²)"], bottom_required)
+            if nb1 + nb2 > 0 or bottom_required == 0 else "Belum dipilih"
+        )
         result_cols = st.columns(2)
         for column, label, result_key, required, status in (
             (result_cols[0], "As atas tersedia", "As atas tersedia (mm²)", top_required, top_status),
             (result_cols[1], "As bawah tersedia", "As bawah tersedia (mm²)", bottom_required, bottom_status),
         ):
-            color = "#39744A" if status == "Memenuhi" else "#B33A32"
+            color = {"Memenuhi": "#39744A", "Tidak memenuhi": "#B33A32"}.get(status, "#B27A20")
             column.markdown(
                 f"<div style='border:1px solid {color};border-radius:10px;padding:.7rem 1rem'>"
                 f"<b>{label}</b><br><span style='font-size:1.25rem'>{as_values[result_key]:,.2f} mm²</span>"
@@ -77,17 +83,23 @@ def _render_beam_row(item, units, ordinal):
         }
         if st.button("Simpan ke Rekap", key=f"save_etabs_rebar_{ordinal}", type="primary"):
             save_etabs_beam_recap(st.session_state, record)
-            st.success("Pilihan tulangan tersimpan di Rekap Tulangan Pasca Modelling dan Rekap Analisis.")
+            st.success("Pilihan tulangan tersimpan di Rekap Tulangan Pasca-Modelling dan Rekap Analisis.")
 
 
 def render_post_etabs_beam(st):
-    st.markdown("## Pasca Modelling · Balok")
+    st.markdown("## Pasca-Modelling · Balok")
     st.info(POST_BEAM_DISCLAIMER, icon="ℹ️")
     st.write("Unggah ringkasan desain balok ETABS berformat `.xlsx` untuk melihat kebutuhan As tiap DesignSect dan story.")
+    st.caption("Workbook harus memuat kolom Story, DesignSect, AsTopTotal, dan AsBotTotal; nilai As harus dalam mm². Setelah dibaca, atur jumlah tulangan atas dan bawah, periksa status, lalu simpan ke rekap.")
     with st.form("upload_etabs_beam_form"):
         upload = st.file_uploader("File ringkasan ETABS (.xlsx)", type=["xlsx"], key="etabs_beam_upload")
         submitted = st.form_submit_button("Baca Excel", type="primary")
     if submitted:
+        st.session_state.pop("etabs_beam_summary", None)
+        st.session_state["show_etabs_rebar"] = False
+        for widget_key in tuple(st.session_state.keys()):
+            if str(widget_key).startswith("etabs_rebar_"):
+                st.session_state.pop(widget_key, None)
         if upload is None:
             st.error("Pilih file Excel terlebih dahulu.")
         else:
@@ -114,12 +126,12 @@ def render_post_etabs_beam(st):
         st.session_state["show_etabs_rebar"] = not st.session_state.get("show_etabs_rebar", False)
     if st.session_state.get("show_etabs_rebar", False):
         st.markdown("### Pilihan tulangan dan pemeriksaan As")
-        st.caption("Setiap baris mewakili satu DesignSect pada satu story. Maksimal dua kombinasi diameter–jumlah untuk masing-masing tepi atas dan bawah.")
+        st.caption("Setiap baris mewakili satu DesignSect pada satu story. Isi jumlah batang atas dan bawah untuk menjalankan pemeriksaan; sisi yang belum diisi berstatus Belum dipilih. Maksimal dua kombinasi diameter–jumlah per sisi.")
         for index, item in enumerate(result["rows"]):
             _render_beam_row(item, result["units"], index)
     recap = st.session_state.get("rekap_etabs_balok", {})
     if recap:
-        st.markdown("### Rekap tulangan Pasca Modelling")
+        st.markdown("### Rekap tulangan Pasca-Modelling")
         table_rows = []
         for data in recap.values():
             table_rows.append({
@@ -132,14 +144,14 @@ def render_post_etabs_beam(st):
                 ]
             })
         render_recap_table(
-            st, key="post-etabs-summary", title="Rekap tulangan Pasca Modelling",
+            st, key="post-etabs-summary", title="Rekap tulangan Pasca-Modelling",
             headers=["Ukuran", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status"],
             widths=[1.0, 0.9, 1.5, 1.5, 0.9], rows=table_rows, clear_column=False,
         )
 
 
 def render_post_etabs_column(st):
-    st.markdown("## Pasca Modelling · Kolom")
+    st.markdown("## Pasca-Modelling · Kolom")
     st.info(
         "Cek dasar luas tulangan longitudinal: target minimum 1–8% dari luas bruto penampang. "
         "Bukan desain kapasitas kolom; gaya aksial, momen, kelangsingan, sengkang, dan detailing tidak dihitung.",
@@ -162,11 +174,15 @@ def render_post_etabs_column(st):
         submitted = st.form_submit_button("Hitung As Kolom", type="primary")
 
     if submitted:
+        st.session_state.pop("draft_etabs_kolom", None)
+        st.session_state.pop("post_column_error", None)
         try:
             code_value = code.strip()
             if not code_value:
                 raise ValueError("Kode kolom wajib diisi.")
             result = hitung_tulangan_kolom(width, depth, ratio, diameters, quantities)
+            if not any(int(value) > 0 for value in quantities):
+                result["Status"] = "Belum dipilih"
             st.session_state["draft_etabs_kolom"] = {
                 "Kode": code_value,
                 "Ukuran": f"{width:g}×{depth:g}",
@@ -190,7 +206,9 @@ def render_post_etabs_column(st):
         result_cols[1].metric("As minimum", f"{draft['As minimum (mm²)']:,.2f} mm²")
         result_cols[2].metric("As tersedia", f"{draft['As tersedia (mm²)']:,.2f} mm²")
         result_cols[3].metric("Rasio aktual", f"{draft['Rasio aktual (%)']:.2f}%")
-        if draft["Status"] == "Memenuhi":
+        if draft["Status"] == "Belum dipilih":
+            st.info("Masukkan jumlah tulangan longitudinal untuk memeriksa kecukupan As.")
+        elif draft["Status"] == "Memenuhi":
             st.success("As tersedia berada di antara target minimum dan batas input 8%.")
         elif draft["Status"] == "Melebihi 8%":
             st.error("As tersedia melebihi batas maksimum 8% dari luas bruto.")
@@ -199,11 +217,11 @@ def render_post_etabs_column(st):
         st.caption(f"{draft['Kode']} · {draft['Ukuran']} mm · {draft['Kombinasi tulangan']}")
         if st.button("Simpan ke Rekap", key="save_post_etabs_column", type="primary"):
             save_etabs_column_recap(st.session_state, draft)
-            st.success("Hasil kolom tersimpan di Rekap Pasca Modelling dan Rekap Analisis.")
+            st.success("Hasil kolom tersimpan di Rekap Pasca-Modelling dan Rekap Analisis.")
 
     recap = st.session_state.get("rekap_etabs_kolom", {})
     if recap:
-        st.markdown("### Rekap tulangan Pasca Modelling · Kolom")
+        st.markdown("### Rekap tulangan Pasca-Modelling · Kolom")
         rows = []
         for key, data in recap.items():
             rows.append({

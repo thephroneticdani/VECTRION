@@ -144,6 +144,8 @@ def ukuran_dari_designsect(designsect):
 
 def status_kombinasi_balok(record):
     """Combined row status is satisfied only when both top and bottom pass."""
+    if "Belum dipilih" in (record.get("Status atas"), record.get("Status bawah")):
+        return "Belum dipilih"
     if record.get("Status atas") == "Memenuhi" and record.get("Status bawah") == "Memenuhi":
         return "Memenuhi"
     return "Tidak memenuhi"

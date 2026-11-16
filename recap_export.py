@@ -71,13 +71,13 @@ RECAP_SECTIONS = (
         ("Rasio kelangsingan", _ratio),
         ("Dimensi pilihan", _dimension),
     )),
-    ("Pasca Modelling — Balok", "rekap_analisis_etabs", (
+    ("Pasca-Modelling — Balok", "rekap_analisis_etabs", (
         ("Nama", lambda row: row.get("DesignSect", "—")),
         ("Story", lambda row: row.get("Story", "—")),
         ("Kombinasi tulangan atas", _beam_top),
         ("Kombinasi tulangan bawah", _beam_bottom),
     )),
-    ("Pasca Modelling — Kolom", "rekap_analisis_etabs_kolom", (
+    ("Pasca-Modelling — Kolom", "rekap_analisis_etabs_kolom", (
         ("Kode", lambda row: row.get("Kode", "—")),
         ("Ukuran", _column_size),
         ("Kombinasi tulangan", lambda row: row.get("Kombinasi tulangan", "—")),
@@ -114,15 +114,15 @@ def build_recap_html(state):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rekap Analisis VECTRION</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f7f4ef;color:#302820;font:15px/1.5 Arial,sans-serif}
-main{max-width:1100px;margin:32px auto;padding:28px;background:#fff;border:1px solid #ded5c9;border-radius:12px}
-header{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:2px solid #81583d;padding-bottom:16px}
-h1{margin:0;color:#63452f;font-size:26px}.print{border:0;border-radius:8px;background:#81583d;color:#fff;padding:10px 16px;font-weight:700;cursor:pointer}
-section{margin-top:26px}h2{font-size:19px;color:#63452f}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{border:1px solid #cfc4b7;padding:8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
-th{background:#f1eadf;color:#553b29}tbody tr:nth-child(even){background:#faf8f4}.empty{padding:20px 0;color:#665b50}
+*{box-sizing:border-box}body{margin:0;background:#e9ebee;color:#202329;font:15px/1.5 Arial,sans-serif}
+main{max-width:1100px;margin:32px auto;padding:28px;background:#f4f5f7;border:1px solid #373c45;border-radius:9px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:2px solid #d6a63e;padding-bottom:16px}
+h1{margin:0;color:#202329;font-size:26px}.print{border:0;border-radius:7px;background:#d6a63e;color:#17191d;padding:10px 16px;font-weight:700;cursor:pointer}
+section{margin-top:26px}h2{font-size:19px;color:#272b32}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid #d4d7dc;padding:8px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:#e3e5e9;color:#202329}tbody tr:nth-child(even){background:#eaecf0}.empty{padding:20px 0;color:#626974}
 @media(max-width:600px){main{margin:0;padding:16px;border:0;border-radius:0}header{align-items:flex-start;flex-direction:column}h1{font-size:22px}table{min-width:620px}}
-@media print{@page{margin:12mm;size:landscape}body{background:#fff}main{max-width:none;margin:0;padding:0;border:0;border-radius:0}.print{display:none}section{break-inside:avoid}h2{break-after:avoid}th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media print{@page{margin:12mm;size:landscape}body{background:#fff;color:#202329}main{max-width:none;margin:0;padding:0;border:0;border-radius:0;background:#fff}.print{display:none}section{break-inside:avoid}h2{break-after:avoid}th{background:#e3e5e9!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style></head><body><main><header><div><h1>Rekap Analisis VECTRION</h1>
 <div>Structural Engineering Suite</div></div><button class="print" onclick="window.print()">Cetak / Simpan PDF</button></header>
 __SECTIONS__</main></body></html>""".replace("__SECTIONS__", "".join(sections))

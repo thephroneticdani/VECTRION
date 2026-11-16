@@ -40,7 +40,7 @@ initialize_state(st.session_state)
 if module_from_url in {"Balok", "Pelat", "Kolom"}:
     st.session_state["modul_pra"] = module_from_url
 st.session_state.setdefault("rekap_kolom", {})
-st.session_state.setdefault("theme_mode", "Terang")
+st.session_state["theme_mode"] = "Gelap"
 inject_global_styles(
     st,
     theme=st.session_state["theme_mode"],
@@ -52,11 +52,6 @@ def pindah(halaman):
 def pilih_modul_pra(modul):
     st.session_state["modul_pra"] = modul
     st.query_params["modul_pra"] = modul
-
-def toggle_theme():
-    themes = ("Terang", "Gelap", "Futuristik")
-    current = st.session_state["theme_mode"] if st.session_state["theme_mode"] in themes else "Terang"
-    st.session_state["theme_mode"] = themes[(themes.index(current) + 1) % len(themes)]
 
 logo_filename = "vectrion_logo_futuristic.png" if st.session_state["theme_mode"] == "Futuristik" else "vectrion_logo_brown.png"
 logo_path = Path(__file__).parent / "assets" / logo_filename
@@ -77,7 +72,7 @@ with st.sidebar:
     st.markdown("---")
     with st.container(key="primary-navigation"):
         st.caption("Navigasi aplikasi")
-        page_buttons = (("Beranda", "Beranda", "⌂"), ("Pra-Modelling", "Pra-Desain", "▤"), ("Pasca Modelling", "Pasca-ETABS", "⌁"))
+        page_buttons = (("Beranda", "Beranda", "⌂"), ("Pra-Modelling", "Pra-Desain", "▤"), ("Pasca-Modelling", "Pasca-ETABS", "⌁"))
         for label, page, icon in page_buttons:
             active = st.session_state["halaman"] == page or (
                 page == "Pasca-ETABS" and st.session_state["halaman"].startswith("Pasca-ETABS-")
@@ -90,16 +85,6 @@ with st.sidebar:
                 on_click=pindah,
                 args=(page,),
             )
-        next_theme_label = {
-            "Terang": "☾  Gelap",
-            "Gelap": "✦  Futuristik",
-            "Futuristik": "☀  Terang",
-        }.get(st.session_state["theme_mode"], "☾  Gelap")
-        st.button(
-            next_theme_label,
-            key="toggle_theme", type="secondary", use_container_width=True,
-            on_click=toggle_theme,
-        )
     if st.session_state["halaman"] == "Pra-Desain":
         st.caption("Modul Pra-Modelling")
         with st.container(key="pre-design-module-navigation"):
@@ -113,7 +98,7 @@ with st.sidebar:
                     args=(modul,),
                 )
     if st.session_state["halaman"].startswith("Pasca-ETABS-"):
-        st.caption("Modul Pasca Modelling")
+        st.caption("Modul Pasca-Modelling")
         with st.container(key="post-etabs-module-navigation"):
             beam_nav, column_nav = st.columns(2, gap="small")
             with beam_nav:
@@ -137,7 +122,7 @@ with st.container(key="page-title"):
         )
     else:
         st.title("VECTRION")
-    st.caption("Structural Engineering Suite · Pemeriksaan dimensi awal struktur beton bertulang")
+    st.caption("Structural Engineering Suite · Pemeriksaan awal dimensi dan kebutuhan tulangan beton bertulang")
 
 if st.session_state["halaman"] == "Beranda":
     st.html(
@@ -148,20 +133,22 @@ if st.session_state["halaman"] == "Beranda":
     )
     render_engineering_disclaimer(st)
     with st.container(key="home-hero"):
-        st.markdown("## Rekayasa struktur, dimulai dari pradesain")
-        st.write("Pilih alur analisis untuk memulai pemeriksaan dimensi awal.")
-        st.caption("Pra-desain elemen beton bertulang dalam satu ruang kerja.")
-    kiri, kanan = st.columns(2)
+        st.markdown("## Rekayasa struktur, dari pra hingga pasca modelling")
+        st.write("Pra-Modelling membantu pemeriksaan awal balok, pelat, dan kolom. Pasca-Modelling membantu meninjau kebutuhan tulangan balok dari ETABS serta memeriksa tulangan kolom.")
+        st.caption("Alur umum: pilih modul, masukkan data, periksa batasan hasil, lalu simpan hasil yang diperlukan ke rekap.")
+    kiri, kanan = st.columns(2, gap="medium")
     with kiri:
-        st.markdown("### Analisis Pra-Modelling")
-        st.write("Pemeriksaan awal dimensi balok dan pelat.")
-        st.button("Buka Pra-Modelling →", type="primary", use_container_width=True,
-                  on_click=pindah, args=("Pra-Desain",))
+        with st.container(key="home-pre-card"):
+            st.markdown("### Pra-Modelling")
+            st.write("Pemeriksaan awal dimensi balok, kolom, dan pelat.")
+            st.button("Buka Pra-Modelling →", type="primary", use_container_width=True,
+                      on_click=pindah, args=("Pra-Desain",))
     with kanan:
-        st.markdown("### Analisis Pasca Modelling")
-        st.write("Alur pemeriksaan hasil analisis struktur.")
-        st.button("Buka Pasca Modelling →", use_container_width=True,
-                  on_click=pindah, args=("Pasca-ETABS",))
+        with st.container(key="home-post-card"):
+            st.markdown("### Pasca-Modelling")
+            st.write("Tinjau hasil ETABS untuk balok dan kolom.")
+            st.button("Buka Pasca-Modelling →", use_container_width=True,
+                      on_click=pindah, args=("Pasca-ETABS",))
 
 elif st.session_state["halaman"] == "Pra-Desain":
     render_engineering_disclaimer(st)
@@ -185,6 +172,9 @@ elif st.session_state["halaman"] == "Pra-Desain":
                 st.session_state.pop("tinggi_pilihan_input", None)
                 st.session_state.pop("lebar_pilihan_input", None)
         draft = st.session_state["draft_balok"]
+        if draft and (draft["kode"] != kode.strip() or draft["bentang"] != bentang or draft["kondisi"] != kondisi):
+            st.info("Input berubah. Hitung kembali untuk menampilkan hasil yang sesuai dengan input saat ini.")
+            draft = None
         if draft:
             st.write(f"**{draft['kode']}** · Bentang {draft['bentang']} mm · {draft['kondisi']}")
             c1, c2 = st.columns(2)
@@ -217,20 +207,22 @@ elif st.session_state["halaman"] == "Pra-Desain":
     else:
         render_modul_pelat(st)
 elif st.session_state["halaman"] == "Pasca-ETABS":
-    st.markdown("## Analisis Pasca Modelling")
+    st.markdown("## Analisis Pasca-Modelling")
     render_engineering_disclaimer(st)
     st.write("Pilih elemen yang ingin diperiksa dari hasil ekspor ETABS.")
     beam_col, column_col = st.columns(2)
-    with beam_col, st.container(border=True):
-        st.markdown("### Balok")
-        st.write("Unggah ringkasan desain dan bandingkan kebutuhan As dengan tulangan pilihan.")
-        st.button("Buka Pasca Modelling Balok →", type="primary", use_container_width=True,
-                  on_click=pindah, args=("Pasca-ETABS-Balok",))
-    with column_col, st.container(border=True):
-        st.markdown("### Kolom")
-        st.write("Periksa rasio luas tulangan longitudinal kolom dengan tiga kombinasi diameter dan jumlah batang.")
-        st.button("Buka Pasca Modelling Kolom →", use_container_width=True,
-                  on_click=pindah, args=("Pasca-ETABS-Kolom",))
+    with beam_col:
+        with st.container(key="post-choice-beam-card"):
+            st.markdown("### Balok")
+            st.write("Unggah ringkasan desain dan bandingkan kebutuhan As dengan tulangan pilihan.")
+            st.button("Buka Pasca-Modelling Balok →", type="primary", use_container_width=True,
+                      on_click=pindah, args=("Pasca-ETABS-Balok",))
+    with column_col:
+        with st.container(key="post-choice-column-card"):
+            st.markdown("### Kolom")
+            st.write("Periksa rasio luas tulangan longitudinal kolom dengan tiga kombinasi diameter dan jumlah batang.")
+            st.button("Buka Pasca-Modelling Kolom →", use_container_width=True,
+                      on_click=pindah, args=("Pasca-ETABS-Kolom",))
 elif st.session_state["halaman"] == "Pasca-ETABS-Balok":
     render_post_etabs_beam(st)
 elif st.session_state["halaman"] == "Pasca-ETABS-Kolom":
@@ -262,7 +254,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=kode_key: st.session_state["rekap_balok"].pop(k, None),
             })
         render_recap_table(
-            st, key="pre-beam", title="Balok Pra-Desain",
+            st, key="pre-beam", title="Balok Pra-Modelling",
             headers=["Kode", "Bentang", "Tumpuan", "Dimensi", "h minimum", "h rekomendasi", "Rasio b/h", "Luas penampang", "Aksi"],
             widths=[.7, .8, 1.15, .8, .8, .9, .65, 1.0, .6], rows=beam_rows,
         )
@@ -279,7 +271,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=kode_key: st.session_state["rekap_pelat"].pop(k, None),
             })
         render_recap_table(
-            st, key="pre-slab", title="Pelat Pra-Desain",
+            st, key="pre-slab", title="Pelat Pra-Modelling",
             headers=["Kode panel", "Jenis", "Bentang", "Tumpuan", "h minimum", "Rekomendasi", "Pilihan", "Status", "Aksi"],
             widths=[.75, 1.2, .8, 1.05, .75, .85, .7, 1.6, .6], rows=slab_rows,
         )
@@ -296,7 +288,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=kode_key: st.session_state["rekap_kolom"].pop(k, None),
             })
         render_recap_table(
-            st, key="pre-column", title="Kolom Pra-Desain",
+            st, key="pre-column", title="Kolom Pra-Modelling",
             headers=["Kode", "Dimensi pilihan", "Rekomendasi", "Panjang tak tertumpu", "Rasio kelangsingan", "Aksi"],
             widths=[.75, 1.0, 1.0, 1.0, 1.0, .6], rows=column_rows,
         )
@@ -313,7 +305,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=recap_key: clear_etabs_beam_recap(st.session_state, k),
             })
         render_recap_table(
-            st, key="post-beam", title="Balok Pasca Modelling",
+            st, key="post-beam", title="Balok Pasca-Modelling",
             headers=["Nama", "Story", "Kombinasi tulangan atas", "Kombinasi tulangan bawah", "Status", "Aksi"],
             widths=[.85, .8, 1.45, 1.45, .8, .6], rows=etabs_rows,
         )
@@ -327,7 +319,7 @@ with st.container(key="recap-section"):
                 "clear": lambda k=recap_key: clear_etabs_column_recap(st.session_state, k),
             })
         render_recap_table(
-            st, key="post-column", title="Kolom Pasca Modelling",
+            st, key="post-column", title="Kolom Pasca-Modelling",
             headers=["Kode", "Ukuran", "Kombinasi tulangan", "As tersedia (mm²)", "Rasio aktual", "As minimum (mm²)", "Status", "Aksi"],
             rows=column_rows,
         )
