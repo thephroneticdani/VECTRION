@@ -951,6 +951,78 @@ def inject_global_styles(st, navigation_hidden=False, theme="Terang", homepage=F
         {etabs_beam_table_theme_css}
         {file_uploader_theme_css}
         {DARK_INDUSTRIAL_SYSTEM_CSS}
+        .st-key-mobile-module-navigation,
+        .st-key-mobile-primary-navigation {{ display:none!important; }}
+        @media(max-width:768px) {{
+          section[data-testid="stSidebar"] {{ display:none!important; }}
+          header button[data-testid="stSidebarCollapsedControl"],
+          header button[data-testid="stExpandSidebarButton"] {{ display:none!important; }}
+          .st-key-mobile-module-navigation {{
+            display:block!important; width:100%; margin:.65rem 0 1rem;
+            padding:.35rem; background:#202329; border:1px solid #373C45; border-radius:9px;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stHorizontalBlock"] {{
+            display:flex!important; flex-wrap:nowrap!important; gap:.4rem!important; align-items:stretch!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stColumn"] {{
+            width:0!important; min-width:0!important; max-width:none!important; flex:1 1 0!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stButton"] button {{
+            width:100%!important; min-height:2.5rem!important; height:2.5rem!important;
+            padding:.35rem .45rem!important; border-radius:6px!important;
+            white-space:nowrap!important; font-size:.88rem!important; box-shadow:none!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stBaseButton-secondary"] {{
+            background:#272B32!important; color:#A5AAB3!important; border:1px solid #373C45!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stBaseButton-primary"] {{
+            background:#D6A63E!important; color:#17191D!important; border:1px solid #E7BD65!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stButton"] button[kind="secondary"],
+          .st-key-mobile-module-navigation [data-testid="stButton"] button[kind="secondary"] *,
+          .st-key-mobile-primary-navigation [data-testid="stButton"] button[kind="secondary"],
+          .st-key-mobile-primary-navigation [data-testid="stButton"] button[kind="secondary"] * {{
+            color:#F4F5F7!important; -webkit-text-fill-color:#F4F5F7!important;
+          }}
+          .st-key-mobile-module-navigation [data-testid="stButton"] button[kind="primary"],
+          .st-key-mobile-module-navigation [data-testid="stButton"] button[kind="primary"] *,
+          .st-key-mobile-primary-navigation [data-testid="stButton"] button[kind="primary"],
+          .st-key-mobile-primary-navigation [data-testid="stButton"] button[kind="primary"] * {{
+            color:#17191D!important; -webkit-text-fill-color:#17191D!important;
+          }}
+          .st-key-mobile-primary-navigation {{
+            display:block!important; position:fixed!important; left:0!important; right:0!important;
+            bottom:0!important; z-index:9999!important; width:100vw!important; box-sizing:border-box!important;
+            padding:.35rem .55rem calc(.35rem + env(safe-area-inset-bottom))!important;
+            margin:0!important; background:#202329!important; border-top:1px solid #373C45!important;
+            box-shadow:0 -5px 16px #0005!important;
+          }}
+          .st-key-mobile-primary-navigation [data-testid="stHorizontalBlock"] {{
+            display:flex!important; flex-wrap:nowrap!important; width:100%!important;
+            gap:.4rem!important; align-items:center!important;
+          }}
+          .st-key-mobile-primary-navigation [data-testid="stColumn"] {{
+            width:0!important; min-width:0!important; max-width:none!important; flex:1 1 0!important;
+          }}
+          .st-key-mobile-primary-navigation [data-testid="stButton"] {{ width:100%!important; }}
+          .st-key-mobile-primary-navigation [data-testid="stButton"] button {{
+            display:flex!important; width:100%!important; min-width:0!important; min-height:3rem!important;
+            height:3rem!important; justify-content:center!important; align-items:center!important;
+            padding:.3rem .2rem!important; border-radius:7px!important; white-space:nowrap!important;
+            font-size:.8rem!important; line-height:1!important; box-shadow:none!important;
+          }}
+          .st-key-mobile-primary-navigation [data-testid="stBaseButton-secondary"] {{
+            background:#272B32!important; color:#A5AAB3!important; border:1px solid #373C45!important;
+          }}
+          .st-key-mobile-primary-navigation [data-testid="stBaseButton-primary"] {{
+            background:#D6A63E!important; color:#17191D!important; border:1px solid #E7BD65!important;
+          }}
+          .st-key-mobile-primary-navigation button *,
+          .st-key-mobile-primary-navigation button p {{ color:inherit!important; -webkit-text-fill-color:currentColor!important; }}
+          [data-testid="stMainBlockContainer"] {{
+            padding-bottom:calc(4.4rem + env(safe-area-inset-bottom))!important;
+          }}
+        }}
         </style>
         """,
         unsafe_allow_html=True,

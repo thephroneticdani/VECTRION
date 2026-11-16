@@ -124,6 +124,37 @@ with st.container(key="page-title"):
         st.title("VECTRION")
     st.caption("Structural Engineering Suite · Pemeriksaan awal dimensi dan kebutuhan tulangan beton bertulang")
 
+if st.session_state["halaman"] == "Pra-Desain":
+    with st.container(key="mobile-module-navigation"):
+        module_columns = st.columns(3, gap="small")
+        for column, modul in zip(module_columns, ("Balok", "Pelat", "Kolom")):
+            with column:
+                st.button(
+                    modul,
+                    key=f"mobile-nav-modul-pra-{modul.lower()}",
+                    type="primary" if st.session_state["modul_pra"] == modul else "secondary",
+                    use_container_width=True,
+                    on_click=pilih_modul_pra,
+                    args=(modul,),
+                )
+elif st.session_state["halaman"].startswith("Pasca-ETABS"):
+    with st.container(key="mobile-module-navigation"):
+        module_columns = st.columns(2, gap="small")
+        post_modules = (
+            ("Balok", "Pasca-ETABS-Balok"),
+            ("Kolom", "Pasca-ETABS-Kolom"),
+        )
+        for column, (label, page) in zip(module_columns, post_modules):
+            with column:
+                st.button(
+                    label,
+                    key=f"mobile-nav-{page.lower()}",
+                    type="primary" if st.session_state["halaman"] == page else "secondary",
+                    use_container_width=True,
+                    on_click=pindah,
+                    args=(page,),
+                )
+
 if st.session_state["halaman"] == "Beranda":
     render_engineering_disclaimer(st)
     with st.container(key="home-hero"):
@@ -319,3 +350,24 @@ with st.container(key="recap-section"):
         )
     if not st.session_state["rekap_balok"] and not st.session_state["rekap_pelat"] and not st.session_state["rekap_kolom"] and not st.session_state["rekap_analisis_etabs"] and not st.session_state["rekap_analisis_etabs_kolom"]:
         st.caption("Belum ada hasil tersimpan. Rekap akan tetap tersedia selama sesi Streamlit.")
+
+with st.container(key="mobile-primary-navigation"):
+    mobile_columns = st.columns(3, gap="small")
+    mobile_pages = (
+        ("⌂  Beranda", "Beranda", "Beranda"),
+        ("▤  Pra", "Pra-Desain", "Pra-Modelling"),
+        ("⌁  Pasca", "Pasca-ETABS", "Pasca-Modelling"),
+    )
+    for column, (label, page, key) in zip(mobile_columns, mobile_pages):
+        active = st.session_state["halaman"] == page or (
+            page == "Pasca-ETABS" and st.session_state["halaman"].startswith("Pasca-ETABS-")
+        )
+        with column:
+            st.button(
+                label,
+                key=f"mobile-primary-{key.lower()}",
+                type="primary" if active else "secondary",
+                use_container_width=True,
+                on_click=pindah,
+                args=(page,),
+            )
